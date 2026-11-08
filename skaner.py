@@ -80,6 +80,61 @@ SEKTORY = {
 }
 SEKTOR_SPOLKI = {t: s for s, l in SEKTORY.items() for t in l.split()}
 
+# ---- 👔 zakupy insiderów (Bankier.pl / Notoria) ----
+# Test 2024-2026: zarząd kupuje za >=100 tys. zł -> ok. +1% ponad rynek w 10 sesji, 55% zyskownych.
+# UWAGA: zakup zarządu PO spadku kursu (>5% w 20 sesji) wypadał źle (-3% vs rynek) -> ostrzeżenie.
+INSIDER_MIN_ZL = 100_000
+INSIDER_DNI = 14
+BANKIER_TICKER = {
+    "11BIT": "11B", "ATAL": "1AT", "ABPL": "ABE", "ASSECOPOL": "ACP", "ACTION": "ACT", "AGORA": "AGO",
+    "ALLEGRO": "ALE", "ALIOR": "ALR", "AMICA": "AMC", "ANSWEAR": "ANR", "AUTOPARTN": "APR", "APATOR": "APT",
+    "ARTIFEX": "ART", "ASBIS": "ASB", "ASSECOSEE": "ASE", "ASTARTA": "AST", "ARCTIC": "ATC", "ATREM": "ATR",
+    "GRUPAAZOTY": "ATT", "BIOCELTIX": "BCX", "BUDIMEX": "BDX", "BENEFIT": "BFT", "HANDLOWY": "BHW",
+    "BLOOBER": "BLO", "BUMECH": "BMC", "BNPPPL": "BNP", "BORYSZEW": "BRS", "INTERCARS": "CAR",
+    "CYBERFLKS": "CBF", "CDPROJEKT": "CDR", "CIGAMES": "CIG", "CLOUD": "CLD", "CLNPHARMA": "CLN", "COMP": "CMP",
+    "COGNOR": "COG", "CYFRPLSAT": "CPS", "CREOTECH": "CRI", "CREEPYJAR": "CRJ", "CAPTORTX": "CTX",
+    "DADELO": "DAD", "DATAWALK": "DAT", "DEBICA": "DBC", "DIAG": "DIA", "DIGITANET": "DIG", "DINOPL": "DNP",
+    "DOMDEV": "DOM", "DEVELIA": "DVL", "AMREST": "EAT", "ELEKTROTI": "ELT", "ENEA": "ENA", "ENERGOINS": "ENG",
+    "ENTER": "ENT", "EUROCASH": "EUR", "FERRO": "FRO", "GENOMTEC": "GNS", "GRUPRACUJ": "GPP", "GPW": "GPW",
+    "GRENEVIA": "GRN", "GREENX": "GRX", "HUUUGE": "HUG", "ICECODE": "ICE", "INGBSK": "ING", "JSW": "JSW",
+    "KGHM": "KGH", "KOGENERA": "KGN", "KINOPOL": "KPL", "KRUK": "KRU", "KETY": "KTY", "LUBAWA": "LBW",
+    "LPP": "LPP", "BOGDANKA": "LWB", "MBANK": "MBK", "MOBRUK": "MBR", "MEDICALG": "MDG", "MDIENERGIA": "MDI",
+    "MILLENNIUM": "MIL", "MOLECURE": "MOL", "MIRBUD": "MRB", "MERCATOR": "MRC", "MURAPOL": "MUR",
+    "NEUCA": "NEU", "NEWAG": "NWG", "ODLEWNIE": "ODL", "ORANGEPL": "OPL", "OPONEO.PL": "OPN", "PASSUS": "PAS",
+    "PEKABEX": "PBX", "PEPCO": "PCO", "PCCROKITA": "PCR", "PEKAO": "PEO", "PEP": "PEP", "PGE": "PGE",
+    "PKNORLEN": "PKN", "PKOBP": "PKO", "PKPCARGO": "PKP", "PLAYWAY": "PLW", "POLIMEXMS": "PXM", "PZU": "PZU",
+    "QUERCUS": "QRS", "RAINBOW": "RBW", "RYVU": "RVU", "SCPFL": "SCP", "SCANWAY": "SCW", "SELENAFM": "SEL",
+    "SYGNITY": "SGN", "SELVITA": "SLV", "SYNEKTIK": "SNT", "STALEXP": "STX", "TSGAMES": "TEN", "TOYA": "TOA",
+    "TORPOL": "TOR", "TAURONPE": "TPE", "TRAKCJA": "TRK", "TEXT": "TXT", "UNIMOT": "UNT", "VIGOPHOTN": "VGO",
+    "VOTUM": "VOT", "VOXEL": "VOX", "VERCOM": "VRC", "WASKO": "WAS", "WIELTON": "WLT", "WIRTUALNA": "WPL",
+    "XTB": "XTB", "XTPL": "XTP", "ZABKA": "ZAB", "NTTSYSTEM": "NTT", "SEVENET": "SEV", "APSENERGY": "APE",
+}
+
+
+def pobierz_insiderow():
+    """Zakupy insiderów z ostatnich dni (zarząd, >= INSIDER_MIN_ZL). Zwraca {ticker: [dict]}."""
+    import json
+    import urllib.request
+    out = {}
+    try:
+        req = urllib.request.Request(
+            "https://api.bankier.pl/quotes/public/insiders-table/?offset=0&limit=300&transaction_type=kupno",
+            headers={"User-Agent": "Mozilla/5.0 (skaner-gpw)", "Accept": "application/json"})
+        dane = json.loads(urllib.request.urlopen(req, timeout=20).read().decode("utf-8"))
+    except Exception as e:
+        print("insiderzy: nie udało się pobrać –", e)
+        return out
+    granica = (dt.date.today() - dt.timedelta(days=INSIDER_DNI)).isoformat()
+    for x in dane.get("results", []):
+        t = BANKIER_TICKER.get(x.get("symbol", ""))
+        funkcja = (x.get("insider_function") or "").lower()
+        if not t or "zarząd" not in funkcja or (x.get("message_date") or "") < granica:
+            continue
+        out.setdefault(t, []).append(dict(data=x["message_date"], wart=float(x.get("value") or 0),
+                                          kto=x.get("insider_function") or ""))
+    # tylko łączne zakupy >= progu
+    return {t: v for t, v in out.items() if sum(i["wart"] for i in v) >= INSIDER_MIN_ZL}
+
 
 # ---------------------- wskaźniki ----------------------
 def rsi_parts(c, n):
@@ -328,11 +383,25 @@ def analiza(t, D, H, panika_rynku):
     if ret.iloc[-1] >= SPIKE_RET and v.iloc[-1] >= SPIKE_VOL * (vavg.iloc[-1] or 1):
         ostrz.append("⛔ Dziś wystrzał – NIE kupuj jutro rano (gonienie traci 1–3%). Ustaw limit na 61,8% korekty.")
 
+    # 👔 insiderzy
+    ins = INSIDERZY.get(t)
+    insider = None
+    if ins:
+        suma = sum(i["wart"] for i in ins)
+        ost = max(i["data"] for i in ins)
+        ret20 = float(close / c.iloc[-21] - 1) * 100
+        tys = f"{suma / 1000:,.0f}".replace(",", " ")
+        if ret20 < -5:
+            ostrz.append(f"⚠️ Zarząd kupił akcje ({ost[8:10]}.{ost[5:7]}, {tys} tys. zł) po spadku kursu "
+                         f"({pct(ret20)} w 20 sesji) – w teście takie zakupy NIE pomagały (średnio −3% vs rynek).")
+        else:
+            insider = f"👔 Zarząd kupił akcje: {tys} tys. zł (ostatnio {ost[8:10]}.{ost[5:7]}) – w teście ok. +1% ponad rynek w 2 tyg."
+
     wyjscie = k1 >= EXIT_K
     sr_hist, n_hist = historia_sygnalow(D)
     return dict(spolka=t, kurs=close, atr=atr / close * 100, obrot=obrot, mod=mod, ostrz=ostrz,
                 wyjscie=wyjscie, k1=k1, k4=k4, r2=r2, ch1=ch1, nad200=nad200, r60=r60,
-                sektor=SEKTOR_SPOLKI.get(t, "Inne"), sr_hist=sr_hist, n_hist=n_hist)
+                sektor=SEKTOR_SPOLKI.get(t, "Inne"), sr_hist=sr_hist, n_hist=n_hist, insider=insider)
 
 
 # ---------------------- raport ----------------------
@@ -362,15 +431,20 @@ h1{margin:0 0 4px;font-size:21px} .sub{color:var(--mut);font-size:13px;margin-bo
 .plan{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
 .plan .l{color:var(--mut)} .op{color:var(--mut);font-size:13px;margin-top:6px}
 .ost{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(240,90,90,.12);color:var(--bad);font-size:13.5px}
+.ins{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(122,162,255,.12);color:var(--blue);font-size:13.5px}
 .ex{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(245,184,75,.13);font-size:13.5px}
 .info{color:var(--mut);font-size:12.5px;margin-top:8px}
 .leg{color:var(--mut);font-size:12.5px;line-height:1.6;margin-top:18px}
 """
 
 
+INSIDERZY = {}
+
+
 def karta(r):
     tv = f"https://www.tradingview.com/chart/?symbol=GPW:{r['spolka']}"
-    typy = " ".join(m["typ"] for m in r["mod"]) + (" ostrz" if r["ostrz"] else "") + (" exit" if r["wyjscie"] else "")
+    typy = (" ".join(m["typ"] for m in r["mod"]) + (" ostrz" if r["ostrz"] else "") + (" exit" if r["wyjscie"] else "")
+            + (" insider" if r.get("insider") else ""))
     star = '<span class="star">⭐ dobrze reaguje</span>' if r.get("gwiazda") else ""
     mods = ""
     for m in r["mod"]:
@@ -380,6 +454,8 @@ def karta(r):
                  f'<span class="l">Stop</span><span>{m["stop"]}</span></div>'
                  f'<div class="op">{m["opis"]}<br><i>{STATY[m["typ"]]}</i></div></div>')
     ost = "".join(f'<div class="ost">{html.escape(x)}</div>' for x in r["ostrz"])
+    if r.get("insider"):
+        ost = f'<div class="ins">{html.escape(r["insider"])}</div>' + ost
     ex = (f'<div class="ex">🔔 Dzienny Stoch RSI = {r["k1"]:.0f} (≥ {EXIT_K}) – jeśli masz pozycję, to strefa realizacji zysku.</div>'
           if r["wyjscie"] else "")
     hist = (f" · historia sygnałów: {r['sr_hist']:+.1f}% śr. z {r['n_hist']}".replace(".", ",")
@@ -393,10 +469,12 @@ def karta(r):
 
 
 def raport(wyniki, plik, rynek, sektory, panika):
-    teraz = dt.datetime.now(dt.timezone.utc).astimezone().strftime("%d.%m.%Y %H:%M")
-    akt = [r for r in wyniki if r["mod"] or r["ostrz"] or r["wyjscie"]]
+    from zoneinfo import ZoneInfo
+    teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw")).strftime("%d.%m.%Y %H:%M")
+    akt = [r for r in wyniki if r["mod"] or r["ostrz"] or r["wyjscie"] or r.get("insider")]
     akt.sort(key=lambda r: (-max([PRIORYTET[m["typ"]] for m in r["mod"]] or [0]),
-                            -(1 if r.get("gwiazda") else 0), r["spolka"]))
+                            -(1 if r.get("insider") else 0), -(1 if r.get("gwiazda") else 0), r["spolka"]))
+    n_ins = sum(1 for r in akt if r.get("insider"))
     chipy = "".join(f'<span class="chip{" top" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
                     for i, (s, m) in enumerate(sektory))
     pan = ('<div class="box badb">🔥 <b>PANIKA NA MAŁYCH SPÓŁKACH</b> (RSI2 indeksu &lt; 10) – historycznie najlepszy moment '
@@ -413,12 +491,13 @@ def raport(wyniki, plik, rynek, sektory, panika):
 <div class="box {rk}">{rynek[1]}</div>{pan}
 <div class="chips">{chipy}</div>
 <div class="ctl"><button class="on" data-f="">Wszystkie</button>{btn}
-<button data-f="exit">🔔 Do realizacji</button><button data-f="ostrz">⛔ Ostrzeżenia</button><button data-f="star">⭐</button></div>
+<button data-f="insider">👔 Insiderzy ({n_ins})</button><button data-f="exit">🔔 Do realizacji</button><button data-f="ostrz">⛔ Ostrzeżenia</button><button data-f="star">⭐</button></div>
 <div id="cards">{''.join(karta(r) for r in akt) or '<div class="box">Dziś brak sygnałów.</div>'}</div>
 <div class="leg"><b>Jak czytać:</b> „Kup jutro na otwarciu” = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
 „Zlecenie z limitem” = kupno tylko jeśli kurs spadnie do tej ceny (ustaw w XTB zlecenie z limitem). Stop awaryjny jest szeroki celowo –
 w testach ciasne stopy pogarszały wynik. Wyniki „test:” to średnie z danych 08.2024–11.2026 po kosztach 0,4%; realnie licz na mniej.
-Nie wchodź na 3 sesje przed raportem okresowym spółki. ⭐ = spółka w najlepszych 20% pod względem historycznych wyników tych sygnałów.<br>
+Nie wchodź na 3 sesje przed raportem okresowym spółki. 👔 = członek zarządu kupił akcje za ≥ 100 tys. zł w ostatnich
+{INSIDER_DNI} dniach (dane: Bankier.pl/Notoria) – to dodatkowy plus, nie samodzielny sygnał. ⭐ =spółka w najlepszych 20% pod względem historycznych wyników tych sygnałów.<br>
 Narzędzie pomocnicze, nie rekomendacja inwestycyjna. Zawsze sprawdź wykres.</div></div>
 <script>
 let f='';document.querySelectorAll('.ctl button').forEach(b=>b.onclick=()=>{{
@@ -437,6 +516,8 @@ def main():
     args, _ = ap.parse_known_args()
 
     symbole = [f"{t}.WA" for t in TICKERY]
+    INSIDERZY.update(pobierz_insiderow())
+    print(f"insiderzy: {len(INSIDERZY)} spółek z zakupami zarządu w ostatnich {INSIDER_DNI} dniach")
     D = pobierz(symbole, "1d", "2y")
     H = pobierz(symbole, "1h", "1y")
 
