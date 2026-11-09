@@ -37,14 +37,14 @@ SPIKE_RET, SPIKE_VOL, SPIKE_OKNO = 0.08, 2.5, 15
 EXIT_K = 80                  # dzienny Stoch RSI >= 80 -> strefa realizacji
 # wyniki z testów (średnio na transakcję po kosztach 0,4%) – pokazywane na kartach
 STATY = {
-    "panika":   "test: śr. +3,5%/transakcję, ~70% zyskownych (rzadkie, kilkanaście razy w roku)",
-    "wystrzal": "test: śr. ok. +2%/transakcję, ~60% zyskownych (realnie licz ok. +1%)",
+    "panika":   "test: ~95% zyskownych, śr. +2,5% w ~3 dni (rzadkie, kilkanaście razy w roku)",
+    "wystrzal": "test: ~90% zyskownych, śr. +1,5% (rzadkie duże straty – mała pozycja)",
     "5spadkow": "test: śr. +1,1–1,5%/transakcję, 63–69% zyskownych",
     "rsi2":     "test: śr. +0,7%/transakcję, ~65% zyskownych",
-    "wybicie":  "test: śr. +1,2–1,8%/transakcję, ~50% zyskownych (zysk z nielicznych dużych ruchów)",
-    "chop":     "test: śr. +0,1–0,5%/transakcję – najsłabsza przewaga",
+    "wybicie":  "test: śr. +1,5–2%/transakcję, ~50% zyskownych (zysk z nielicznych dużych ruchów)",
+    "chop":     "test: ~73% zyskownych, śr. +0,5–1% (tylko gdy rynek wyprzedany)",
 }
-PRIORYTET = {"panika": 100, "wystrzal": 90, "5spadkow": 70, "wybicie": 65, "rsi2": 60, "chop": 30}
+PRIORYTET = {"panika": 100, "wystrzal": 90, "5spadkow": 70, "wybicie": 65, "rsi2": 60, "chop": 55}
 # ==========================================================
 
 TICKERY = """
@@ -262,7 +262,7 @@ def historia_sygnalow(D, koniec_bez=20):
 
 
 # ---------------------- analiza spółki ----------------------
-def analiza(t, D, H, panika_rynku):
+def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
     if D is None or len(D) < 130:
         return None
     o, hi, lo, c, v = (D[x] for x in ("Open", "High", "Low", "Close", "Volume"))
@@ -296,8 +296,8 @@ def analiza(t, D, H, panika_rynku):
     if panika_rynku and ret5 <= -10:
         mod.append(dict(typ="panika", tytul="🔥 PANIKA NA RYNKU – odbicie",
             kup=f"jutro na otwarciu (do ok. {zl(close * 1.02)})",
-            sprzedaj=f"gdy RSI2 &gt; 70 – dziś to zamknięcie ≥ {zl(cel_rsi2)}; najpóźniej {data_za(D, 7)}",
-            stop=f"awaryjny {zl(stop_awaryjny)}",
+            sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy zakupie po {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
+            stop="bez stopu (w testach stopy szkodziły) – trzymaj małą pozycję",
             opis=f"Indeks małych spółek mocno wyprzedany, spółka {pct(ret5)} w 5 sesji."))
 
     # 🚀 WYSTRZAŁ – ostatni skok w oknie
@@ -322,14 +322,14 @@ def analiza(t, D, H, panika_rynku):
                     e = min(float(o.iloc[j]), L618)
                     mod.append(dict(typ="wystrzal", tytul="🚀 PO WYSTRZALE – zlecenie wypełnione",
                         kup=f"wypełnione {D.index[j]:%d.%m} po ok. {zl(e)} ({pct((close / e - 1) * 100)} od wejścia)",
-                        sprzedaj=f"z limitem {zl(Hs)} (szczyt dnia wystrzału) albo na zamknięciu {data_za(D, 5 - po)}",
+                        sprzedaj=f"z limitem <b>{zl(e * 1.02)}</b> (+2% od wejścia) albo na zamknięciu {data_za(D, 10 - po)}",
                         stop=f"awaryjny {zl(Cpre - 0.5 * atr)}", opis=info, aktywny=False))
             elif dni <= SPIKE_OKNO:
                 odl = (close / L618 - 1) * 100
                 mod.append(dict(typ="wystrzal", tytul=("🚀 PO WYSTRZALE – nie goń! Ustaw limit" if dni == 0
                                                       else "🚀 PO WYSTRZALE – czekaj na limit"),
                     kup=f"zlecenie z limitem <b>{zl(L618)}</b> (61,8% korekty; śmielej: {zl(L50)}) · kurs jest {pct(odl)} nad limitem",
-                    sprzedaj=f"z limitem {zl(Hs)} (szczyt dnia wystrzału) albo po 5 sesjach od zakupu",
+                    sprzedaj=f"z limitem <b>+2% od ceny zakupu</b> (przy {zl(L618)} → {zl(L618 * 1.02)}) albo po 10 sesjach od zakupu",
                     stop=f"awaryjny {zl(Cpre - 0.5 * atr)} (pod ceną sprzed skoku)",
                     opis=info + f" Zlecenie ważne do ok. {data_za(D, SPIKE_OKNO - dni)}.", odl=odl, aktywny=True))
             break
@@ -354,26 +354,22 @@ def analiza(t, D, H, panika_rynku):
     if close > hh and v.iloc[-1] >= 1.5 * vmed.iloc[-1] and nad200:
         mod.append(dict(typ="wybicie", tytul="📈 WYBICIE na szczyt ze 120 sesji",
             kup=f"jutro na otwarciu (do ok. {zl(close * 1.02)})",
-            sprzedaj=f"po 7 sesjach ({data_za(D, 7)}) albo stop kroczący: najwyższe zamknięcie − 2×ATR",
+            sprzedaj=f"po 10 sesjach ({data_za(D, 10)}) albo stop kroczący: najwyższe zamknięcie − 2×ATR",
             stop=f"stop kroczący, dziś {zl(close - 2 * atr)}",
             opis=f"Poprzedni szczyt {zl(hh)}, wolumen {v.iloc[-1] / vmed.iloc[-1]:.1f}× mediany."))
 
-    # 🌀 CHOP + STOCH (nowa wersja)
-    k4 = d4 = None
-    t4 = False
+    # 🌀 CHOP rozładowanie przy wyprzedanym rynku (k4 tylko informacyjnie)
+    k4 = None
     H4 = to_4h(H)
     if H4 is not None and len(H4) > 60:
-        kk4, dd4 = stoch_rsi(H4["Close"])
-        k4, d4 = float(kk4.iloc[-1]), float(dd4.iloc[-1])
-        t4 = (kk4.tail(8) < 20).any() and kk4.iloc[-1] > kk4.iloc[-2] and k4 > d4
-    t1 = (k.tail(6) < 30).any() and k1 > k0 and k1 > d1
-    rozl = ch.tail(10).max() > 58 and ch1 < 50
-    if rozl and (t1 or t4) and nad200:
-        mod.append(dict(typ="chop", tytul="🌀 CHOP rozładowanie + zakręt Stoch RSI",
+        k4 = float(stoch_rsi(H4["Close"])[0].iloc[-1])
+    rozl = ch.tail(10).max() > 60 and ch1 < 50
+    if rozl and trend_ok and r2_rynku < 30 and not any(m["typ"] == "panika" for m in mod):
+        mod.append(dict(typ="chop", tytul="🌀 CHOP rozładowanie + rynek wyprzedany",
             kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
-            sprzedaj=f"gdy dzienny Stoch RSI ≥ {EXIT_K} albo po 5 sesjach ({data_za(D, 5)})",
-            stop=f"awaryjny {zl(stop_awaryjny)}",
-            opis=f"CHOP {ch1:.1f} (był &gt; 58), zakręt na {'1D' if t1 else ''}{' i ' if t1 and t4 else ''}{'4H' if t4 else ''}."))
+            sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
+            stop="bez stopu (w testach stopy szkodziły) – mała pozycja",
+            opis=f"CHOP spadł z {ch.tail(10).max():.0f} do {ch1:.0f}, RSI2 rynku {r2_rynku:.0f} (&lt; 30), kurs w trendzie."))
 
     # ⛔ ostrzeżenia
     for j in range(n - 3, n):
@@ -406,103 +402,206 @@ def analiza(t, D, H, panika_rynku):
 
 # ---------------------- raport ----------------------
 CSS = """
-:root{--bg:#0f1115;--card:#171a21;--tx:#e6e8ee;--mut:#8b92a3;--ln:#262a33;--acc:#3ddc97;--warn:#f5b84b;--bad:#f06a6a;--blue:#7aa2ff}
-@media (prefers-color-scheme: light){:root{--bg:#f6f7f9;--card:#fff;--tx:#151820;--mut:#667;--ln:#e3e5ea;--acc:#12a36b;--warn:#c98a10;--bad:#d84a4a;--blue:#3a64d8}}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,Segoe UI,Arial,sans-serif}
-.wrap{max-width:860px;margin:0 auto;padding:18px 14px}
-h1{margin:0 0 4px;font-size:21px} .sub{color:var(--mut);font-size:13px;margin-bottom:14px}
-.box{padding:11px 13px;border-radius:12px;margin:0 0 12px;border:1px solid var(--ln);font-size:14.5px}
+:root{--bg:#0f1115;--card:#171a21;--tx:#eef0f4;--mut:#9aa1b1;--ln:#2a2f3a;--acc:#3ddc97;--warn:#f5b84b;--bad:#f06a6a;--blue:#7aa2ff;--gold:#f5c84b}
+@media (prefers-color-scheme: light){:root{--bg:#f4f5f7;--card:#fff;--tx:#12151c;--mut:#5d6474;--ln:#e0e3e9;--acc:#0e9a63;--warn:#b77c08;--bad:#d03f3f;--blue:#3a64d8;--gold:#c99a10}}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,Segoe UI,Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:18px 16px 40px}
+h1{margin:0;font-size:22px} .sub{color:var(--mut);font-size:13.5px;margin:2px 0 14px}
+h2{font-size:18px;margin:26px 0 10px} h2 small{font-weight:400;color:var(--mut);font-size:13.5px}
+.box{padding:11px 14px;border-radius:12px;margin:0 0 10px;border:1px solid var(--ln);font-size:15px}
 .ok{background:rgba(61,220,151,.10)} .warnb{background:rgba(245,184,75,.13)} .badb{background:rgba(240,90,90,.14)}
-.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
-.chip{flex:none;background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:6px 11px;font-size:13px;white-space:nowrap}
-.chip.top{border-color:var(--acc)} .chip.top b{color:var(--acc)}
-.ctl{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 14px}
-.ctl button{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:20px;padding:8px 13px;font:inherit;font-size:14px}
+/* TOP 5 */
+.top{display:flex;gap:12px;background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:12px}
+.top.r1{border:2px solid var(--acc)}
+.nr{flex:none;width:38px;height:38px;border-radius:50%;background:var(--acc);color:#04130c;font-weight:800;font-size:19px;display:grid;place-items:center}
+.top:not(.r1) .nr{background:rgba(127,127,127,.18);color:var(--tx)}
+.tb{flex:1;min-width:0}
+.th{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.th a{font-size:23px;font-weight:800;color:var(--tx);text-decoration:none} .th a:hover{color:var(--acc)}
+.th .kurs{margin-left:auto;font-size:17px;font-weight:600}
+.sila{color:var(--gold);letter-spacing:1px;font-size:15px}
+.tt{font-weight:600;margin:2px 0 10px;color:var(--mut)}
+.tg{display:grid;gap:8px}
+.tg div{padding:8px 11px;border-radius:10px;background:rgba(127,127,127,.08);font-size:15px}
+.tg span{display:inline-block;min-width:82px;font-size:12px;font-weight:800;letter-spacing:.5px}
+.tg .kp span{color:var(--acc)} .tg .sp span{color:var(--blue)} .tg .st span{color:var(--bad)}
+.tw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bd{font-size:12.5px;padding:3px 9px;border-radius:12px;background:rgba(127,127,127,.14);color:var(--mut)}
+.bd.g{background:rgba(61,220,151,.14);color:var(--acc)} .bd.b{background:rgba(122,162,255,.15);color:var(--blue)}
+.bd.y{background:rgba(245,200,75,.16);color:var(--gold)}
+/* lista */
+.ctl{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 12px}
+.ctl button{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:20px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer}
 .ctl button.on{background:var(--acc);border-color:var(--acc);color:#05140d;font-weight:700}
-.k{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:13px;margin-bottom:11px}
+.k{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin-bottom:10px}
 .kh{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.kh a{font-size:20px;font-weight:800;color:var(--tx);text-decoration:none} .kh a:hover{color:var(--acc)}
-.kh .kurs{margin-left:auto;color:var(--mut)} .star{color:#f5c84b;font-size:13px}
-.tag{font-size:11.5px;padding:2px 8px;border-radius:10px;background:rgba(127,127,127,.14);color:var(--mut)}
-.mod{margin-top:10px;padding:10px 11px;border-radius:11px;border-left:4px solid var(--acc);background:rgba(61,220,151,.07)}
+.kh a{font-size:19px;font-weight:800;color:var(--tx);text-decoration:none} .kh a:hover{color:var(--acc)}
+.kh .kurs{margin-left:auto;font-weight:600}
+.tag{font-size:12px;padding:2px 8px;border-radius:10px;background:rgba(127,127,127,.14);color:var(--mut)}
+.mod{margin-top:9px;padding:9px 11px;border-radius:11px;border-left:4px solid var(--acc);background:rgba(61,220,151,.07)}
 .mod.wystrzal{border-color:var(--blue);background:rgba(122,162,255,.08)} .mod.panika{border-color:var(--bad);background:rgba(240,90,90,.08)}
 .mod.chop{border-color:var(--mut);background:rgba(127,127,127,.07)}
-.mod h3{margin:0 0 6px;font-size:15px}
-.plan{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
-.plan .l{color:var(--mut)} .op{color:var(--mut);font-size:13px;margin-top:6px}
-.ost{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(240,90,90,.12);color:var(--bad);font-size:13.5px}
-.ins{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(122,162,255,.12);color:var(--blue);font-size:13.5px}
-.ex{margin-top:9px;padding:8px 10px;border-radius:10px;background:rgba(245,184,75,.13);font-size:13.5px}
+.mod h3{margin:0 0 5px;font-size:15px}
+.plan{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:14.5px}
+.plan .l{color:var(--mut);font-weight:600} .op{color:var(--mut);font-size:13px;margin-top:6px}
+.ost{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(240,90,90,.12);color:var(--bad);font-size:14px}
+.ins{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(122,162,255,.12);color:var(--blue);font-size:14px}
+.ex{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(245,184,75,.13);font-size:14px}
 .info{color:var(--mut);font-size:12.5px;margin-top:8px}
-.leg{color:var(--mut);font-size:12.5px;line-height:1.6;margin-top:18px}
+details{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:10px 14px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;font-size:15.5px}
+details[open] summary{margin-bottom:10px}
+details .k{border-color:var(--ln);background:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--bg);border:1px solid var(--ln);border-radius:16px;padding:5px 10px;font-size:13.5px}
+.chip.top3{border-color:var(--acc)} .chip.top3 b{color:var(--acc)}
+.leg{color:var(--mut);font-size:14px;line-height:1.6}
+.stopka{color:var(--mut);font-size:12.5px;margin-top:20px;text-align:center}
+@media (max-width:560px){.top{padding:12px;gap:9px}.nr{width:30px;height:30px;font-size:16px}.tg span{display:block;min-width:0}.th a{font-size:21px}}
 """
 
+NAZWA = {"panika": "Odbicie po panice na rynku", "wystrzal": "Wejście na korekcie po wystrzale",
+         "5spadkow": "5 spadków z rzędu w trendzie", "rsi2": "Mocne wyprzedanie w trendzie (RSI2)",
+         "wybicie": "Wybicie na nowy szczyt", "chop": "CHOP rozładowanie przy wyprzedanym rynku"}
 
 INSIDERZY = {}
+
+
+def ocena(r):
+    """Punkty do rankingu TOP 5: siła reguły z testów + dodatki. None = nie do kupna."""
+    if any(x.startswith("⛔") for x in r["ostrz"]):
+        return None, None
+    kup = [m for m in r["mod"] if m.get("aktywny", True)]
+    if not kup:
+        return None, None
+    m = max(kup, key=lambda m: PRIORYTET[m["typ"]])
+    p = float(PRIORYTET[m["typ"]])
+    if m["typ"] == "wystrzal":  # daleko od limitu = mała szansa wypełnienia
+        p -= min(30.0, max(0.0, m.get("odl", 0) - 3) * 3)
+    if r.get("insider"):
+        p += 8
+    if r.get("gwiazda"):
+        p += 6
+    if r["sr_hist"] is not None and r["n_hist"] >= 3:
+        p += max(-6.0, min(6.0, r["sr_hist"] * 2))
+    if any(x.startswith("⚠️") for x in r["ostrz"]):
+        p -= 8
+    if r["wyjscie"]:
+        p -= 5
+    return p, m
+
+
+def kropki(p):
+    n = 3 if p >= 80 else 2 if p >= 55 else 1
+    return "★" * n + "☆" * (3 - n)
+
+
+def karta_top(i, r):
+    p, m = r["_p"], r["_m"]
+    tv = f"https://www.tradingview.com/chart/?symbol=GPW:{r['spolka']}"
+    bd = [f'<span class="bd g">{STATY[m["typ"]].replace("test: ", "w testach: ")}</span>']
+    if r.get("insider"):
+        bd.append('<span class="bd b">👔 zarząd kupił akcje</span>')
+    if r.get("gwiazda"):
+        bd.append('<span class="bd y">⭐ spółka dobrze reaguje na sygnały</span>')
+    if r["sr_hist"] is not None and r["n_hist"] >= 3:
+        bd.append(f'<span class="bd">historia tej spółki: {r["sr_hist"]:+.1f}% śr. z {r["n_hist"]}</span>'.replace(".", ",", 1))
+    bd.append(f'<span class="bd">zmienność dzienna {r["atr"]:.1f}%</span>'.replace(".", ","))
+    ostrz = "".join(f'<div class="ost">{html.escape(x)}</div>' for x in r["ostrz"])
+    return (f'<div class="top{" r1" if i == 0 else ""}"><div class="nr">{i + 1}</div><div class="tb">'
+            f'<div class="th"><a href="{tv}" target="_blank">{r["spolka"]}</a><span class="sila" title="siła sygnału">{kropki(p)}</span>'
+            f'<span class="kurs">{zl(r["kurs"])}</span></div>'
+            f'<div class="tt">{m["tytul"].split(" ", 1)[0]} {NAZWA[m["typ"]]} · {html.escape(r["sektor"])}</div>'
+            f'<div class="tg"><div class="kp"><span>KUP</span>{m["kup"]}</div>'
+            f'<div class="sp"><span>SPRZEDAJ</span>{m["sprzedaj"]}</div>'
+            f'<div class="st"><span>STOP</span>{m["stop"]}</div></div>'
+            f'{ostrz}<div class="tw">{"".join(bd)}</div><div class="info">{m["opis"]}</div></div></div>')
 
 
 def karta(r):
     tv = f"https://www.tradingview.com/chart/?symbol=GPW:{r['spolka']}"
     typy = (" ".join(m["typ"] for m in r["mod"]) + (" ostrz" if r["ostrz"] else "") + (" exit" if r["wyjscie"] else "")
-            + (" insider" if r.get("insider") else ""))
-    star = '<span class="star">⭐ dobrze reaguje</span>' if r.get("gwiazda") else ""
+            + (" insider" if r.get("insider") else "") + (" star" if r.get("gwiazda") else ""))
+    star = '<span class="tag">⭐ dobrze reaguje</span>' if r.get("gwiazda") else ""
     mods = ""
     for m in r["mod"]:
         mods += (f'<div class="mod {m["typ"]}"><h3>{m["tytul"]}</h3><div class="plan">'
                  f'<span class="l">Kup</span><span>{m["kup"]}</span>'
                  f'<span class="l">Sprzedaj</span><span>{m["sprzedaj"]}</span>'
                  f'<span class="l">Stop</span><span>{m["stop"]}</span></div>'
-                 f'<div class="op">{m["opis"]}<br><i>{STATY[m["typ"]]}</i></div></div>')
+                 f'<div class="op">{m["opis"]} <i>{STATY[m["typ"]]}</i></div></div>')
     ost = "".join(f'<div class="ost">{html.escape(x)}</div>' for x in r["ostrz"])
     if r.get("insider"):
         ost = f'<div class="ins">{html.escape(r["insider"])}</div>' + ost
-    ex = (f'<div class="ex">🔔 Dzienny Stoch RSI = {r["k1"]:.0f} (≥ {EXIT_K}) – jeśli masz pozycję, to strefa realizacji zysku.</div>'
+    ex = (f'<div class="ex">🔔 Dzienny Stoch RSI = {r["k1"]:.0f} – jeśli masz tę spółkę, to strefa realizacji zysku.</div>'
           if r["wyjscie"] else "")
     hist = (f" · historia sygnałów: {r['sr_hist']:+.1f}% śr. z {r['n_hist']}".replace(".", ",")
             if r["sr_hist"] is not None else "")
     sek = r["sektor"] + (f" (#{r['sek_msc']})" if r.get("sek_msc") else "")
     return (f'<div class="k" data-typy="{typy}"><div class="kh"><a href="{tv}" target="_blank">{r["spolka"]}</a>'
             f'{star}<span class="tag">{html.escape(sek)}</span><span class="kurs">{zl(r["kurs"])}</span></div>'
-            f'{mods}{ost}{ex}<div class="info">ATR {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
+            f'{mods}{ost}{ex}<div class="info">Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
             f'{" · 4H " + format(r["k4"], ".0f") if r["k4"] is not None else ""} · CHOP {r["ch1"]:.0f} · '
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
 
 def raport(wyniki, plik, rynek, sektory, panika):
     from zoneinfo import ZoneInfo
-    teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw")).strftime("%d.%m.%Y %H:%M")
-    akt = [r for r in wyniki if r["mod"] or r["ostrz"] or r["wyjscie"] or r.get("insider")]
-    akt.sort(key=lambda r: (-max([PRIORYTET[m["typ"]] for m in r["mod"]] or [0]),
-                            -(1 if r.get("insider") else 0), -(1 if r.get("gwiazda") else 0), r["spolka"]))
-    n_ins = sum(1 for r in akt if r.get("insider"))
-    chipy = "".join(f'<span class="chip{" top" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
-                    for i, (s, m) in enumerate(sektory))
-    pan = ('<div class="box badb">🔥 <b>PANIKA NA MAŁYCH SPÓŁKACH</b> (RSI2 indeksu &lt; 10) – historycznie najlepszy moment '
-           'na odbicia. Sprawdź karty z 🔥.</div>' if panika else "")
+    teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw")).strftime("%d.%m.%Y, godz. %H:%M")
+    for r in wyniki:
+        r["_p"], r["_m"] = ocena(r)
+    kupno = sorted([r for r in wyniki if r["_p"] is not None], key=lambda r: (-r["_p"], r["spolka"]))
+    top = kupno[:5]
+    reszta = kupno[5:]
+    inne = sorted([r for r in wyniki if r["_p"] is None and (r["mod"] or r["ostrz"] or r["wyjscie"] or r.get("insider"))],
+                  key=lambda r: (0 if r["mod"] else 1 if r.get("insider") else 2 if r["ostrz"] else 3, r["spolka"]))
     rk = {"ok": "ok", "warn": "warnb", "bad": "badb"}[rynek[0]]
-    licz = {t: sum(1 for r in akt if any(m["typ"] == t for m in r["mod"])) for t in PRIORYTET}
+    pan = ('<div class="box badb">🔥 <b>PANIKA NA MAŁYCH SPÓŁKACH</b> – historycznie najlepszy moment na odbicia.</div>'
+           if panika else "")
+    if top:
+        top_html = "".join(karta_top(i, r) for i, r in enumerate(top))
+        if len(top) < 5:
+            top_html += f'<div class="box">Dziś tylko {len(top)} {"sygnał" if len(top) == 1 else "sygnały"} kupna – nie dobieraj na siłę.</div>'
+    else:
+        top_html = '<div class="box">Dziś brak sygnałów kupna. Czekamy – brak pozycji to też pozycja.</div>'
+    licz = {t: sum(1 for r in reszta if any(m["typ"] == t for m in r["mod"])) for t in PRIORYTET}
     btn = "".join(f'<button data-f="{t}">{lab} ({licz[t]})</button>' for t, lab in
                   (("panika", "🔥 Panika"), ("wystrzal", "🚀 Wystrzał"), ("5spadkow", "📉 5 spadków"),
-                   ("rsi2", "📉 RSI2"), ("wybicie", "📈 Wybicie"), ("chop", "🌀 CHOP")))
+                   ("rsi2", "📉 RSI2"), ("wybicie", "📈 Wybicie"), ("chop", "🌀 CHOP")) if licz[t])
+    reszta_html = (f'<h2>Pozostałe sygnały kupna <small>({len(reszta)}, od najmocniejszych)</small></h2>'
+                   f'<div class="ctl"><button class="on" data-f="">Wszystkie</button>{btn}</div>'
+                   f'<div id="cards">{"".join(karta(r) for r in reszta)}</div>') if reszta else ""
+    n_ex = sum(1 for r in inne if r["wyjscie"])
+    inne_html = (f'<details><summary>⛔ Ostrzeżenia, 🔔 do realizacji i pozostałe ({len(inne)})'
+                 f'{f" – {n_ex} do realizacji" if n_ex else ""}</summary>{"".join(karta(r) for r in inne)}</details>'
+                 if inne else "")
+    chipy = "".join(f'<span class="chip{" top3" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
+                    for i, (s, m) in enumerate(sektory))
     strona = f"""<!doctype html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Skaner GPW</title><style>{CSS}</style></head>
 <body><div class="wrap"><h1>Skaner GPW</h1>
-<div class="sub">Stan na {teraz} · przeskanowano {len(wyniki)} płynnych spółek · sygnałów: {len(akt)} · kliknij spółkę = wykres</div>
+<div class="sub">Stan na {teraz} · {len(wyniki)} spółek · kliknij nazwę spółki, żeby otworzyć wykres</div>
 <div class="box {rk}">{rynek[1]}</div>{pan}
-<div class="chips">{chipy}</div>
-<div class="ctl"><button class="on" data-f="">Wszystkie</button>{btn}
-<button data-f="insider">👔 Insiderzy ({n_ins})</button><button data-f="exit">🔔 Do realizacji</button><button data-f="ostrz">⛔ Ostrzeżenia</button><button data-f="star">⭐</button></div>
-<div id="cards">{''.join(karta(r) for r in akt) or '<div class="box">Dziś brak sygnałów.</div>'}</div>
-<div class="leg"><b>Jak czytać:</b> „Kup jutro na otwarciu” = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
-„Zlecenie z limitem” = kupno tylko jeśli kurs spadnie do tej ceny (ustaw w XTB zlecenie z limitem). Stop awaryjny jest szeroki celowo –
-w testach ciasne stopy pogarszały wynik. Wyniki „test:” to średnie z danych 08.2024–11.2026 po kosztach 0,4%; realnie licz na mniej.
-Nie wchodź na 3 sesje przed raportem okresowym spółki. 👔 = członek zarządu kupił akcje za ≥ 100 tys. zł w ostatnich
-{INSIDER_DNI} dniach (dane: Bankier.pl/Notoria) – to dodatkowy plus, nie samodzielny sygnał. ⭐ =spółka w najlepszych 20% pod względem historycznych wyników tych sygnałów.<br>
-Narzędzie pomocnicze, nie rekomendacja inwestycyjna. Zawsze sprawdź wykres.</div></div>
+<h2>🏆 TOP 5 na dziś <small>najmocniejsze sygnały kupna wg testów</small></h2>
+{top_html}
+{reszta_html}
+{inne_html}
+<details><summary>📊 Najmocniejsze sektory (ostatnie 1–3 miesiące)</summary><div class="chips">{chipy}</div></details>
+<details><summary>❓ Jak czytać</summary><div class="leg">
+<b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
+plus dodatkowe punkty za 👔 zakup zarządu, ⭐ i dobrą historię sygnałów na tej spółce. ★★★ = mocny, ★☆☆ = słaby.<br>
+<b>Kup jutro na otwarciu</b> = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
+<b>Zlecenie z limitem</b> = kupno tylko, jeśli kurs spadnie do tej ceny (w XTB: zlecenie z limitem).<br>
+<b>Stop</b>: w testach stopy −5%/−8% pogarszały wynik, dlatego przy 🔥/🚀/🌀 go nie ma – zamiast tego trzymaj małe pozycje (maks. 3–4 naraz). Limit +2/3% ustaw zaraz po zakupie.
+Wyniki „w testach” to średnie z 08.2024–11.2026 po kosztach 0,4% – realnie licz na mniej.
+Nie wchodź na 3 sesje przed raportem okresowym spółki.<br>
+👔 = członek zarządu kupił akcje za ≥ 100 tys. zł w ostatnich {INSIDER_DNI} dniach (Bankier.pl). ⭐ = spółka w najlepszych 20% pod względem historycznych wyników sygnałów.
+</div></details>
+<div class="stopka">Narzędzie pomocnicze, nie rekomendacja inwestycyjna. Zawsze sprawdź wykres.</div></div>
 <script>
-let f='';document.querySelectorAll('.ctl button').forEach(b=>b.onclick=()=>{{
-document.querySelectorAll('.ctl button').forEach(x=>x.classList.remove('on'));b.classList.add('on');f=b.dataset.f;
-document.querySelectorAll('.k').forEach(k=>{{const t=k.dataset.typy+(k.querySelector('.star')?' star':'');k.style.display=(!f||t.split(' ').includes(f))?'':'none';}});}});
+document.querySelectorAll('.ctl button').forEach(b=>b.onclick=()=>{{
+document.querySelectorAll('.ctl button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.f;
+document.querySelectorAll('#cards .k').forEach(k=>{{k.style.display=(!f||k.dataset.typy.split(' ').includes(f))?'':'none';}});}});
 </script></body></html>"""
     Path(plik).parent.mkdir(parents=True, exist_ok=True)
     Path(plik).write_text(strona, encoding="utf-8")
@@ -559,7 +658,7 @@ def main():
         if df is None or df.index[-1] < ostatnia - pd.Timedelta(days=6):
             continue  # brak świeżych notowań (zawieszona / wycofana)
         try:
-            r = analiza(t, df, H.get(s), panika)
+            r = analiza(t, df, H.get(s), panika, idx_r2)
         except Exception as e:
             print(f"  {t}: błąd {e}")
             continue
