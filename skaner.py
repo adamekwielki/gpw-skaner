@@ -607,6 +607,58 @@ document.querySelectorAll('#cards .k').forEach(k=>{{k.style.display=(!f||k.datas
     Path(plik).write_text(strona, encoding="utf-8")
 
 
+# ---------------------- alerty na telefon (ntfy.sh) ----------------------
+STRONA = "https://adamekwielki.github.io/gpw-skaner/"
+
+
+def _ntfy(topic, tytul, tekst, tagi="chart_with_upwards_trend", prio=4):
+    import json, urllib.request
+    dane = json.dumps({"topic": topic, "title": tytul, "message": tekst, "tags": [tagi],
+                       "priority": prio, "click": STRONA}).encode("utf-8")
+    req = urllib.request.Request("https://ntfy.sh/", data=dane, method="POST",
+                                 headers={"Content-Type": "application/json"})
+    urllib.request.urlopen(req, timeout=15).read()
+
+
+def alerty(wyniki, panika, plik_stanu="docs/alerty.json"):
+    """Wysyła powiadomienie o sygnałach ★★★ (bez powtórek tej samej spółki i reguły przez 5 dni)."""
+    import json, re
+    topic = os.environ.get("NTFY_TOPIC", "").strip()
+    if not topic:
+        print("alerty: brak NTFY_TOPIC – pomijam")
+        return
+    dzis = dt.date.today()
+    try:
+        stan = json.loads(Path(plik_stanu).read_text(encoding="utf-8"))
+    except Exception:
+        stan = {}
+    stan = {k: v for k, v in stan.items() if (dzis - dt.date.fromisoformat(v)).days < 5}
+    czysc = lambda x: re.sub(r"<[^>]+>", "", x).replace("&gt;", ">").replace("&lt;", "<")
+    nowe = []
+    for r in sorted([r for r in wyniki if r.get("_p") is not None and r["_p"] >= 80], key=lambda r: -r["_p"]):
+        m = r["_m"]
+        klucz = f'{r["spolka"]}:{m["typ"]}'
+        if klucz in stan:
+            continue
+        stan[klucz] = dzis.isoformat()
+        nowe.append(f'{m["tytul"].split(" ", 1)[0]} {r["spolka"]} ★★★ – {NAZWA[m["typ"]]}\n'
+                    f'KUP: {czysc(m["kup"])}\nSPRZEDAJ: {czysc(m["sprzedaj"])}')
+    try:
+        if os.environ.get("NTFY_TEST") == "true":
+            _ntfy(topic, "Skaner GPW – test", "Powiadomienia działają. Sygnały ★★★ będą przychodzić tutaj.", "white_check_mark", 3)
+            print("alerty: wysłano test")
+        if nowe:
+            _ntfy(topic, f"Skaner GPW: mocne sygnały ★★★ ({len(nowe)})",
+                  ("🔥 PANIKA NA RYNKU!\n\n" if panika else "") + "\n\n".join(nowe[:5]), "rotating_light", 4)
+            print(f"alerty: wysłano {len(nowe)}")
+        else:
+            print("alerty: brak nowych sygnałów ★★★")
+        Path(plik_stanu).parent.mkdir(parents=True, exist_ok=True)
+        Path(plik_stanu).write_text(json.dumps(stan, indent=0), encoding="utf-8")
+    except Exception as e:
+        print(f"alerty: błąd wysyłki {e}")
+
+
 # ---------------------- start ----------------------
 def main():
     ap = argparse.ArgumentParser()
@@ -676,6 +728,7 @@ def main():
         if r["mod"]:
             print(f"  {r['spolka']:>4} {'⭐' if r.get('gwiazda') else '  '} " + " | ".join(m['tytul'] for m in r['mod']))
     raport(wyniki, args.out, rynek, sektory, panika)
+    alerty(wyniki, panika, str(Path(args.out).parent / "alerty.json"))
     print("\nRaport:", os.path.abspath(args.out))
 
     try:
