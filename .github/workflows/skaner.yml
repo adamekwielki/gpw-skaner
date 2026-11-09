@@ -2,10 +2,15 @@ name: Skaner GPW
 
 on:
   schedule:
-    # godziny w UTC: 07:05 (rano przed sesją) i 16:20 (po zamknięciu sesji), pon-pt
+    # godziny w UTC: 07:30 i 16:20 = 8:30 i 17:20 czasu polskiego zimą (latem 9:30 i 18:20), pon-pt
     - cron: "30 7 * * 1-5"
     - cron: "20 16 * * 1-5"
-  workflow_dispatch: {}   # przycisk "Run workflow" do ręcznego uruchomienia
+  workflow_dispatch:   # przycisk "Run workflow" do ręcznego uruchomienia
+    inputs:
+      test_alert:
+        description: "Wyślij testowe powiadomienie na telefon"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -21,10 +26,13 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - run: python skaner.py --out docs/index.html --no-open
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC || 'gpw-adam-90fff5f59c' }}
+          NTFY_TEST: ${{ inputs.test_alert }}
       - name: Zapisz raport
         run: |
           git config user.name "skaner-bot"
           git config user.email "skaner-bot@users.noreply.github.com"
-          git add docs/index.html
+          git add docs/
           git commit -m "Raport $(date -u +'%Y-%m-%d %H:%M')" || echo "brak zmian"
           git push
