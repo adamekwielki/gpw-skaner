@@ -3,7 +3,7 @@ name: Skaner GPW
 on:
   schedule:
     # godziny w UTC: 07:05 (rano przed sesją) i 16:20 (po zamknięciu sesji), pon-pt
-    - cron: "5 7 * * 1-5"
+    - cron: "30 7 * * 1-5"
     - cron: "20 16 * * 1-5"
   workflow_dispatch: {}   # przycisk "Run workflow" do ręcznego uruchomienia
 
