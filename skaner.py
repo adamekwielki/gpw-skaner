@@ -357,6 +357,9 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
             sprzedaj=f"po 10 sesjach ({data_za(D, 10)}) albo stop kroczący: najwyższe zamknięcie − 2×ATR",
             stop=f"stop kroczący, dziś {zl(close - 2 * atr)}",
             opis=f"Poprzedni szczyt {zl(hh)}, wolumen {v.iloc[-1] / vmed.iloc[-1]:.1f}× mediany."))
+        if atr / close * 100 > 5:
+            ostrz.append(f"⚠️ Duża zmienność ({atr / close * 100:.1f}% dziennie) – wybicie to tu loteria: w testach co 5. "
+                         "transakcja traciła ponad 10%. Najwyżej pół pozycji.".replace(".", ",", 1))
 
     # 🌀 CHOP rozładowanie przy wyprzedanym rynku (k4 tylko informacyjnie)
     k4 = None
@@ -428,7 +431,7 @@ h2{font-size:18px;margin:26px 0 10px} h2 small{font-weight:400;color:var(--mut);
 .tw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .bd{font-size:12.5px;padding:3px 9px;border-radius:12px;background:rgba(127,127,127,.14);color:var(--mut)}
 .bd.g{background:rgba(61,220,151,.14);color:var(--acc)} .bd.b{background:rgba(122,162,255,.15);color:var(--blue)}
-.bd.y{background:rgba(245,200,75,.16);color:var(--gold)}
+.bd.y{background:rgba(245,200,75,.16);color:var(--gold)} .bd.r{background:rgba(240,90,90,.14);color:var(--bad);font-weight:700}
 /* lista */
 .ctl{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 12px}
 .ctl button{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:20px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer}
@@ -491,6 +494,12 @@ def ocena(r):
     return p, m
 
 
+def pozycja(r):
+    if r["atr"] > 5:
+        return '<span class="bd r">½ pozycji – duża zmienność</span>'
+    return '<span class="bd g">pełna pozycja</span>'
+
+
 def kropki(p):
     n = 3 if p >= 80 else 2 if p >= 55 else 1
     return "★" * n + "☆" * (3 - n)
@@ -507,6 +516,7 @@ def karta_top(i, r):
     if r["sr_hist"] is not None and r["n_hist"] >= 3:
         bd.append(f'<span class="bd">historia tej spółki: {r["sr_hist"]:+.1f}% śr. z {r["n_hist"]}</span>'.replace(".", ",", 1))
     bd.append(f'<span class="bd">zmienność dzienna {r["atr"]:.1f}%</span>'.replace(".", ","))
+    bd.insert(0, pozycja(r))
     ostrz = "".join(f'<div class="ost">{html.escape(x)}</div>' for x in r["ostrz"])
     return (f'<div class="top{" r1" if i == 0 else ""}"><div class="nr">{i + 1}</div><div class="tb">'
             f'<div class="th"><a href="{tv}" target="_blank">{r["spolka"]}</a><span class="sila" title="siła sygnału">{kropki(p)}</span>'
@@ -540,7 +550,7 @@ def karta(r):
     sek = r["sektor"] + (f" (#{r['sek_msc']})" if r.get("sek_msc") else "")
     return (f'<div class="k" data-typy="{typy}"><div class="kh"><a href="{tv}" target="_blank">{r["spolka"]}</a>'
             f'{star}<span class="tag">{html.escape(sek)}</span><span class="kurs">{zl(r["kurs"])}</span></div>'
-            f'{mods}{ost}{ex}<div class="info">Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
+            f'{mods}{ost}{ex}<div class="info">{"<b>½ pozycji</b> · " if r["atr"] > 5 and r["mod"] else ""}Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
             f'{" · 4H " + format(r["k4"], ".0f") if r["k4"] is not None else ""} · CHOP {r["ch1"]:.0f} · '
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
@@ -551,8 +561,9 @@ def raport(wyniki, plik, rynek, sektory, panika):
     for r in wyniki:
         r["_p"], r["_m"] = ocena(r)
     kupno = sorted([r for r in wyniki if r["_p"] is not None], key=lambda r: (-r["_p"], r["spolka"]))
-    top = kupno[:5]
-    reszta = kupno[5:]
+    poza_top = lambda r: r["_m"]["typ"] in ("chop", "rsi2") and r["atr"] > 5  # w testach niestabilne i ryzykowne
+    top = [r for r in kupno if not poza_top(r)][:5]
+    reszta = [r for r in kupno if r not in top]
     inne = sorted([r for r in wyniki if r["_p"] is None and (r["mod"] or r["ostrz"] or r["wyjscie"] or r.get("insider"))],
                   key=lambda r: (0 if r["mod"] else 1 if r.get("insider") else 2 if r["ostrz"] else 3, r["spolka"]))
     rk = {"ok": "ok", "warn": "warnb", "bad": "badb"}[rynek[0]]
@@ -593,6 +604,7 @@ plus dodatkowe punkty za 👔 zakup zarządu, ⭐ i dobrą historię sygnałów 
 <b>Kup jutro na otwarciu</b> = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
 <b>Zlecenie z limitem</b> = kupno tylko, jeśli kurs spadnie do tej ceny (w XTB: zlecenie z limitem).<br>
 <b>Stop</b>: w testach stopy −5%/−8% pogarszały wynik, dlatego przy 🔥/🚀/🌀 go nie ma – zamiast tego trzymaj małe pozycje (maks. 3–4 naraz). Limit +2/3% ustaw zaraz po zakupie.
+<b>½ pozycji</b> = spółka rusza się średnio ponad 5% dziennie – w testach co 10. transakcja traciła tam ponad 10%, więc wchodź mniejszą kwotą. 🌀 CHOP i 📉 RSI2 na takich spółkach nie trafiają do TOP 5.
 Wyniki „w testach” to średnie z 08.2024–11.2026 po kosztach 0,4% – realnie licz na mniej.
 Nie wchodź na 3 sesje przed raportem okresowym spółki.<br>
 👔 = członek zarządu kupił akcje za ≥ 100 tys. zł w ostatnich {INSIDER_DNI} dniach (Bankier.pl). ⭐ = spółka w najlepszych 20% pod względem historycznych wyników sygnałów.
