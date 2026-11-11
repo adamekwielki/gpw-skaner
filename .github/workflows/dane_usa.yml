@@ -1,0 +1,22 @@
+name: Dane USA (jednorazowo)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  pobierz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install yfinance pandas numpy lxml
+      - run: python dane_usa.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dane_usa
+          path: dane_usa/
+          retention-days: 14
+          compression-level: 0
