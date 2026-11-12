@@ -1,0 +1,36 @@
+name: Powiadomienie na telefon
+
+# Uruchamiane przez agentów (gh workflow run powiadom.yml -f tytul=... -f tresc=...)
+on:
+  workflow_dispatch:
+    inputs:
+      tytul:
+        description: "Tytuł"
+        required: true
+      tresc:
+        description: "Treść"
+        required: true
+      priorytet:
+        description: "1-5"
+        default: "3"
+
+jobs:
+  wyslij:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wyślij przez ntfy
+        env:
+          TOPIC: ${{ secrets.NTFY_TOPIC || 'gpw-adam-90fff5f59c' }}
+          TYTUL: ${{ inputs.tytul }}
+          TRESC: ${{ inputs.tresc }}
+          PRIO: ${{ inputs.priorytet }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          d = {"topic": os.environ["TOPIC"], "title": os.environ["TYTUL"], "message": os.environ["TRESC"].replace("\\n", "\n"),
+               "priority": int(os.environ.get("PRIO") or 3), "tags": ["robot"],
+               "click": "https://adamekwielki.github.io/gpw-skaner/"}
+          r = urllib.request.Request("https://ntfy.sh/", data=json.dumps(d).encode(), headers={"Content-Type": "application/json"})
+          print(urllib.request.urlopen(r, timeout=15).status)
+          PY
