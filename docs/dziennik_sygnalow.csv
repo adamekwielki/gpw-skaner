@@ -1,0 +1,9 @@
+data_sygnalu,spolka,typ,punkty,gwiazdki,w_top5,kurs,limit,atr,status,data_wejscia,cena_wejscia,data_wyjscia,cena_wyjscia,wynik_proc,dni
+2026-11-12,EUR,wystrzal,77.5,2,1,4.782,4.4623,4.75,oczekuje,,,,,,
+2026-11-12,ACT,wybicie,68.2,2,1,54.7,,4.83,oczekuje,,,,,,
+2026-11-12,WAS,wystrzal,67.0,2,1,7.82,6.5067,7.64,oczekuje,,,,,,
+2026-11-12,ALE,wybicie,65.3,2,1,63.55,,2.82,oczekuje,,,,,,
+2026-11-12,KTY,wybicie,60.3,2,1,1319.0,,2.22,oczekuje,,,,,,
+2026-11-12,CDR,wybicie,59.0,2,0,276.4,,2.8,oczekuje,,,,,,
+2026-11-12,DAT,wystrzal,57.8,2,0,94.0,78.438,8.53,oczekuje,,,,,,
+2026-11-12,TOA,wystrzal,55.8,2,0,13.34,11.7508,4.04,oczekuje,,,,,,
