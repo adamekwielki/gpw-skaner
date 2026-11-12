@@ -331,7 +331,8 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
                     kup=f"zlecenie z limitem <b>{zl(L618)}</b> (61,8% korekty; śmielej: {zl(L50)}) · kurs jest {pct(odl)} nad limitem",
                     sprzedaj=f"z limitem <b>+2% od ceny zakupu</b> (przy {zl(L618)} → {zl(L618 * 1.02)}) albo po 10 sesjach od zakupu",
                     stop=f"awaryjny {zl(Cpre - 0.5 * atr)} (pod ceną sprzed skoku)",
-                    opis=info + f" Zlecenie ważne do ok. {data_za(D, SPIKE_OKNO - dni)}.", odl=odl, aktywny=True))
+                    opis=info + f" Zlecenie ważne do ok. {data_za(D, SPIKE_OKNO - dni)}.", odl=odl, aktywny=True,
+                    limit=float(L618)))
             break
 
     # 📉 5 SPADKÓW
@@ -398,7 +399,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
 
     wyjscie = k1 >= EXIT_K
     sr_hist, n_hist = historia_sygnalow(D)
-    return dict(spolka=t, kurs=close, atr=atr / close * 100, obrot=obrot, mod=mod, ostrz=ostrz,
+    return dict(spolka=t, data=f"{D.index[-1]:%Y-%m-%d}", kurs=close, atr=atr / close * 100, obrot=obrot, mod=mod, ostrz=ostrz,
                 wyjscie=wyjscie, k1=k1, k4=k4, r2=r2, ch1=ch1, nad200=nad200, r60=r60,
                 sektor=SEKTOR_SPOLKI.get(t, "Inne"), sr_hist=sr_hist, n_hist=n_hist, insider=insider)
 
@@ -460,6 +461,8 @@ details .k{border-color:var(--ln);background:var(--bg)}
 .chip.top3{border-color:var(--acc)} .chip.top3 b{color:var(--acc)}
 .leg{color:var(--mut);font-size:14px;line-height:1.6}
 .stopka{color:var(--mut);font-size:12.5px;margin-top:20px;text-align:center}
+.tw2{width:100%;border-collapse:collapse;font-size:14px} .tw2 td,.tw2 th{padding:5px 6px;border-bottom:1px solid var(--ln);text-align:left}
+.tw2 th{color:var(--mut);font-weight:600;font-size:12.5px}
 @media (max-width:560px){.top{padding:12px;gap:9px}.nr{width:30px;height:30px;font-size:16px}.tg span{display:block;min-width:0}.th a{font-size:21px}}
 """
 
@@ -555,7 +558,7 @@ def karta(r):
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
 
-def raport(wyniki, plik, rynek, sektory, panika):
+def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
     from zoneinfo import ZoneInfo
     teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw")).strftime("%d.%m.%Y, godz. %H:%M")
     for r in wyniki:
@@ -563,6 +566,8 @@ def raport(wyniki, plik, rynek, sektory, panika):
     kupno = sorted([r for r in wyniki if r["_p"] is not None], key=lambda r: (-r["_p"], r["spolka"]))
     poza_top = lambda r: r["_m"]["typ"] in ("chop", "rsi2") and r["atr"] > 5  # w testach niestabilne i ryzykowne
     top = [r for r in kupno if not poza_top(r)][:5]
+    for r in top:
+        r["_top"] = True
     reszta = [r for r in kupno if r not in top]
     inne = sorted([r for r in wyniki if r["_p"] is None and (r["mod"] or r["ostrz"] or r["wyjscie"] or r.get("insider"))],
                   key=lambda r: (0 if r["mod"] else 1 if r.get("insider") else 2 if r["ostrz"] else 3, r["spolka"]))
@@ -597,6 +602,7 @@ def raport(wyniki, plik, rynek, sektory, panika):
 {top_html}
 {reszta_html}
 {inne_html}
+{wyniki_html}
 <details><summary>📊 Najmocniejsze sektory (ostatnie 1–3 miesiące)</summary><div class="chips">{chipy}</div></details>
 <details><summary>❓ Jak czytać</summary><div class="leg">
 <b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
@@ -617,6 +623,133 @@ document.querySelectorAll('#cards .k').forEach(k=>{{k.style.display=(!f||k.datas
 </script></body></html>"""
     Path(plik).parent.mkdir(parents=True, exist_ok=True)
     Path(plik).write_text(strona, encoding="utf-8")
+
+
+# ---------------------- dziennik sygnałów (śledzenie wyników na żywo) ----------------------
+WYJSCIE = {"panika": ("tp", 1.03, 10), "chop": ("tp", 1.03, 10), "wystrzal": ("tp", 1.02, 10),
+           "5spadkow": ("rsi2", None, 7), "rsi2": ("rsi2", None, 7), "wybicie": ("hold", None, 10)}
+KOLUMNY = ["data_sygnalu", "spolka", "typ", "punkty", "gwiazdki", "w_top5", "kurs", "limit", "atr",
+           "status", "data_wejscia", "cena_wejscia", "data_wyjscia", "cena_wyjscia", "wynik_proc", "dni"]
+
+
+def zapisz_sygnaly(wyniki, plik):
+    """Dopisuje dzisiejsze sygnały kupna (tylko po sesji / przed otwarciem, bez duplikatów)."""
+    from zoneinfo import ZoneInfo
+    teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw"))
+    if 9 <= teraz.hour < 17 and teraz.weekday() < 5:
+        print("dziennik: sesja trwa – nie zapisuję sygnałów z niepełnej świecy")
+        return
+    p = Path(plik)
+    J = pd.read_csv(p, dtype=object, keep_default_na=False) if p.exists() else pd.DataFrame(columns=KOLUMNY)
+    klucze = set(zip(J.data_sygnalu, J.spolka, J.typ))
+    kupno = sorted([r for r in wyniki if r.get("_p") is not None], key=lambda r: -r["_p"])
+    top = {id(r) for r in kupno if r.get("_top")}
+    nowe = []
+    for r in kupno:
+        m = r["_m"]
+        d = r["data"]
+        if (d, r["spolka"], m["typ"]) in klucze:
+            continue
+        if m["typ"] == "wystrzal" and m.get("limit") and ((J.spolka == r["spolka"]) & (J.typ == "wystrzal") & (
+                pd.to_numeric(J.limit, errors="coerce").round(3) == round(m["limit"], 3))).any():
+            continue  # ten sam wystrzał (ten sam limit) już zapisany
+        nowe.append(dict(data_sygnalu=d, spolka=r["spolka"], typ=m["typ"], punkty=round(r["_p"], 1),
+                         gwiazdki=kropki(r["_p"]).count("★"), w_top5=int(id(r) in top), kurs=round(r["kurs"], 4),
+                         limit=round(m["limit"], 4) if m.get("limit") else "", atr=round(r["atr"], 2), status="oczekuje"))
+    if nowe:
+        J = pd.concat([J, pd.DataFrame(nowe)], ignore_index=True)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        J[KOLUMNY].to_csv(p, index=False)
+    print(f"dziennik: dopisano {len(nowe)} sygnałów")
+
+
+def ocen_sygnaly(D, plik):
+    """Liczy wyniki zapisanych sygnałów na podstawie notowań dziennych (wejście na otwarciu / limicie)."""
+    p = Path(plik)
+    if not p.exists():
+        return None
+    J = pd.read_csv(p, dtype=object, keep_default_na=False).reindex(columns=KOLUMNY)
+    for i, w in J.iterrows():
+        if w.status in ("zamknieta", "niewypelnione"):
+            continue
+        df = D.get(f"{w.spolka}.WA")
+        if df is None:
+            continue
+        df = df.copy()
+        df.index = pd.to_datetime(df.index).tz_localize(None) if getattr(df.index, "tz", None) else pd.to_datetime(df.index)
+        po = df[df.index.normalize() > pd.Timestamp(w.data_sygnalu)]
+        if len(po) == 0:
+            continue
+        rodz, tp, maxd = WYJSCIE.get(w.typ, ("hold", None, 7))
+        o, h, l, c = (po[x].values for x in ("Open", "High", "Low", "Close"))
+        # wejście
+        j0, e = 0, float(o[0])
+        if w.typ == "wystrzal" and str(w.limit) not in ("", "nan"):
+            L = float(w.limit)
+            j0 = next((k for k in range(min(len(po), SPIKE_OKNO)) if l[k] <= L), None)
+            if j0 is None:
+                if len(po) >= SPIKE_OKNO:
+                    J.loc[i, "status"] = "niewypelnione"
+                continue
+            e = min(float(o[j0]), L)
+        r2 = rsi(df["Close"], 2).reindex(po.index).values
+        wyj = None
+        for k in range(j0, len(po)):
+            dzien = k - j0 + 1
+            if rodz == "tp":
+                cel = e * tp
+                if k > j0 and o[k] >= cel:
+                    wyj = (o[k], k); break
+                if h[k] >= cel and (k > j0 or w.typ != "wystrzal"):
+                    wyj = (cel, k); break
+            elif rodz == "rsi2" and r2[k] > 70:
+                wyj = (c[k], k); break
+            if dzien >= maxd:
+                wyj = (c[k], k); break
+        J.loc[i, ["data_wejscia", "cena_wejscia"]] = [f"{po.index[j0]:%Y-%m-%d}", round(e, 4)]
+        if wyj:
+            J.loc[i, ["status", "data_wyjscia", "cena_wyjscia", "dni"]] = [
+                "zamknieta", f"{po.index[wyj[1]]:%Y-%m-%d}", round(float(wyj[0]), 4), wyj[1] - j0 + 1]
+            J.loc[i, "wynik_proc"] = round((float(wyj[0]) / e - 1 - 0.004) * 100, 2)
+        else:
+            J.loc[i, ["status", "dni"]] = ["otwarta", len(po) - j0]
+            J.loc[i, "wynik_proc"] = round((float(c[-1]) / e - 1 - 0.004) * 100, 2)
+    J.to_csv(p, index=False)
+    return J
+
+
+def sekcja_wynikow(J):
+    if J is None or len(J) == 0:
+        return ('<details><summary>📒 Wyniki sygnałów na żywo</summary><div class="leg">Dziennik dopiero się zapełnia – '
+                'pierwsze wyniki po kilku sesjach.</div></details>')
+    J = J.copy()
+    J["wynik_proc"] = pd.to_numeric(J.wynik_proc, errors="coerce")
+    z = J[J.status == "zamknieta"]
+    nazwy = {"panika": "🔥 Panika", "wystrzal": "🚀 Wystrzał", "5spadkow": "📉 5 spadków", "rsi2": "📉 RSI2",
+             "wybicie": "📈 Wybicie", "chop": "🌀 CHOP"}
+    wiersze = ""
+    for t, g in z.groupby("typ"):
+        wiersze += (f'<tr><td>{nazwy.get(t, t)}</td><td>{len(g)}</td><td>{(g.wynik_proc > 0).mean() * 100:.0f}%</td>'
+                    f'<td>{g.wynik_proc.mean():+.2f}%</td></tr>')
+    t5 = z[z.w_top5.astype(str) == "1"]
+    if len(z):
+        wiersze += (f'<tr><td><b>Razem</b></td><td><b>{len(z)}</b></td><td><b>{(z.wynik_proc > 0).mean() * 100:.0f}%</b></td>'
+                    f'<td><b>{z.wynik_proc.mean():+.2f}%</b></td></tr>')
+    if len(t5):
+        wiersze += (f'<tr><td>w tym TOP 5</td><td>{len(t5)}</td><td>{(t5.wynik_proc > 0).mean() * 100:.0f}%</td>'
+                    f'<td>{t5.wynik_proc.mean():+.2f}%</td></tr>')
+    otw = J[J.status == "otwarta"]
+    ost = J[J.status.isin(["zamknieta", "otwarta"])].sort_values("data_wejscia").tail(12).iloc[::-1]
+    lista = "".join(f'<tr><td>{w.spolka}</td><td>{nazwy.get(w.typ, w.typ)}</td><td>{w.data_wejscia}</td>'
+                    f'<td>{"✅" if w.status == "zamknieta" else "⏳"}</td><td>{w.wynik_proc:+.2f}%</td></tr>'
+                    for w in ost.itertuples())
+    return (f'<details open><summary>📒 Wyniki sygnałów na żywo <small>(zamkniętych {len(z)}, otwartych {len(otw)}, '
+            f'po kosztach 0,4%)</small></summary>'
+            f'<table class="tw2"><tr><th>Reguła</th><th>Transakcji</th><th>Zyskownych</th><th>Śr. wynik</th></tr>{wiersze}</table>'
+            f'<div class="leg" style="margin-top:10px">Ostatnie:</div>'
+            f'<table class="tw2"><tr><th>Spółka</th><th>Reguła</th><th>Wejście</th><th></th><th>Wynik</th></tr>{lista}</table>'
+            f'<div class="leg">Liczone automatycznie wg reguł skanera (wejście na otwarciu lub na limicie, wyjście wg reguły). '
+            f'Do porównania z wynikami testów.</div></details>')
 
 
 # ---------------------- alerty na telefon (ntfy.sh) ----------------------
@@ -739,7 +872,16 @@ def main():
     for r in wyniki:
         if r["mod"]:
             print(f"  {r['spolka']:>4} {'⭐' if r.get('gwiazda') else '  '} " + " | ".join(m['tytul'] for m in r['mod']))
-    raport(wyniki, args.out, rynek, sektory, panika)
+    plik_dz = str(Path(args.out).parent / "dziennik_sygnalow.csv")
+    try:
+        J = ocen_sygnaly(D, plik_dz)
+    except Exception as e:
+        print("dziennik: błąd oceny", e); J = None
+    raport(wyniki, args.out, rynek, sektory, panika, sekcja_wynikow(J))
+    try:
+        zapisz_sygnaly(wyniki, plik_dz)
+    except Exception as e:
+        print("dziennik: błąd zapisu", e)
     alerty(wyniki, panika, str(Path(args.out).parent / "alerty.json"))
     print("\nRaport:", os.path.abspath(args.out))
 
