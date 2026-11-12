@@ -7,3 +7,6 @@ data_sygnalu,spolka,typ,punkty,gwiazdki,w_top5,kurs,limit,atr,status,data_wejsci
 2026-11-12,CDR,wybicie,59.0,2,0,276.4,,2.8,oczekuje,,,,,,
 2026-11-12,DAT,wystrzal,57.8,2,0,94.0,78.438,8.53,oczekuje,,,,,,
 2026-11-12,TOA,wystrzal,55.8,2,0,13.34,11.7508,4.04,oczekuje,,,,,,
+2026-11-12,ING,wybicie,64.1,2,1,491.8,,3.56,oczekuje,,,,,,
+2026-11-12,MBK,wybicie,60.9,2,1,1745.0,,3.77,oczekuje,,,,,,
+2026-11-12,MIL,wybicie,59.9,2,0,24.15,,3.66,oczekuje,,,,,,
