@@ -60,4 +60,5 @@ Ryzyko: ATR > 5% dziennie → pół pozycji (co 10. transakcja traci >10%). CHOP
 7. Rotacja sektorowa: czy najsilniejszy sektor z 1–3 miesięcy dalej wygrywa przez kolejny miesiąc.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-12: po sesji – skan 17:09 OK, 8 sygnałów w dzienniku (4 wystrzał, 4 wybicie), 0 zamkniętych; RSI2 rynku 95.
 - 2026-11-12: utworzono plik; dziennik sygnałów na żywo w `docs/dziennik_sygnalow.csv`.
