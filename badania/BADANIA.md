@@ -38,6 +38,26 @@ Ryzyko: ATR > 5% dziennie → pół pozycji (co 10. transakcja traci >10%). CHOP
 - Wybicie ponad VAH60 przy wolumenie > 2× – +0,5%.
 - Wysychanie wolumenu na korekcie, potem wzrost na wolumenie – mało transakcji.
 
+## Psychologia inwestorów – badanie 14.11.2026 (386 spółek, dzienne 2013–2026, trening 2013–21 / test 2022–26)
+Metoda: wejście na otwarciu t+1, koszt 0,4%, „przewaga” = wynik minus średnia wszystkich płynnych spółek kupionych tego samego dnia. Skrypty: `badania/skrypty/2026-11-14_psychologia_*.py` (dane: yfinance, auto_adjust=False; uwaga – lista to spółki notowane dziś, więc wyniki bezwzględne są lekko zawyżone).
+
+**Potwierdzenie starych reguł na 14 latach (pierwotne testy miały 2 lata):** RSI2<5 nad SMA200: 63% zyskownych, +0,9% / +0,6% (trening/test), 14/14 lat; 5 spadków nad SMA100: 65%, +1,1% / +1,0%, 13/14 lat; wybicie 120 sesji + wolumen: +1,5% / +1,2% w 10 sesji, 13/14 lat.
+
+**Działa:**
+- **Kotwica 52 tygodni (anchoring).** Nowy szczyt 52 tyg. + wolumen ≥1,5×: +1,6% / +1,2% w 10 sesji, +2,3% / +2,3% w 20 sesji; przewaga +1,9 pkt, 14/14 lat; ~52% zyskownych (zysk z dużych ruchów), 12% transakcji traci >10%. Wybicie 120 sesji, które NIE jest szczytem 52 tyg.: tylko +0,4% / +0,8%, nieistotne → cała siła reguły 📈 pochodzi ze szczytu 52 tyg.
+- **Nowy dołek 52 tyg. = nie łapać.** Przewaga −1,5 / −1,0 pkt w 10 sesji i −2,7 / −1,8 pkt w 20 sesji (1/14 lat na plus), także z RSI2<5.
+- **RSI2<5 nad SMA200 działa dużo lepiej, gdy kurs jest ≥10% pod szczytem 52 tyg.:** +1,5% / +0,9% (65% zyskownych, 14/14 lat) vs +0,3% / +0,35% blisko szczytu. Dla 5 spadków podobnie (+1,5/+1,1 vs +0,7/+1,0).
+- **Wybicia: wejście na zamknięciu dnia sygnału zamiast na otwarciu t+1 daje +0,2–0,5 pkt** (noc po wybiciu jest dodatnia). Przy RSI2 / 5 spadkach bez różnicy.
+- **Noc vs sesja:** średnio cały zysk rynku powstaje w nocy (zamknięcie→otwarcie +0,13%/dzień), a w trakcie sesji rynek traci (−0,08%/dzień, wt–czw najgorzej); stabilne w obu okresach. Po wystrzale (+8%, wolumen 2,5×): noc +1,5% / +0,9%, następna sesja −0,6% → kupowanie rano po wystrzale to płacenie za emocje tłumu.
+- **Kalendarz:** poniedziałek najlepszy dzień (+0,14%, oba okresy); pierwsze 3 sesje miesiąca +0,15%/dzień vs +0,02% w reszcie; sesja przed świętem +0,2% (mała próba). Za małe na samodzielną grę, dobre do wyboru momentu.
+- **Przełom roku:** 27.12 → 15.01 wszystkie płynne spółki średnio +3,5% (10/13 lat na plus), 20% najgorszych spółek roku +4,6% (12/13 lat na plus). Okres 15.11 → 15.12 słaby: −1,2% (4/12 lat na plus). Tylko 13 obserwacji – sezonowość, nie pewnik.
+
+**Efekt loterii (ostrzeżenie):** 20% najbardziej zmiennych spółek przegrywa z rynkiem o ~0,7 pkt na 20 sesji (2/14 lat na plus); 10% spółek z największym jednodniowym skokiem w ostatnich 20 sesjach: −0,6 / −0,9 pkt. Zmienne spółki opłacają się tylko z sygnałem (np. szczyt 52 tyg. przy ATR ≥5%: +6% w 20 sesji, ale mała próba i duży rozrzut).
+
+**Nie działa:** okrągłe ceny (przebicia i odbicia identyczne jak przy losowych poziomach „placebo”); serie 4–6 wzrostów z rzędu (brak efektu); powrót kursu „na zero” do średniego kosztu zakupu po stracie >20% (lekko ujemny, mała próba, nieistotny); cofnięcie RSI2<10 tuż przy szczycie 52 tyg. (przewaga +0,5 pkt, ale wynik po kosztach ~+0,2%).
+
+**Słaby ślad:** luka paniki – gdy cały rynek otwiera się ≤ −1,5% (24 dni w 13 lat), spółki z luką ≤ −4% kupione na otwarciu dają po 2 sesjach +1,3% / +4,3% (61–78% zyskownych); tego samego dnia do zamknięcia wynik niestabilny.
+
 ## Wpływ USA na GPW (badanie 11.2026, 550 sesji)
 - Wczorajszy S&P 500 silnie wpływa na lukę na otwarciu GPW (korelacja ~0,45), ale prawie wcale na sesję po otwarciu (~0,05).
 - Po spadku S&P > 2%: otwarcie GPW średnio −0,5 do −0,7%, potem w ciągu dnia brak dalszego spadku (mniejsze spółki lekko odrabiają).
@@ -53,13 +73,15 @@ Ryzyko: ATR > 5% dziennie → pół pozycji (co 10. transakcja traci >10%). CHOP
 ## Kolejka hipotez do zbadania (agent badawczy bierze pierwszą niezbadaną)
 1. Czy skok VIX / spadek S&P > 2% dzień wcześniej zapowiada 🔥 panikę na GPW (wczesne ostrzeżenie)?
 2. Reguła dogrywki: spółka +8% o 16:00 → kupno na fixingu zamknięcia, sprzedaż następnego ranka (wymaga danych 15-min/godzinowych).
-3. Efekt dnia tygodnia / początku miesiąca na GPW (napływy do OFE/PPK, wypłaty).
 4. Reakcja na raporty kwartalne: luka po raporcie i dryf w kolejnych 5–10 sesjach.
 5. Dywidendy: zachowanie kursu przed dniem odcięcia i po nim.
-6. Wejście panika/CHOP na zamknięciu dnia sygnału (fixing) zamiast na otwarciu t+1.
+6. Wejście panika/CHOP na zamknięciu dnia sygnału (fixing) zamiast na otwarciu t+1 – dla wybić/RSI2/5 spadków zbadane 14.11.2026 (patrz sekcja „Psychologia”), zostaje panika i CHOP na danych godzinowych.
 7. Rotacja sektorowa: czy najsilniejszy sektor z 1–3 miesięcy dalej wygrywa przez kolejny miesiąc.
+8. Luka paniki na otwarciu (rynek ≤ −1,5%): potwierdzić na danych godzinowych, o której najlepiej kupować i kiedy wychodzić.
+9. Przełom roku: czy efekt 27.12→15.01 jest silniejszy dla małych spółek / przegranych roku po odjęciu rynku; jak wyglądał w latach 2005–2012.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-14: badanie „psychologia inwestorów” na 14 latach danych dziennych (kotwica 52 tyg., loteria, okrągłe ceny, kalendarz, noc/sesja, przełom roku); hipoteza nr 3 (dni tygodnia) zamknięta.
 - 2026-11-13: po sesji – cron 17:20 się nie uruchomił (był tylko skan 16:37 sprzed zamknięcia), ręczny skan 18:16 OK; 0 zamkniętych, 7 otwartych wybić (śr. ~0%); RSI2 rynku 88.
 - 2026-11-12: po sesji – skan 17:09 OK, 8 sygnałów w dzienniku (4 wystrzał, 4 wybicie), 0 zamkniętych; RSI2 rynku 95.
 - 2026-11-12: utworzono plik; dziennik sygnałów na żywo w `docs/dziennik_sygnalow.csv`.
