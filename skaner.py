@@ -40,11 +40,12 @@ STATY = {
     "panika":   "test: ~95% zyskownych, śr. +2,5% w ~3 dni (rzadkie, kilkanaście razy w roku)",
     "wystrzal": "test: ~90% zyskownych, śr. +1,5% (rzadkie duże straty – mała pozycja)",
     "5spadkow": "test: śr. +1,1–1,5%/transakcję, 63–69% zyskownych",
-    "rsi2":     "test: śr. +0,7%/transakcję, ~65% zyskownych",
-    "wybicie":  "test: śr. +1,5–2%/transakcję, ~50% zyskownych (zysk z nielicznych dużych ruchów)",
+    "rsi2":     "test (14 lat): śr. +0,9–1,5% i ~65% zyskownych, gdy kurs jest ≥10% pod rocznym szczytem; bliżej szczytu tylko +0,3%",
+    "wybicie":  "test (14 lat): śr. +1,2–1,6% w 10 sesji, +2,3% w 20 sesji, ~52% zyskownych (zysk z nielicznych dużych ruchów)",
+    "cofniecie": "test (14 lat): ~83% zyskownych, śr. +0,5–1,1% (co 20. transakcja traci ponad 10%)",
     "chop":     "test: ~73% zyskownych, śr. +0,5–1% (tylko gdy rynek wyprzedany)",
 }
-PRIORYTET = {"panika": 100, "wystrzal": 90, "5spadkow": 70, "wybicie": 65, "rsi2": 60, "chop": 55}
+PRIORYTET = {"panika": 100, "wystrzal": 90, "cofniecie": 75, "5spadkow": 70, "wybicie": 65, "rsi2": 60, "chop": 55}
 # ==========================================================
 
 TICKERY = """
@@ -79,6 +80,27 @@ SEKTORY = {
     "Turystyka i usługi": "RBW ENT BFT MBR",
 }
 SEKTOR_SPOLKI = {t: s for s, l in SEKTORY.items() for t in l.split()}
+# nazwy do wyszukiwarki (ticker -> nazwy, po których można szukać)
+NAZWY = {"11B": "11 bit studios|11bit", "ACP": "Asseco Poland", "ALE": "Allegro", "ALR": "Alior Bank", "ASB": "Asbis",
+         "ATT": "Grupa Azoty", "BDX": "Budimex", "BHW": "Bank Handlowy", "BNP": "BNP Paribas", "CAR": "Inter Cars",
+         "CDR": "CD Projekt", "CIG": "CI Games", "CPS": "Cyfrowy Polsat", "DNP": "Dino", "DOM": "Dom Development",
+         "EAT": "AmRest", "ENA": "Enea", "EUR": "Eurocash", "GPW": "GPW|Giełda Papierów", "ING": "ING Bank Śląski|ING",
+         "JSW": "JSW|Jastrzębska Spółka Węglowa", "KGH": "KGHM", "KRU": "Kruk", "KTY": "Kęty|Kety", "LPP": "LPP", "LWB": "Bogdanka",
+         "MBK": "mBank", "MIL": "Millennium", "OPL": "Orange", "PCO": "Pepco", "PEO": "Pekao", "PGE": "PGE",
+         "PKN": "Orlen|PKN", "PKO": "PKO BP", "PKP": "PKP Cargo", "PZU": "PZU", "TPE": "Tauron", "TEN": "Ten Square Games",
+         "TXT": "Text|LiveChat", "WAS": "Wasko", "WPL": "Wirtualna Polska", "XTB": "XTB", "ZAB": "Żabka|Zabka",
+         "NTT": "NTT System", "PLW": "PlayWay", "MRB": "Mirbud", "PXM": "Polimex Mostostal|Polimex", "SNT": "Synektik",
+         "VRC": "Vercom", "BFT": "Benefit Systems", "GPP": "Grupa Pracuj", "APR": "Auto Partner", "AMC": "Amica",
+         "DVL": "Develia", "MUR": "Murapol", "KGN": "Kogeneracja", "ABE": "AB", "DAT": "DataWalk", "CRI": "Creotech",
+         "CBF": "cyber_Folks|Cyberfolks", "HUG": "Huuuge", "MOC": "Molecure", "SLV": "Selvita", "RVU": "Ryvu",
+         "MDG": "Medicalgorithmics", "OPN": "Oponeo", "TOR": "Torpol", "TRK": "Trakcja", "UNT": "Unimot", "VOX": "Voxel",
+         "WLT": "Wielton", "STX": "Stalexport", "RBW": "Rainbow Tours", "COG": "Cognor", "BRS": "Boryszew",
+         "NEU": "Neuca", "ASE": "Asseco SEE", "ACT": "Action", "AGO": "Agora", "APT": "Apator", "ELT": "Elektrotim",
+         "ENT": "Enter Air", "GRX": "Grenevia|Famur", "LBW": "Lubawa", "MRC": "Mercator", "SEL": "Selena",
+         "PEP": "Polenergia", "ZRE": "Zremb", "BMC": "Bumech", "FRO": "Ferro", "ATC": "Arctic Paper",
+         "PCR": "PCC Rokita", "SGN": "Sygnity", "VOT": "Votum", "VGO": "Vigo Photonics", "BLO": "Bloober Team",
+         "CMP": "Comp", "XTP": "XTPL", "SCP": "Scope Fluidics", "CRJ": "Creepy Jar", "PBX": "Pekabex",
+         "TOA": "Toya", "1AT": "Atal", "CLN": "Celon Pharma", "DIG": "Digital Network", "KPL": "Kino Polska"}
 
 # ---- 👔 zakupy insiderów (Bankier.pl / Notoria) ----
 # Test 2024-2026: zarząd kupuje za >=100 tys. zł -> ok. +1% ponad rynek w 10 sesji, 55% zyskownych.
@@ -289,6 +311,13 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
     ret5 = float(close / c.iloc[-6] - 1) * 100
     r60 = float(close / c.iloc[-61] - 1) * 100
 
+    # kotwica 52 tygodni (250 sesji)
+    h52 = float(c.iloc[-251:-1].max()) if len(c) >= 200 else float("nan")
+    od52 = (close / h52 - 1) * 100 if np.isfinite(h52) else float("nan")
+    szczyt52 = bool(np.isfinite(h52) and close > h52)
+    lo250 = c.rolling(250, min_periods=200).min().shift(1)
+    dolek52 = bool((c < lo250).tail(20).any())
+
     mod, ostrz = [], []
     stop_awaryjny = close - 2 * atr
 
@@ -306,9 +335,10 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
         if ret.iloc[s] >= SPIKE_RET and vavg.iloc[s] > 0 and v.iloc[s] >= SPIKE_VOL * vavg.iloc[s]:
             Cs, Cpre, Hs = float(c.iloc[s]), float(c.iloc[s - 1]), float(hi.iloc[s])
             gain = Cs - Cpre
-            L618, L50 = Cs - 0.618 * gain, Cs - 0.5 * gain
+            L618, L382 = Cs - 0.618 * gain, Cs - 0.382 * gain
             dni = n - 1 - s
             wyp = [j for j in range(s + 1, n) if lo.iloc[j] <= L618]
+            wyp382 = [j for j in range(s + 1, n) if lo.iloc[j] <= L382]
             odd = (Cs - close) / gain * 100
             odd_txt = f"Oddane {odd:.0f}% skoku." if odd >= 0 else "Kurs wciąż wyżej niż w dniu skoku."
             info = (f"Wystrzał {D.index[s]:%d.%m} ({dni} ses. temu): {pct(ret.iloc[s] * 100)} przy "
@@ -325,11 +355,18 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
                         sprzedaj=f"z limitem <b>{zl(e * 1.02)}</b> (+2% od wejścia) albo na zamknięciu {data_za(D, 10 - po)}",
                         stop=f"awaryjny {zl(Cpre - 0.5 * atr)}", opis=info, aktywny=False))
             elif dni <= SPIKE_OKNO:
-                odl = (close / L618 - 1) * 100
-                mod.append(dict(typ="wystrzal", tytul=("🚀 PO WYSTRZALE – nie goń! Ustaw limit" if dni == 0
+                if wyp382:
+                    odl = (close / L618 - 1) * 100
+                    kup_txt = (f"płytszy limit {zl(L382)} wypełniony {D.index[wyp382[0]]:%d.%m}; głębszy <b>{zl(L618)}</b> "
+                               f"(61,8% korekty) wciąż czeka · kurs jest {pct(odl)} nad nim")
+                else:
+                    odl = (close / L382 - 1) * 100
+                    kup_txt = (f"dwa zlecenia z limitem, po pół pozycji: <b>{zl(L382)}</b> (38,2% korekty – wchodzi w ok. 3 z 4 "
+                               f"przypadków) i <b>{zl(L618)}</b> (61,8% – w ok. 6 z 10) · kurs jest {pct(odl)} nad pierwszym")
+                mod.append(dict(typ="wystrzal", tytul=("🚀 PO WYSTRZALE – nie goń! Ustaw limity" if dni == 0
                                                       else "🚀 PO WYSTRZALE – czekaj na limit"),
-                    kup=f"zlecenie z limitem <b>{zl(L618)}</b> (61,8% korekty; śmielej: {zl(L50)}) · kurs jest {pct(odl)} nad limitem",
-                    sprzedaj=f"z limitem <b>+2% od ceny zakupu</b> (przy {zl(L618)} → {zl(L618 * 1.02)}) albo po 10 sesjach od zakupu",
+                    kup=kup_txt,
+                    sprzedaj=f"z limitem <b>+2% od każdej ceny zakupu</b> ({zl(L382)} → {zl(L382 * 1.02)}, {zl(L618)} → {zl(L618 * 1.02)}) albo po 10 sesjach od zakupu",
                     stop=f"awaryjny {zl(Cpre - 0.5 * atr)} (pod ceną sprzed skoku)",
                     opis=info + f" Zlecenie ważne do ok. {data_za(D, SPIKE_OKNO - dni)}.", odl=odl, aktywny=True,
                     limit=float(L618)))
@@ -343,21 +380,34 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
             sprzedaj=f"gdy RSI2 &gt; 70 – dziś to zamknięcie ≥ {zl(cel_rsi2)}; najpóźniej {data_za(D, 7)}",
             stop=f"awaryjny {zl(stop_awaryjny)}", opis=f"Kurs {pct((close / sma100 - 1) * 100)} nad SMA100."))
 
+    # 📉 MOCNE COFNIĘCIE w trendzie (spółka −8% w 5 sesji, nad SMA200, RSI2 < 10)
+    if r2 < 10 and nad200 and ret5 <= -8 and not any(m["typ"] == "panika" for m in mod):
+        mod.append(dict(typ="cofniecie", tytul="📉 MOCNE COFNIĘCIE w trendzie",
+            kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
+            sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
+            stop="bez stopu (w testach stopy szkodziły) – mała pozycja",
+            opis=f"Spółka {pct(ret5)} w 5 sesji, RSI2 = {r2:.0f}, kurs nadal nad SMA200."))
+
     # 📉 RSI2 < 5 w trendzie
-    if r2 < 5 and trend_ok and not any(m["typ"] in ("5spadkow", "panika") for m in mod):
-        mod.append(dict(typ="rsi2", tytul="📉 RSI2 &lt; 5 w trendzie",
+    if r2 < 5 and trend_ok and not any(m["typ"] in ("5spadkow", "panika", "cofniecie") for m in mod):
+        blisko = bool(np.isfinite(od52) and od52 > -10)
+        mod.append(dict(typ="rsi2", tytul="📉 RSI2 &lt; 5 w trendzie" + (" (blisko szczytu – słabsze)" if blisko else ""),
             kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
             sprzedaj=f"gdy RSI2 &gt; 70 – dziś to zamknięcie ≥ {zl(cel_rsi2)}; najpóźniej {data_za(D, 7)}",
-            stop=f"awaryjny {zl(stop_awaryjny)}", opis=f"RSI2 = {r2:.1f}, kurs nad SMA200."))
+            stop=f"awaryjny {zl(stop_awaryjny)}", slabe=blisko,
+            opis=f"RSI2 = {r2:.1f}, kurs nad SMA200" + (f", {pct(od52)} od rocznego szczytu." if np.isfinite(od52) else ".")))
 
     # 📈 WYBICIE na szczyt 120 sesji
     hh = float(c.iloc[-121:-1].max())
     if close > hh and v.iloc[-1] >= 1.5 * vmed.iloc[-1] and nad200:
-        mod.append(dict(typ="wybicie", tytul="📈 WYBICIE na szczyt ze 120 sesji",
+        roczny = szczyt52 or not np.isfinite(h52)
+        mod.append(dict(typ="wybicie", tytul=("📈 WYBICIE na roczny szczyt (52 tyg.)" if roczny
+                                              else "📈 Wybicie na szczyt 120 sesji (nie roczny – słabsze)"),
             kup=f"jutro na otwarciu (do ok. {zl(close * 1.02)})",
-            sprzedaj=f"po 10 sesjach ({data_za(D, 10)}) albo stop kroczący: najwyższe zamknięcie − 2×ATR",
-            stop=f"stop kroczący, dziś {zl(close - 2 * atr)}",
-            opis=f"Poprzedni szczyt {zl(hh)}, wolumen {v.iloc[-1] / vmed.iloc[-1]:.1f}× mediany."))
+            sprzedaj=f"po 10 sesjach ({data_za(D, 10)}), a gdy idzie dobrze – nawet do 20 sesji; albo stop kroczący: najwyższe zamknięcie − 2×ATR",
+            stop=f"stop kroczący, dziś {zl(close - 2 * atr)}", slabe=not roczny,
+            opis=(f"Poprzedni szczyt {zl(hh)}, wolumen {v.iloc[-1] / vmed.iloc[-1]:.1f}× mediany."
+                  + ("" if roczny else f" Do rocznego szczytu brakuje {pct(-od52, plus=False)} – w testach takie wybicia dawały tylko ok. +0,5%."))))
         if atr / close * 100 > 5:
             ostrz.append(f"⚠️ Duża zmienność ({atr / close * 100:.1f}% dziennie) – wybicie to tu loteria: w testach co 5. "
                          "transakcja traciła ponad 10%. Najwyżej pół pozycji.".replace(".", ",", 1))
@@ -383,6 +433,10 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
     if ret.iloc[-1] >= SPIKE_RET and v.iloc[-1] >= SPIKE_VOL * (vavg.iloc[-1] or 1):
         ostrz.append("⛔ Dziś wystrzał – NIE kupuj jutro rano (gonienie traci 1–3%). Ustaw limit na 61,8% korekty.")
 
+    if dolek52 and not any(m["typ"] == "panika" for m in mod):
+        ostrz.append("⚠️ Nowy dołek 52 tyg. w ostatnich 20 sesjach – w testach takie spółki dalej przegrywały z rynkiem "
+                     "(o 1–2,7 pkt w 2–4 tygodnie). Nie łap spadającego noża.")
+
     # 👔 insiderzy
     ins = INSIDERZY.get(t)
     insider = None
@@ -401,6 +455,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
     sr_hist, n_hist = historia_sygnalow(D)
     return dict(spolka=t, data=f"{D.index[-1]:%Y-%m-%d}", kurs=close, atr=atr / close * 100, obrot=obrot, mod=mod, ostrz=ostrz,
                 wyjscie=wyjscie, k1=k1, k4=k4, r2=r2, ch1=ch1, nad200=nad200, r60=r60,
+                od52=od52, szczyt52=szczyt52, dolek52=dolek52,
                 sektor=SEKTOR_SPOLKI.get(t, "Inne"), sr_hist=sr_hist, n_hist=n_hist, insider=insider)
 
 
@@ -461,12 +516,18 @@ details .k{border-color:var(--ln);background:var(--bg)}
 .chip.top3{border-color:var(--acc)} .chip.top3 b{color:var(--acc)}
 .leg{color:var(--mut);font-size:14px;line-height:1.6}
 .stopka{color:var(--mut);font-size:12.5px;margin-top:20px;text-align:center}
+.szuk{display:flex;gap:8px;margin:0 0 6px} .szuk input{flex:1;min-width:0;background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:12px;padding:11px 13px;font:inherit;font-size:16px}
+.szuk input:focus{outline:2px solid var(--acc);border-color:var(--acc)} .szuk button{background:var(--card);color:var(--mut);border:1px solid var(--ln);border-radius:12px;padding:0 14px;font:inherit;cursor:pointer}
+.wer{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:14.5px;font-weight:600}
+.wer.ex{background:rgba(245,184,75,.16)} .wer.ost{background:rgba(240,90,90,.12);color:var(--bad)} .wer.okb{background:rgba(61,220,151,.12);color:var(--acc)} .wer.neu{background:rgba(127,127,127,.10);color:var(--mut);font-weight:500}
+.nazwa{color:var(--mut);font-size:13.5px}
 .tw2{width:100%;border-collapse:collapse;font-size:14px} .tw2 td,.tw2 th{padding:5px 6px;border-bottom:1px solid var(--ln);text-align:left}
 .tw2 th{color:var(--mut);font-weight:600;font-size:12.5px}
 @media (max-width:560px){.top{padding:12px;gap:9px}.nr{width:30px;height:30px;font-size:16px}.tg span{display:block;min-width:0}.th a{font-size:21px}}
 """
 
 NAZWA = {"panika": "Odbicie po panice na rynku", "wystrzal": "Wejście na korekcie po wystrzale",
+         "cofniecie": "Mocne cofnięcie w trendzie (wysoka skuteczność)",
          "5spadkow": "5 spadków z rzędu w trendzie", "rsi2": "Mocne wyprzedanie w trendzie (RSI2)",
          "wybicie": "Wybicie na nowy szczyt", "chop": "CHOP rozładowanie przy wyprzedanym rynku"}
 
@@ -482,6 +543,10 @@ def ocena(r):
         return None, None
     m = max(kup, key=lambda m: PRIORYTET[m["typ"]])
     p = float(PRIORYTET[m["typ"]])
+    if m.get("slabe"):          # wybicie nie na roczny szczyt / RSI2 tuż pod szczytem – w testach słabe
+        p -= 18
+    elif m["typ"] == "rsi2":
+        p += 6
     if m["typ"] == "wystrzal":  # daleko od limitu = mała szansa wypełnienia
         p -= min(30.0, max(0.0, m.get("odl", 0) - 3) * 3)
     if r.get("insider"):
@@ -531,7 +596,29 @@ def karta_top(i, r):
             f'{ostrz}<div class="tw">{"".join(bd)}</div><div class="info">{m["opis"]}</div></div></div>')
 
 
-def karta(r):
+def werdykt(r):
+    """Krótka ocena dla posiadacza akcji (wyszukiwarka / moje spółki)."""
+    w = []
+    if r["wyjscie"]:
+        w.append(("ex", f"🔔 Strefa realizacji zysku – dzienny Stoch RSI = {r['k1']:.0f} (≥ {EXIT_K})."))
+    elif r["r2"] > 70 and not r.get("szczyt52"):
+        w.append(("ex", f"🔔 RSI2 = {r['r2']:.0f} (> 70) – typowy moment wyjścia z pozycji kupionych w dołku."))
+    if r.get("dolek52"):
+        w.append(("ost", "⚠️ Nowy dołek 52 tyg. w ostatnich 20 sesjach – słabość, w testach takie spółki dalej traciły do rynku."))
+    elif r.get("szczyt52"):
+        w.append(("okb", "📈 Nowy roczny szczyt – trend mocny; w testach takie spółki rosły jeszcze przez 10–20 sesji."))
+    elif not r["nad200"]:
+        w.append(("ost", "📉 Kurs pod SMA200 – trend spadkowy."))
+    if any(x.startswith("⛔") for x in r["ostrz"]):
+        w.append(("ost", "⛔ Jest ostrzeżenie – szczegóły niżej."))
+    if not w:
+        w.append(("neu", "Brak sygnału wyjścia – trzymaj wg swojego planu."))
+    o52 = r.get("od52")
+    od = "" if o52 is None or o52 != o52 else (f" · {pct(o52)} nad poprzednim rocznym szczytem" if o52 > 0 else f" · {pct(o52)} od rocznego szczytu")
+    return "".join(f'<div class="wer {k}">{html.escape(t)}</div>' for k, t in w) + f'<div class="info">Kurs {zl(r["kurs"])}{od}</div>'
+
+
+def karta(r, z_werdyktem=False):
     tv = f"https://www.tradingview.com/chart/?symbol=GPW:{r['spolka']}"
     typy = (" ".join(m["typ"] for m in r["mod"]) + (" ostrz" if r["ostrz"] else "") + (" exit" if r["wyjscie"] else "")
             + (" insider" if r.get("insider") else "") + (" star" if r.get("gwiazda") else ""))
@@ -551,9 +638,14 @@ def karta(r):
     hist = (f" · historia sygnałów: {r['sr_hist']:+.1f}% śr. z {r['n_hist']}".replace(".", ",")
             if r["sr_hist"] is not None else "")
     sek = r["sektor"] + (f" (#{r['sek_msc']})" if r.get("sek_msc") else "")
-    return (f'<div class="k" data-typy="{typy}"><div class="kh"><a href="{tv}" target="_blank">{r["spolka"]}</a>'
+    naz_all = NAZWY.get(r["spolka"], "")
+    naz = naz_all.split("|")[0]
+    if z_werdyktem:
+        ex = werdykt(r)
+    return (f'<div class="k" data-typy="{typy}" data-t="{r["spolka"]}" data-n="{html.escape(naz_all.replace("|", " "))}"><div class="kh"><a href="{tv}" target="_blank">{r["spolka"]}</a>'
+            f'{f"<span class=nazwa>{html.escape(naz)}</span>" if z_werdyktem and naz else ""}'
             f'{star}<span class="tag">{html.escape(sek)}</span><span class="kurs">{zl(r["kurs"])}</span></div>'
-            f'{mods}{ost}{ex}<div class="info">{"<b>½ pozycji</b> · " if r["atr"] > 5 and r["mod"] else ""}Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
+            f'{ex if z_werdyktem else ""}{mods}{ost}{"" if z_werdyktem else ex}<div class="info">{"<b>½ pozycji</b> · " if r["atr"] > 5 and r["mod"] else ""}Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
             f'{" · 4H " + format(r["k4"], ".0f") if r["k4"] is not None else ""} · CHOP {r["ch1"]:.0f} · '
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
@@ -564,7 +656,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
     for r in wyniki:
         r["_p"], r["_m"] = ocena(r)
     kupno = sorted([r for r in wyniki if r["_p"] is not None], key=lambda r: (-r["_p"], r["spolka"]))
-    poza_top = lambda r: r["_m"]["typ"] in ("chop", "rsi2") and r["atr"] > 5  # w testach niestabilne i ryzykowne
+    poza_top = lambda r: (r["_m"]["typ"] in ("chop", "rsi2") and r["atr"] > 5) or r["_m"].get("slabe")  # słabe w testach
     top = [r for r in kupno if not poza_top(r)][:5]
     for r in top:
         r["_top"] = True
@@ -582,7 +674,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
         top_html = '<div class="box">Dziś brak sygnałów kupna. Czekamy – brak pozycji to też pozycja.</div>'
     licz = {t: sum(1 for r in reszta if any(m["typ"] == t for m in r["mod"])) for t in PRIORYTET}
     btn = "".join(f'<button data-f="{t}">{lab} ({licz[t]})</button>' for t, lab in
-                  (("panika", "🔥 Panika"), ("wystrzal", "🚀 Wystrzał"), ("5spadkow", "📉 5 spadków"),
+                  (("panika", "🔥 Panika"), ("wystrzal", "🚀 Wystrzał"), ("cofniecie", "📉 Cofnięcie"), ("5spadkow", "📉 5 spadków"),
                    ("rsi2", "📉 RSI2"), ("wybicie", "📈 Wybicie"), ("chop", "🌀 CHOP")) if licz[t])
     reszta_html = (f'<h2>Pozostałe sygnały kupna <small>({len(reszta)}, od najmocniejszych)</small></h2>'
                    f'<div class="ctl"><button class="on" data-f="">Wszystkie</button>{btn}</div>'
@@ -591,13 +683,28 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
     inne_html = (f'<details><summary>⛔ Ostrzeżenia, 🔔 do realizacji i pozostałe ({len(inne)})'
                  f'{f" – {n_ex} do realizacji" if n_ex else ""}</summary>{"".join(karta(r) for r in inne)}</details>'
                  if inne else "")
+    dzis = dt.datetime.now(ZoneInfo("Europe/Warsaw")).date()
+    md = (dzis.month, dzis.day)
+    if (11, 15) <= md <= (12, 15):
+        sezon = ('<div class="box warnb">📅 <b>Sezon:</b> od połowy listopada do połowy grudnia rynek bywał słaby '
+                 '(średnio −1,2%, na plus tylko w 4 z 12 lat) – ostrożniej z nowymi pozycjami. Od 27.12 zwykle mocny okres.</div>')
+    elif md >= (12, 22) or md <= (1, 15):
+        sezon = ('<div class="box ok">📅 <b>Sezon:</b> 27.12 → 15.01 bywał mocny: płynne spółki średnio +3,5% (10 z 13 lat), '
+                 'a najsłabsze spółki mijającego roku +4,6% (12 z 13 lat).</div>')
+    else:
+        sezon = ""
+    wszystkie_html = "".join(karta(r, True) for r in sorted(wyniki, key=lambda r: r["spolka"]))
     chipy = "".join(f'<span class="chip{" top3" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
                     for i, (s, m) in enumerate(sektory))
     strona = f"""<!doctype html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Skaner GPW</title><style>{CSS}</style></head>
 <body><div class="wrap"><h1>Skaner GPW</h1>
 <div class="sub">Stan na {teraz} · {len(wyniki)} spółek · kliknij nazwę spółki, żeby otworzyć wykres</div>
-<div class="box {rk}">{rynek[1]}</div>{pan}
+<div class="box {rk}">{rynek[1]}</div>{pan}{sezon}
+<h2>🔎 Moje spółki <small>wpisz skróty lub nazwy – zapamiętam je na tym urządzeniu</small></h2>
+<div class="szuk"><input id="q" type="text" inputmode="text" placeholder="np. PKN, CDR, Allegro" autocomplete="off" autocapitalize="characters"><button id="qx" title="Wyczyść">✕</button></div>
+<div id="wyn"></div>
+<div id="all" hidden>{wszystkie_html}</div>
 <h2>🏆 TOP 5 na dziś <small>najmocniejsze sygnały kupna wg testów</small></h2>
 {top_html}
 {reszta_html}
@@ -605,13 +712,15 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
 {wyniki_html}
 <details><summary>📊 Najmocniejsze sektory (ostatnie 1–3 miesiące)</summary><div class="chips">{chipy}</div></details>
 <details><summary>❓ Jak czytać</summary><div class="leg">
-<b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
+<b>Moje spółki</b>: wpisz skróty (np. PKN, CDR) albo nazwy – zobaczysz, czy spółka jest w strefie realizacji zysku (🔔), przy rocznym szczycie (📈) albo czy jest ostrzeżenie. Skaner zna ok. 140 najpłynniejszych spółek.<br>
+<b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 mocne cofnięcie &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
 plus dodatkowe punkty za 👔 zakup zarządu, ⭐ i dobrą historię sygnałów na tej spółce. ★★★ = mocny, ★☆☆ = słaby.<br>
 <b>Kup jutro na otwarciu</b> = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
 <b>Zlecenie z limitem</b> = kupno tylko, jeśli kurs spadnie do tej ceny (w XTB: zlecenie z limitem).<br>
 <b>Stop</b>: w testach stopy −5%/−8% pogarszały wynik, dlatego przy 🔥/🚀/🌀 go nie ma – zamiast tego trzymaj małe pozycje (maks. 3–4 naraz). Limit +2/3% ustaw zaraz po zakupie.
 <b>½ pozycji</b> = spółka rusza się średnio ponad 5% dziennie – w testach co 10. transakcja traciła tam ponad 10%, więc wchodź mniejszą kwotą. 🌀 CHOP i 📉 RSI2 na takich spółkach nie trafiają do TOP 5.
-Wyniki „w testach” to średnie z 08.2024–11.2026 po kosztach 0,4% – realnie licz na mniej.
+Wyniki „w testach” to średnie z 08.2024–11.2026 (oznaczone „14 lat”: 2013–2026) po kosztach 0,4% – realnie licz na mniej.
+<b>Roczny szczyt</b>: wybicia zarabiały tylko na szczycie z 52 tygodni; 📉 RSI2 działa dużo lepiej, gdy kurs jest co najmniej 10% pod tym szczytem. Słabsze wersje nie trafiają do TOP 5.
 Nie wchodź na 3 sesje przed raportem okresowym spółki.<br>
 👔 = członek zarządu kupił akcje za ≥ 100 tys. zł w ostatnich {INSIDER_DNI} dniach (Bankier.pl). ⭐ = spółka w najlepszych 20% pod względem historycznych wyników sygnałów.
 </div></details>
@@ -620,13 +729,33 @@ Nie wchodź na 3 sesje przed raportem okresowym spółki.<br>
 document.querySelectorAll('.ctl button').forEach(b=>b.onclick=()=>{{
 document.querySelectorAll('.ctl button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.f;
 document.querySelectorAll('#cards .k').forEach(k=>{{k.style.display=(!f||k.dataset.typy.split(' ').includes(f))?'':'none';}});}});
+(function(){{
+const q=document.getElementById('q'),wyn=document.getElementById('wyn'),all=[...document.querySelectorAll('#all .k')];
+const norm=x=>x.toUpperCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/Ł/g,'L').replace(/[^A-Z0-9]/g,'');
+const idx=all.map(k=>({{k:k,t:k.dataset.t,n:(k.dataset.n||'').split(' ').map(norm).filter(Boolean),nn:norm(k.dataset.n||'')}}));
+function znajdz(seg){{const s=norm(seg);if(!s)return null;
+let m=idx.filter(o=>o.t===s);if(m.length)return m;
+if(s.length>=3){{m=idx.filter(o=>o.nn.startsWith(s)||o.n.some(w=>w.startsWith(s)));if(m.length)return m.slice(0,4);}}
+if(s.length>=2){{m=idx.filter(o=>o.t.startsWith(s));if(m.length)return m.slice(0,4);}}
+return [];}}
+function pokaz(){{const v=q.value;try{{localStorage.setItem('moje',v);}}catch(e){{}}
+wyn.innerHTML='';const juz=new Set(),brak=[];
+v.split(/[,;\\n]+/).forEach(seg=>{{seg=seg.trim();if(!seg)return;let m=znajdz(seg);
+if(m&&!m.length&&/\\s/.test(seg)){{m=[];seg.split(/\\s+/).forEach(x=>{{const mm=znajdz(x);if(mm&&mm.length)m.push(...mm);else if(mm)brak.push(x);}});}}
+else if(m&&!m.length)brak.push(seg);
+(m||[]).forEach(o=>{{if(!juz.has(o.t)){{juz.add(o.t);wyn.appendChild(o.k.cloneNode(true));}}}});}});
+if(brak.length){{const d=document.createElement('div');d.className='box';d.textContent='Nie mam w skanerze: '+brak.join(', ')+' (sprawdzam ok. 140 najpłynniejszych spółek z GPW).';wyn.appendChild(d);}}}}
+let t;q.addEventListener('input',()=>{{clearTimeout(t);t=setTimeout(pokaz,250);}});
+document.getElementById('qx').onclick=()=>{{q.value='';pokaz();q.focus();}};
+try{{const z=localStorage.getItem('moje');if(z){{q.value=z;pokaz();}}}}catch(e){{}}
+}})();
 </script></body></html>"""
     Path(plik).parent.mkdir(parents=True, exist_ok=True)
     Path(plik).write_text(strona, encoding="utf-8")
 
 
 # ---------------------- dziennik sygnałów (śledzenie wyników na żywo) ----------------------
-WYJSCIE = {"panika": ("tp", 1.03, 10), "chop": ("tp", 1.03, 10), "wystrzal": ("tp", 1.02, 10),
+WYJSCIE = {"panika": ("tp", 1.03, 10), "chop": ("tp", 1.03, 10), "wystrzal": ("tp", 1.02, 10), "cofniecie": ("tp", 1.03, 10),
            "5spadkow": ("rsi2", None, 7), "rsi2": ("rsi2", None, 7), "wybicie": ("hold", None, 10)}
 KOLUMNY = ["data_sygnalu", "spolka", "typ", "punkty", "gwiazdki", "w_top5", "kurs", "limit", "atr",
            "status", "data_wejscia", "cena_wejscia", "data_wyjscia", "cena_wyjscia", "wynik_proc", "dni"]
@@ -650,6 +779,8 @@ def zapisz_sygnaly(wyniki, plik):
         d = r["data"]
         if (d, r["spolka"], m["typ"]) in klucze:
             continue
+        if ((J.spolka == r["spolka"]) & (J.typ == m["typ"]) & J.status.isin(["oczekuje", "otwarta"])).any():
+            continue  # ta sama reguła na tej spółce jeszcze trwa
         if m["typ"] == "wystrzal" and m.get("limit") and ((J.spolka == r["spolka"]) & (J.typ == "wystrzal") & (
                 pd.to_numeric(J.limit, errors="coerce").round(3) == round(m["limit"], 3))).any():
             continue  # ten sam wystrzał (ten sam limit) już zapisany
@@ -726,7 +857,7 @@ def sekcja_wynikow(J):
     J["wynik_proc"] = pd.to_numeric(J.wynik_proc, errors="coerce")
     z = J[J.status == "zamknieta"]
     nazwy = {"panika": "🔥 Panika", "wystrzal": "🚀 Wystrzał", "5spadkow": "📉 5 spadków", "rsi2": "📉 RSI2",
-             "wybicie": "📈 Wybicie", "chop": "🌀 CHOP"}
+             "wybicie": "📈 Wybicie", "chop": "🌀 CHOP", "cofniecie": "📉 Cofnięcie"}
     wiersze = ""
     for t, g in z.groupby("typ"):
         wiersze += (f'<tr><td>{nazwy.get(t, t)}</td><td>{len(g)}</td><td>{(g.wynik_proc > 0).mean() * 100:.0f}%</td>'

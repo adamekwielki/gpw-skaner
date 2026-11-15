@@ -20,6 +20,7 @@ Plik czytają agenci przed każdą pracą i uzupełniają po niej. Zasada: **nie
 | 📉 RSI2 | RSI2 < 5 nad SMA200 | RSI2 > 70 lub 7 sesji | +0,7% |
 | 🌀 CHOP | CHOP był > 60 w 10 sesjach, teraz < 50, kurs w trendzie, RSI2 rynku < 30 | limit +3%, 10 sesji | ~73% zyskownych, +0,5–1%, pewność umiarkowana |
 | 👔 Insiderzy | zakup członka zarządu ≥ 100 tys. zł (14 dni) | – | +1% vs rynek w 10 dni; po spadku kursu −3% (ostrzeżenie) |
+| 📉 Mocne cofnięcie (od 15.11.2026) | RSI2 < 10, kurs nad SMA200, spółka −8% lub więcej w 5 sesji (bez paniki rynku) | limit +3%, najpóźniej 10 sesji, bez stopu | 14 lat: 85% / 82% zyskownych, śr. +1,1% / +0,5% (trening/test), 13/14 lat na plus; 5% transakcji traci >10%; losowe wejście z tym wyjściem: 64%, −0,4% |
 
 Ryzyko: ATR > 5% dziennie → pół pozycji (co 10. transakcja traci >10%). CHOP i RSI2 przy ATR > 5% nie trafiają do TOP 5. Stopy −5%/−8% pogarszały każdą regułę.
 
@@ -37,6 +38,14 @@ Ryzyko: ATR > 5% dziennie → pół pozycji (co 10. transakcja traci >10%). CHOP
 - Profil wolumenu: cena w „dziurze” profilu 60 sesji nad POC, TP 5% – +0,4–0,6%, przewaga nad losowym 8/8 kwartałów.
 - Wybicie ponad VAH60 przy wolumenie > 2× – +0,5%.
 - Wysychanie wolumenu na korekcie, potem wzrost na wolumenie – mało transakcji.
+
+## Zmiany w skanerze 15.11.2026 (po badaniu na 14 latach)
+- 📈 Wybicie: pełną rangę ma tylko wybicie na roczny szczyt (52 tyg.); wybicie 120 sesji, które nie jest rocznym szczytem, jest oznaczone „słabsze” (−18 pkt, poza TOP 5). Trzymanie 10–20 sesji.
+- 📉 RSI2: +6 pkt, gdy kurs ≥10% pod rocznym szczytem; tuż pod szczytem „słabsze” (poza TOP 5).
+- 🚀 Wystrzał: dwa limity po pół pozycji – 38,2% i 61,8% korekty. Na 14 latach (TP +2%, 10 sesji): limit 38,2% wypełnia się w 74% przypadków (84–85% zyskownych, +1,4% / +1,0%), limit 61,8% w 59% (87% / 86%, +1,4% / +1,4%), limit 50% w 65% (+1,3% / +1,0%). Dziennik na żywo dalej liczy tylko limit 61,8%.
+- ⚠️ Ostrzeżenie „nowy dołek 52 tyg.” (ostatnie 20 sesji), ramka sezonowa (15.11–15.12 słabo, 27.12–15.01 mocno), wyszukiwarka „Moje spółki” z oceną dla posiadacza.
+- Sprawdzone i odrzucone jako nowa reguła: cofnięcie po świeżym szczycie 52 tyg. (RSI2 < 15): 66–80% zyskownych z TP, ale średnio tylko +0,1–0,3%. TP dla RSI2 / 5 spadków: winrate 76–85%, ale średnia spada do +0,3–0,7% (wyjście RSI2 > 70 lepsze).
+- Harmonogram: cron GitHuba spóźnia się nawet o kilka godzin (13.11: skan z 17:20 ruszył o 23:00) – skan po sesji i poranny uruchamiają agenci przez workflow_dispatch.
 
 ## Psychologia inwestorów – badanie 14.11.2026 (386 spółek, dzienne 2013–2026, trening 2013–21 / test 2022–26)
 Metoda: wejście na otwarciu t+1, koszt 0,4%, „przewaga” = wynik minus średnia wszystkich płynnych spółek kupionych tego samego dnia. Skrypty: `badania/skrypty/2026-11-14_psychologia_*.py` (dane: yfinance, auto_adjust=False; uwaga – lista to spółki notowane dziś, więc wyniki bezwzględne są lekko zawyżone).
@@ -81,6 +90,7 @@ Metoda: wejście na otwarciu t+1, koszt 0,4%, „przewaga” = wynik minus śred
 9. Przełom roku: czy efekt 27.12→15.01 jest silniejszy dla małych spółek / przegranych roku po odjęciu rynku; jak wyglądał w latach 2005–2012.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-15: skaner – wyszukiwarka „Moje spółki”, nowa reguła 📉 mocne cofnięcie, kotwica 52 tyg. w wybiciach i RSI2, dwa limity po wystrzale, ostrzeżenie o dołku 52 tyg., ramka sezonowa; dziennik nie dubluje trwających sygnałów.
 - 2026-11-14: badanie „psychologia inwestorów” na 14 latach danych dziennych (kotwica 52 tyg., loteria, okrągłe ceny, kalendarz, noc/sesja, przełom roku); hipoteza nr 3 (dni tygodnia) zamknięta.
 - 2026-11-13: po sesji – cron 17:20 się nie uruchomił (był tylko skan 16:37 sprzed zamknięcia), ręczny skan 18:16 OK; 0 zamkniętych, 7 otwartych wybić (śr. ~0%); RSI2 rynku 88.
 - 2026-11-12: po sesji – skan 17:09 OK, 8 sygnałów w dzienniku (4 wystrzał, 4 wybicie), 0 zamkniętych; RSI2 rynku 95.
