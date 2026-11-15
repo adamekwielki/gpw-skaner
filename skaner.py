@@ -284,13 +284,13 @@ def historia_sygnalow(D, koniec_bez=20):
 
 
 # ---------------------- analiza spółki ----------------------
-def analiza(t, D, H, panika_rynku, r2_rynku=50.0):
+def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
     if D is None or len(D) < 130:
         return None
     o, hi, lo, c, v = (D[x] for x in ("Open", "High", "Low", "Close", "Volume"))
     close = float(c.iloc[-1])
     obrot = float((c * v).tail(20).median())
-    if obrot < MIN_OBROT or close < 1:
+    if (obrot < MIN_OBROT or close < 1) and not wymus:
         return None
     atr = float(tr(D).rolling(14).mean().iloc[-1])
     sma100, sma200, sma50 = (float(c.rolling(n).mean().iloc[-1]) for n in (100, 200, 50))
@@ -532,6 +532,7 @@ NAZWA = {"panika": "Odbicie po panice na rynku", "wystrzal": "Wejście na korekc
          "wybicie": "Wybicie na nowy szczyt", "chop": "CHOP rozładowanie przy wyprzedanym rynku"}
 
 INSIDERZY = {}
+BRAK_POZ = []
 
 
 def ocena(r):
@@ -615,6 +616,10 @@ def werdykt(r):
         w.append(("neu", "Brak sygnału wyjścia – trzymaj wg swojego planu."))
     o52 = r.get("od52")
     od = "" if o52 is None or o52 != o52 else (f" · {pct(o52)} nad poprzednim rocznym szczytem" if o52 > 0 else f" · {pct(o52)} od rocznego szczytu")
+    pz = r.get("_poz")
+    if pz and pz.get("cena"):
+        wyn = (r["kurs"] / pz["cena"] - 1) * 100
+        od += f' · <b>kupione{" " + pz["data"] if pz.get("data") else ""} po {zl(pz["cena"])} → {pct(wyn)}</b>'
     return "".join(f'<div class="wer {k}">{html.escape(t)}</div>' for k, t in w) + f'<div class="info">Kurs {zl(r["kurs"])}{od}</div>'
 
 
@@ -650,7 +655,7 @@ def karta(r, z_werdyktem=False):
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
 
-def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
+def raport(wyniki, plik, rynek, sektory, panika, wyniki_html="", pozycje=()):
     from zoneinfo import ZoneInfo
     teraz = dt.datetime.now(ZoneInfo("Europe/Warsaw")).strftime("%d.%m.%Y, godz. %H:%M")
     for r in wyniki:
@@ -694,6 +699,14 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
     else:
         sezon = ""
     wszystkie_html = "".join(karta(r, True) for r in sorted(wyniki, key=lambda r: r["spolka"]))
+    if pozycje:
+        n_real = sum(1 for r in pozycje if stan_pozycji(r)[0] == "exit")
+        poz_html = (f'<h2>💼 Moje pozycje <small>({len(pozycje)}{f", {n_real} do realizacji" if n_real else ""})</small></h2>'
+                    + "".join(karta(r, True) for r in pozycje))
+    else:
+        poz_html = ""
+    if BRAK_POZ:
+        poz_html += f'<div class="box">Nie mam notowań dla pozycji: {html.escape(", ".join(BRAK_POZ))} – sprawdź skrót w pliku pozycji.</div>'
     chipy = "".join(f'<span class="chip{" top3" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
                     for i, (s, m) in enumerate(sektory))
     strona = f"""<!doctype html><html lang="pl"><head><meta charset="utf-8">
@@ -701,6 +714,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
 <body><div class="wrap"><h1>Skaner GPW</h1>
 <div class="sub">Stan na {teraz} · {len(wyniki)} spółek · kliknij nazwę spółki, żeby otworzyć wykres</div>
 <div class="box {rk}">{rynek[1]}</div>{pan}{sezon}
+{poz_html}
 <h2>🔎 Moje spółki <small>wpisz skróty lub nazwy – zapamiętam je na tym urządzeniu</small></h2>
 <div class="szuk"><input id="q" type="text" inputmode="text" placeholder="np. PKN, CDR, Allegro" autocomplete="off" autocapitalize="characters"><button id="qx" title="Wyczyść">✕</button></div>
 <div id="wyn"></div>
@@ -712,6 +726,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html=""):
 {wyniki_html}
 <details><summary>📊 Najmocniejsze sektory (ostatnie 1–3 miesiące)</summary><div class="chips">{chipy}</div></details>
 <details><summary>❓ Jak czytać</summary><div class="leg">
+<b>💼 Moje pozycje</b>: lista z pliku docs/moje_pozycje.csv (spółka, cena i data zakupu). Gdy pozycja wejdzie w strefę realizacji (🔔), wyprzedanie (RSI2 &lt; 10) albo pojawi się ostrzeżenie, przychodzi powiadomienie na telefon.<br>
 <b>Moje spółki</b>: wpisz skróty (np. PKN, CDR) albo nazwy – zobaczysz, czy spółka jest w strefie realizacji zysku (🔔), przy rocznym szczycie (📈) albo czy jest ostrzeżenie. Skaner zna ok. 140 najpłynniejszych spółek.<br>
 <b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 mocne cofnięcie &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
 plus dodatkowe punkty za 👔 zakup zarządu, ⭐ i dobrą historię sygnałów na tej spółce. ★★★ = mocny, ★☆☆ = słaby.<br>
@@ -896,7 +911,43 @@ def _ntfy(topic, tytul, tekst, tagi="chart_with_upwards_trend", prio=4):
     urllib.request.urlopen(req, timeout=15).read()
 
 
-def alerty(wyniki, panika, plik_stanu="docs/alerty.json"):
+def wczytaj_pozycje(plik):
+    """docs/moje_pozycje.csv: spolka,cena_zakupu,data_zakupu (cena i data opcjonalne)."""
+    p = Path(plik)
+    if not p.exists():
+        return {}
+    out = {}
+    try:
+        T = pd.read_csv(p, dtype=object, keep_default_na=False)
+        for w in T.itertuples():
+            t = str(getattr(w, "spolka", "")).strip().upper()
+            if not t or t.startswith("#"):
+                continue
+            try:
+                cena = float(str(getattr(w, "cena_zakupu", "")).replace(",", ".").replace(" ", "")) or None
+            except ValueError:
+                cena = None
+            d = str(getattr(w, "data_zakupu", "")).strip()
+            out[t] = dict(cena=cena, data=f"{d[8:10]}.{d[5:7]}" if len(d) >= 10 and d[4] == "-" else d)
+    except Exception as e:
+        print("pozycje: błąd odczytu", e)
+    return out
+
+
+def stan_pozycji(r):
+    """(kod, opis) dla posiadanej spółki – do powiadomień."""
+    if any(x.startswith("⛔") for x in r["ostrz"]) or r.get("dolek52"):
+        return "ostrz", ("⚠️ nowy dołek 52 tyg." if r.get("dolek52") else "⛔ ostrzeżenie – zobacz kartę")
+    if r["wyjscie"]:
+        return "exit", f"🔔 strefa realizacji zysku (Stoch RSI {r['k1']:.0f})"
+    if r["r2"] > 70 and not r.get("szczyt52"):
+        return "exit", f"🔔 RSI2 = {r['r2']:.0f} – typowy moment wyjścia"
+    if r["r2"] < 10:
+        return "wyprz", f"📉 wyprzedanie (RSI2 = {r['r2']:.0f})"
+    return "", ""
+
+
+def alerty(wyniki, panika, plik_stanu="docs/alerty.json", pozycje=()):
     """Wysyła powiadomienie o sygnałach ★★★ (bez powtórek tej samej spółki i reguły przez 5 dni)."""
     import json, re
     topic = os.environ.get("NTFY_TOPIC", "").strip()
@@ -919,7 +970,19 @@ def alerty(wyniki, panika, plik_stanu="docs/alerty.json"):
         stan[klucz] = dzis.isoformat()
         nowe.append(f'{m["tytul"].split(" ", 1)[0]} {r["spolka"]} ★★★ – {NAZWA[m["typ"]]}\n'
                     f'KUP: {czysc(m["kup"])}\nSPRZEDAJ: {czysc(m["sprzedaj"])}')
+    poz = []
+    for r in pozycje:
+        kod, opis = stan_pozycji(r)
+        if not kod or f'poz:{r["spolka"]}:{kod}' in stan:
+            continue
+        stan[f'poz:{r["spolka"]}:{kod}'] = dzis.isoformat()
+        pz = r.get("_poz") or {}
+        wyn = f', {pct((r["kurs"] / pz["cena"] - 1) * 100)} od zakupu' if pz.get("cena") else ""
+        poz.append(f'{r["spolka"]} ({zl(r["kurs"])}{wyn}): {opis}')
     try:
+        if poz:
+            _ntfy(topic, f"💼 Moje pozycje ({len(poz)})", "\n".join(poz), "briefcase", 4)
+            print(f"alerty: pozycje – wysłano {len(poz)}")
         if os.environ.get("NTFY_TEST") == "true":
             _ntfy(topic, "Skaner GPW – test", "Powiadomienia działają. Sygnały ★★★ będą przychodzić tutaj.", "white_check_mark", 3)
             print("alerty: wysłano test")
@@ -943,6 +1006,9 @@ def main():
     args, _ = ap.parse_known_args()
 
     symbole = [f"{t}.WA" for t in TICKERY]
+    MOJE = wczytaj_pozycje(str(Path(args.out).parent / "moje_pozycje.csv"))
+    symbole += [f"{t}.WA" for t in MOJE if t not in TICKERY]
+    print(f"moje pozycje: {len(MOJE)}")
     INSIDERZY.update(pobierz_insiderow())
     print(f"insiderzy: {len(INSIDERZY)} spółek z zakupami zarządu w ostatnich {INSIDER_DNI} dniach")
     D = pobierz(symbole, "1d", "2y")
@@ -1008,12 +1074,28 @@ def main():
         J = ocen_sygnaly(D, plik_dz)
     except Exception as e:
         print("dziennik: błąd oceny", e); J = None
-    raport(wyniki, args.out, rynek, sektory, panika, sekcja_wynikow(J))
+    pozycje = []
+    for t, pz in MOJE.items():
+        r = next((x for x in wyniki if x["spolka"] == t), None)
+        if r is None:
+            try:
+                r = analiza(t, D.get(f"{t}.WA"), H.get(f"{t}.WA"), panika, idx_r2, wymus=True)
+            except Exception as e:
+                print(f"  pozycja {t}: błąd {e}")
+            if r:
+                r["sek_msc"] = msc.get(r["sektor"])
+        if r:
+            r["_poz"] = pz
+            pozycje.append(r)
+        else:
+            BRAK_POZ.append(t)
+            print(f"  pozycja {t}: brak danych")
+    raport(wyniki, args.out, rynek, sektory, panika, sekcja_wynikow(J), pozycje)
     try:
         zapisz_sygnaly(wyniki, plik_dz)
     except Exception as e:
         print("dziennik: błąd zapisu", e)
-    alerty(wyniki, panika, str(Path(args.out).parent / "alerty.json"))
+    alerty(wyniki, panika, str(Path(args.out).parent / "alerty.json"), pozycje)
     print("\nRaport:", os.path.abspath(args.out))
 
     try:
