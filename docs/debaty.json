@@ -1,0 +1,83 @@
+{
+ "ACT": {
+  "data": "2026-11-15",
+  "regula": "wybicie",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Wybicia nie tłumaczy żaden komunikat z 9–13.11. W tle: szacunek przychodów za III kw. ok. 922 mln zł (+23,8% r/r), cena docelowa DM BOŚ 63,3 zł (22.10) i trwający skup akcji. Raport za III kw. wypada 27.11, w oknie trzymania; zysk netto jeszcze nieznany. C/Z 13,5 – powyżej mediany sektora.",
+  "byk": [
+   "Reguła ma dodatnią wartość oczekiwaną z 14 lat GPW: średnio +2,3% w 20 sesji po kosztach, mimo tylko ~52% zyskownych i 12% strat ponad 10%.",
+   "Wybicie ma paliwo fundamentalne: przychody III kw. ok. 922 mln zł (+23,8% r/r), cena docelowa DM BOŚ 63,3 zł wobec kursu 55,40 oraz trwający skup akcji.",
+   "Nowy roczny szczyt powyżej 54,00 zł potwierdza wolumen 1,8× mediany, a stop kroczący ok. 50,29 zł ogranicza stratę, choć komunikatu tłumaczącego ruch brak."
+  ],
+  "niedzwiedz": [
+   "Raport za III kwartał wypada 27.11, w oknie trzymania, a zysk netto jest nieznany – przy C/Z 13,5 i C/WK 1,88 powyżej mediany sektora rozczarowanie może zaboleć.",
+   "Wybicia nie tłumaczy żaden komunikat z 9–13.11, kurs jest tylko 2,6% nad poprzednim szczytem, a 13.10 nieustalony akcjonariusz zmniejszył udział w głosach.",
+   "Rynek jest wykupiony (RSI2 89) i wchodzi w okres 15.11–15.12 ze średnią −1,2%, a reguła daje tylko ~52% trafności i 12% strat ponad 10%."
+  ],
+  "ryzyko": "Największe ryzyko to raport za III kw. 27.11 w oknie trzymania – zysk netto nieznany przy wycenie powyżej mediany sektora, a wybicia nie tłumaczy żaden komunikat. Sygnał unieważnia powrót poniżej 54,00 zł lub zejście do stopu ok. 50,29 zł. Ograniczenie: mniejsza pozycja i wyjście przed 27.11 albo pominięcie.",
+  "zrodla": [
+   {
+    "t": "BiznesRadar – wiadomości ACTION",
+    "u": "https://www.biznesradar.pl/wiadomosci/ACT"
+   },
+   {
+    "t": "Strefa Inwestorów – wyniki Action",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLACTIN00018/wyniki-finansowe"
+   }
+  ]
+ },
+ "TOA": {
+  "data": "2026-11-15",
+  "regula": "wystrzal",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Wystrzał 06.11 (+10,4%) po raporcie za III kw.: przychody 274 mln zł (+22% r/r), zysk netto 28,4 mln zł (+52% r/r, 20% nad konsensusem). Noble podniósł cenę docelową do 17 zł (19.10). Kolejnego raportu w 2026 r. nie będzie. C/Z ok. 9,9. Po wystrzale kurs rósł dalej, do 14,22 zł (12.11).",
+  "byk": [
+   "Reguła przez 14 lat dawała 85–87% zyskownych transakcji i średnio +1,0–1,4% po kosztach, choć 4–5% transakcji traciło ponad 10%.",
+   "Wystrzał ma twarde podstawy: EBIT III kwartału +54% r/r i 23% nad konsensusem, C/Z ok. 9,9, cena docelowa Noble 17 zł, choć wyniki kwartał do kwartału płaskie.",
+   "Limity 12,03 i 11,75 zł leżą w zakresie sesji wystrzału, a przy kursie 10% wyżej brak wypełnienia nic nie kosztuje."
+  ],
+  "niedzwiedz": [
+   "Kurs 13,24 zł jest ok. 10% nad pierwszym limitem, a wypełnienie wymaga zamknięcia luki z 06.11 – rynek musiałby zanegować reakcję na świetny raport.",
+   "Asymetria jest niekorzystna: zysk ograniczony do +2% (średnio +1,0–1,4% po kosztach), a ok. 4–5% transakcji traci ponad 10%.",
+   "Otoczenie sprzyja głębszej korekcie zamiast odbicia: rynek wykupiony (RSI2 89), sezonowo słaby okres 15.11–15.12, brak kolejnego raportu jako katalizatora."
+  ],
+  "ryzyko": "Limity 12,03 i 11,75 zł wypełnią się dopiero przy zamknięciu luki po świetnym raporcie, przy wykupionym rynku i słabym sezonie, a zysk ograniczono do +2%. Sygnał unieważnia zejście poniżej 11,54 zł (dołek sesji 06.11) lub wygaśnięcie zlecenia po 15 sesjach od 06.11. Ograniczenie: mniejsza pozycja, nie gonić kursu.",
+  "zrodla": [
+   {
+    "t": "Wyniki Toya w III kw. 2026 vs konsensus",
+    "u": "https://strefainwestorow.pl/wiadomosci/20261105/wyniki-toya-w-iii-kw-2026-r-vs-konsensus-pap-biznes-tabela"
+   },
+   {
+    "t": "Terminy raportów Toya 2026",
+    "u": "https://toya.pl/en/deadlines-for-publication-of-toya-s-a-interim-reports-in-the-financial-year-2026"
+   }
+  ]
+ },
+ "EUR": {
+  "data": "2026-11-15",
+  "regula": "wystrzal",
+  "werdykt": "poważne zastrzeżenia",
+  "analityk": "Wystrzał 03.11 (ok. +11%) po wstępnych szacunkach III kw.: EBITDA 216 mln zł wobec konsensusu 148 mln, zysk netto 16 mln zł zamiast oczekiwanej straty; przychody −8% r/r. Pełny raport 19.11. 29.10 kurs spadł o 13% do 4,36 zł, najniżej od 20 lat, z niejasnej przyczyny. 12.11 zwołano NWZ (porządek obrad nieustalony).",
+  "byk": [
+   "Reguła ma 14-letnią statystykę na GPW: ok. 85–87% transakcji zyskownych, średnio +1,0–1,4% po kosztach, choć zdarzają się rzadkie duże straty.",
+   "Wystrzał ma twarde podstawy: EBITDA III kw. 216 mln zł wobec konsensusu 148 mln i zysk netto 16 mln zamiast oczekiwanej straty 41 mln, mimo przychodów −8% r/r.",
+   "Plan nie goni kursu: limity 4,58 i 4,46 zł leżą ok. 7–10% poniżej 4,93 zł, cel to tylko +2%, a Noble wycenia akcje na 5,70 zł."
+  ],
+  "niedzwiedz": [
+   "Pełny raport za III kw. wypada 19.11, w oknie zlecenia, a reguła skanera zakazuje wejścia na 3 sesje przed raportem – limit może się wypełnić tuż przed nim.",
+   "29.10 kurs spadł o 13% do 4,36 zł, najniżej od 20 lat, z niejasnej przyczyny, a spółki po nowym rocznym dołku przegrywały z rynkiem o 1–2,7 pkt.",
+   "Oczekiwany zysk to tylko ok. +1,0–1,4% przy rzadkich dużych stratach, a niewiadome są spore: NWZ bez porządku obrad, nieustalony dług netto, słaby sezon."
+  ],
+  "ryzyko": "Skaner ostrzega przed rocznym dołkiem, a spadek 29.10 o 13% i NWZ bez porządku obrad są niewyjaśnione. Wypełnienie limitów 4,58/4,46 zł w sesjach 16–18.11 złamałoby zakaz wejścia na 3 sesje przed raportem 19.11. Sygnał unieważnia raport gorszy od szacunków lub zejście poniżej 4,36 zł. Ograniczenie: pominąć albo wystawić zlecenia dopiero po 19.11, mniejszą pozycją.",
+  "zrodla": [
+   {
+    "t": "Eurocash – szacunki za III kw.",
+    "u": "https://xyz.pl/?p=271278"
+   },
+   {
+    "t": "Terminy raportów Eurocash 2026",
+    "u": "https://www.parkiet.com/komunikaty-espi/art43730511-eurocash-sa-terminy-publikacji-raportow-okresowych-w-2026-r"
+   }
+  ]
+ }
+}

@@ -521,6 +521,10 @@ details .k{border-color:var(--ln);background:var(--bg)}
 .wer{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:14.5px;font-weight:600}
 .wer.ex{background:rgba(245,184,75,.16)} .wer.ost{background:rgba(240,90,90,.12);color:var(--bad)} .wer.okb{background:rgba(61,220,151,.12);color:var(--acc)} .wer.neu{background:rgba(127,127,127,.10);color:var(--mut);font-weight:500}
 .nazwa{color:var(--mut);font-size:13.5px}
+details.deb{margin:10px 0 0;padding:8px 11px;background:rgba(127,127,127,.07);border-radius:11px;border:1px solid var(--ln)}
+details.deb summary{font-size:14.5px;font-weight:600} details.deb[open] summary{margin-bottom:8px}
+.wv{padding:2px 8px;border-radius:10px;font-size:12.5px} .wv.okb{background:rgba(61,220,151,.16);color:var(--acc)} .wv.ex{background:rgba(245,184,75,.2)} .wv.ost{background:rgba(240,90,90,.14);color:var(--bad)} .wv.neu{background:rgba(127,127,127,.14)}
+.dr{font-size:14px;margin:6px 0} .dr ul{margin:3px 0 0;padding-left:20px} .dr li{margin:2px 0}
 .tw2{width:100%;border-collapse:collapse;font-size:14px} .tw2 td,.tw2 th{padding:5px 6px;border-bottom:1px solid var(--ln);text-align:left}
 .tw2 th{color:var(--mut);font-weight:600;font-size:12.5px}
 @media (max-width:560px){.top{padding:12px;gap:9px}.nr{width:30px;height:30px;font-size:16px}.tg span{display:block;min-width:0}.th a{font-size:21px}}
@@ -533,6 +537,44 @@ NAZWA = {"panika": "Odbicie po panice na rynku", "wystrzal": "Wejście na korekc
 
 INSIDERZY = {}
 BRAK_POZ = []
+DEBATY = {}
+DEBATA_DNI = 6   # jak długo debata jest „świeża” i pokazywana na karcie
+
+
+def wczytaj_debaty(plik):
+    """docs/debaty.json – zapisywany przez zespół agentów (analityk, byk, niedźwiedź, ryzyko)."""
+    import json
+    try:
+        d = json.loads(Path(plik).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    dzis = dt.date.today()
+    out = {}
+    for t, v in d.items():
+        try:
+            if (dzis - dt.date.fromisoformat(v["data"])).days <= DEBATA_DNI:
+                out[t.upper()] = v
+        except Exception:
+            pass
+    return out
+
+
+def debata_html(t):
+    v = DEBATY.get(t)
+    if not v:
+        return ""
+    e = lambda x: html.escape(str(x))
+    lista = lambda xs: "".join(f"<li>{e(x)}</li>" for x in (xs if isinstance(xs, list) else [xs]) if x)
+    klasa = {"bez zastrzeżeń": "okb", "z zastrzeżeniami": "ex", "poważne zastrzeżenia": "ost"}.get(v.get("werdykt", ""), "neu")
+    zr = " · ".join(f'<a href="{e(z.get("u", ""))}" target="_blank" rel="noopener">{e(z.get("t", "źródło"))}</a>'
+                    for z in v.get("zrodla", [])[:5] if str(z.get("u", "")).startswith("http"))
+    return (f'<details class="deb"><summary>🗣️ Debata agentów · {e(v["data"][8:10])}.{e(v["data"][5:7])} · '
+            f'<span class="wv {klasa}">{e(v.get("werdykt", "–"))}</span></summary>'
+            f'<div class="dr"><b>🧾 Analityk:</b> {e(v.get("analityk", ""))}</div>'
+            f'<div class="dr"><b>🐂 Byk:</b><ul>{lista(v.get("byk", []))}</ul></div>'
+            f'<div class="dr"><b>🐻 Niedźwiedź:</b><ul>{lista(v.get("niedzwiedz", []))}</ul></div>'
+            f'<div class="dr"><b>⚖️ Ryzyko:</b> {e(v.get("ryzyko", ""))}</div>'
+            f'{f"<div class=info>Źródła: {zr}</div>" if zr else ""}</details>')
 
 
 def ocena(r):
@@ -594,7 +636,7 @@ def karta_top(i, r):
             f'<div class="tg"><div class="kp"><span>KUP</span>{m["kup"]}</div>'
             f'<div class="sp"><span>SPRZEDAJ</span>{m["sprzedaj"]}</div>'
             f'<div class="st"><span>STOP</span>{m["stop"]}</div></div>'
-            f'{ostrz}<div class="tw">{"".join(bd)}</div><div class="info">{m["opis"]}</div></div></div>')
+            f'{ostrz}<div class="tw">{"".join(bd)}</div><div class="info">{m["opis"]}</div>{debata_html(r["spolka"])}</div></div>')
 
 
 def werdykt(r):
@@ -650,7 +692,7 @@ def karta(r, z_werdyktem=False):
     return (f'<div class="k" data-typy="{typy}" data-t="{r["spolka"]}" data-n="{html.escape(naz_all.replace("|", " "))}"><div class="kh"><a href="{tv}" target="_blank">{r["spolka"]}</a>'
             f'{f"<span class=nazwa>{html.escape(naz)}</span>" if z_werdyktem and naz else ""}'
             f'{star}<span class="tag">{html.escape(sek)}</span><span class="kurs">{zl(r["kurs"])}</span></div>'
-            f'{ex if z_werdyktem else ""}{mods}{ost}{"" if z_werdyktem else ex}<div class="info">{"<b>½ pozycji</b> · " if r["atr"] > 5 and r["mod"] else ""}Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
+            f'{ex if z_werdyktem else ""}{mods}{ost}{"" if z_werdyktem else ex}{debata_html(r["spolka"])}<div class="info">{"<b>½ pozycji</b> · " if r["atr"] > 5 and r["mod"] else ""}Zmienność {r["atr"]:.1f}% · RSI2 {r["r2"]:.0f} · Stoch RSI 1D {r["k1"]:.0f}'
             f'{" · 4H " + format(r["k4"], ".0f") if r["k4"] is not None else ""} · CHOP {r["ch1"]:.0f} · '
             f'{"nad" if r["nad200"] else "pod"} SMA200{hist}</div></div>')
 
@@ -726,6 +768,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html="", pozycje=()):
 {wyniki_html}
 <details><summary>📊 Najmocniejsze sektory (ostatnie 1–3 miesiące)</summary><div class="chips">{chipy}</div></details>
 <details><summary>❓ Jak czytać</summary><div class="leg">
+<b>🗣️ Debata agentów</b>: po sesji czterech agentów AI omawia spółki z TOP 5 – analityk zbiera fakty i komunikaty, byk i niedźwiedź podają najmocniejsze argumenty za i przeciw, a agent ryzyka ocenia, co może pójść źle. Werdykt mówi o zastrzeżeniach do sygnału, nie jest rekomendacją.<br>
 <b>💼 Moje pozycje</b>: lista z pliku docs/moje_pozycje.csv (spółka, cena i data zakupu). Gdy pozycja wejdzie w strefę realizacji (🔔), wyprzedanie (RSI2 &lt; 10) albo pojawi się ostrzeżenie, przychodzi powiadomienie na telefon.<br>
 <b>Moje spółki</b>: wpisz skróty (np. PKN, CDR) albo nazwy – zobaczysz, czy spółka jest w strefie realizacji zysku (🔔), przy rocznym szczycie (📈) albo czy jest ostrzeżenie. Skaner zna ok. 140 najpłynniejszych spółek.<br>
 <b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 mocne cofnięcie &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
@@ -1006,6 +1049,8 @@ def main():
     args, _ = ap.parse_known_args()
 
     symbole = [f"{t}.WA" for t in TICKERY]
+    DEBATY.update(wczytaj_debaty(str(Path(args.out).parent / "debaty.json")))
+    print(f"debaty: {len(DEBATY)} świeżych")
     MOJE = wczytaj_pozycje(str(Path(args.out).parent / "moje_pozycje.csv"))
     symbole += [f"{t}.WA" for t in MOJE if t not in TICKERY]
     print(f"moje pozycje: {len(MOJE)}")
