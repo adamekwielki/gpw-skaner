@@ -79,8 +79,15 @@ Metoda: wejście na otwarciu t+1, koszt 0,4%, „przewaga” = wynik minus śred
 - Wystrzał z limitem w USA: przewaga pozorna (artefakt porównania); ślad tylko przy wystrzałach ≥ 15%.
 - Decyzja: skupiamy się na GPW, USA tylko jako tło.
 
+## USA → 🔥 panika na GPW – badanie 15.11.2026 (hipoteza 1; 140 spółek z TICKERY, dzienne 2013–2026, trening 2013–21 / test 2022–26)
+Skrypt: `badania/skrypty/2026-11-15_usa_panika.py`. Panika = RSI2 indeksu równowagowego < 10; sygnał USA dla sesji t = ostatnia sesja USA przed t. TP +3% na High dziennym, 10 sesji, koszt 0,4%.
+- **Jako ostrzeżenie – słabe.** Po S&P < −2% szansa, że tego samego dnia RSI2 rynku spadnie < 10, rośnie z ~7% do 15% / 19% (trening/test), a w ciągu 3 sesji z ~18% do ~38%. Gdy rynek już słaby (RSI2 < 30): 35% / 45% vs 29% / 25%. Ale tylko ~5% początków paniki poprzedza spadek S&P > 2% lub VIX +20% – paniki na GPW są w większości „domowe”. VIX > 30 sam nic nie mówi.
+- **Jako filtr reguły – NIE działa.** 🔥 panika z sygnałem z USA w 3 dni: −0,16% / +0,82% (2020 i 2022 ciągną w dół, 9% transakcji traci >10%); bez sygnału z USA: +0,33% / +0,89%. Nie dodawać.
+- **Wczesne wejście (open t po S&P < −2%, spółka już −10%/5d): +0,31% / +0,71%**, 23/30 kwartałów – tyle samo co obecna reguła, nie lepiej.
+- **Słaby ślad (ten sam co „luka paniki”):** S&P < −2% i średnia luka otwarcia płynnych spółek < −1% → kupno wszystkiego na otwarciu, TP +3%/10 sesji: +0,8% / +1,6% na transakcję vs losowy dzień −0,4% / −0,3%, 11/12 kwartałów. Ale tylko 21 dni w 13 lat (5 w teście), średnia po dniach ~+0,2% przez 6.03.2020 (−14,6%); bez tego ~+0,9%. Luka ≥ −1% przy tym samym S&P: nic (+0,0%). Wniosek praktyczny: po złej nocy w USA nie sprzedawać na otwarciu, a duża luka w dół to raczej okazja niż sygnał ucieczki – ale za mało danych na regułę.
+- Przy okazji: 🔥 panika (obecna definicja) na 14 latach: 84% / 85% zyskownych, +0,29% / +0,86%, 10/14 lat i 36/55 kwartałów na plus, przewaga nad losowym dniem +0,7 / +1,2 pkt, 7% transakcji traci >10% → dodatnia, ale daleko od „95%, +2,5%” (hipoteza 10).
+
 ## Kolejka hipotez do zbadania (agent badawczy bierze pierwszą niezbadaną)
-1. Czy skok VIX / spadek S&P > 2% dzień wcześniej zapowiada 🔥 panikę na GPW (wczesne ostrzeżenie)?
 2. Reguła dogrywki: spółka +8% o 16:00 → kupno na fixingu zamknięcia, sprzedaż następnego ranka (wymaga danych 15-min/godzinowych).
 4. Reakcja na raporty kwartalne: luka po raporcie i dryf w kolejnych 5–10 sesjach.
 5. Dywidendy: zachowanie kursu przed dniem odcięcia i po nim.
@@ -88,8 +95,10 @@ Metoda: wejście na otwarciu t+1, koszt 0,4%, „przewaga” = wynik minus śred
 7. Rotacja sektorowa: czy najsilniejszy sektor z 1–3 miesięcy dalej wygrywa przez kolejny miesiąc.
 8. Luka paniki na otwarciu (rynek ≤ −1,5%): potwierdzić na danych godzinowych, o której najlepiej kupować i kiedy wychodzić.
 9. Przełom roku: czy efekt 27.12→15.01 jest silniejszy dla małych spółek / przegranych roku po odjęciu rynku; jak wyglądał w latach 2005–2012.
+10. 🔥 Panika na 14 latach wypada dużo słabiej niż w pierwotnym teście 2-letnim (84–85% zyskownych, śr. +0,3% / +0,9%, 36/55 kwartałów na plus vs „~95%, +2,5%”) – sprawdzić na danych godzinowych i szukać filtra (głębsze RSI2 rynku < 5, spółka −15%, RSI2 spółki, odległość od szczytu 52 tyg.), zanim uznamy ją za najsilniejszą regułę.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-15: badanie hipotezy 1 (USA → panika na GPW): ostrzeżenie słabe (2–3× większa szansa paniki, ale tylko ~5% panik poprzedzonych przez USA), filtr nie działa; ślad „S&P −2% + luka < −1%”; panika na 14 latach słabsza niż sądziliśmy → hipoteza 10. Na żywo: 0 zamkniętych transakcji.
 - 2026-11-15: skaner – wyszukiwarka „Moje spółki”, nowa reguła 📉 mocne cofnięcie, kotwica 52 tyg. w wybiciach i RSI2, dwa limity po wystrzale, ostrzeżenie o dołku 52 tyg., ramka sezonowa; dziennik nie dubluje trwających sygnałów.
 - 2026-11-14: badanie „psychologia inwestorów” na 14 latach danych dziennych (kotwica 52 tyg., loteria, okrągłe ceny, kalendarz, noc/sesja, przełom roku); hipoteza nr 3 (dni tygodnia) zamknięta.
 - 2026-11-13: po sesji – cron 17:20 się nie uruchomił (był tylko skan 16:37 sprzed zamknięcia), ręczny skan 18:16 OK; 0 zamkniętych, 7 otwartych wybić (śr. ~0%); RSI2 rynku 88.
