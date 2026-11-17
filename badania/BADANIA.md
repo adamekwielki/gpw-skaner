@@ -98,6 +98,7 @@ Skrypt: `badania/skrypty/2026-11-15_usa_panika.py`. Panika = RSI2 indeksu równo
 10. 🔥 Panika na 14 latach wypada dużo słabiej niż w pierwotnym teście 2-letnim (84–85% zyskownych, śr. +0,3% / +0,9%, 36/55 kwartałów na plus vs „~95%, +2,5%”) – sprawdzić na danych godzinowych i szukać filtra (głębsze RSI2 rynku < 5, spółka −15%, RSI2 spółki, odległość od szczytu 52 tyg.), zanim uznamy ją za najsilniejszą regułę.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-17: po sesji – cron 17:59 i ręczny skan 18:16 OK; 0 zamkniętych, 8 otwartych wybić (śr. −0,4%), 7 nowych 🌀 CHOP; RSI2 rynku 11 (tuż nad progiem paniki), WIG −1,5%; TOP 5: WAS, TOA, EUR, ACT, KTY. Dziennik nie śledzi nowego wystrzału WAS z 16.11 (stary wpis z limitem 6,51).
 - 2026-11-16: po sesji – ręczny skan 18:15 OK; 0 zamkniętych, 8 otwartych wybić (śr. −0,1%), 4 limity 🚀 czekają; RSI2 rynku 48 (z 88); TOP 5 tylko 3 pozycje (EUR, TOA, DAT); WAS nowy wystrzał +14,8%.
 - 2026-11-15: badanie hipotezy 1 (USA → panika na GPW): ostrzeżenie słabe (2–3× większa szansa paniki, ale tylko ~5% panik poprzedzonych przez USA), filtr nie działa; ślad „S&P −2% + luka < −1%”; panika na 14 latach słabsza niż sądziliśmy → hipoteza 10. Na żywo: 0 zamkniętych transakcji.
 - 2026-11-15: skaner – wyszukiwarka „Moje spółki”, nowa reguła 📉 mocne cofnięcie, kotwica 52 tyg. w wybiciach i RSI2, dwa limity po wystrzale, ostrzeżenie o dołku 52 tyg., ramka sezonowa; dziennik nie dubluje trwających sygnałów.
