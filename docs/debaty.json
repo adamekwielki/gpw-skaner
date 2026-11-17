@@ -79,5 +79,75 @@
     "u": "https://www.parkiet.com/komunikaty-espi/art43730511-eurocash-sa-terminy-publikacji-raportow-okresowych-w-2026-r"
    }
   ]
+ },
+ "WAS": {
+  "data": "2026-11-17",
+  "regula": "wystrzal",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Wystrzał 16.11 (+14,8%) po raporcie za III kw. z 13.11: przychody 213,6 mln zł (+83% r/r), zysk netto 27,5 mln zł wobec 8,6 mln rok wcześniej; po 9 mies. zysk 50,8 mln (13,0 mln). Na NWZ 02.11 wymieniono całą radę nadzorczą (3 członków powołał W. Wajda z osobistego uprawnienia). Raport już za nami, do 01.12 brak zaplanowanych zdarzeń; C/Z ok. 8,9. Ryzyka: kurs ok. +330% od początku roku, tuż pod kwietniowym szczytem 9,4 zł, rosnący udział niskomarżowego handlu.",
+  "byk": [
+   "Reguła Wystrzał ma 14 lat historii: limit 38,2% jest już wypełniony, a takie transakcje były zyskowne w 84–85% przypadków (+1,4%/+1,0% trening/test).",
+   "Wybicie ma podstawy fundamentalne: w III kw. przychody wzrosły o 83% r/r, zysk netto z 8,6 do 27,5 mln, a C/Z wynosi ok. 8,9.",
+   "Cel +2% (9,02 zł) leży poniżej zamknięcia z 16.11 (9,30 zł), WAS reagował na sygnały średnio +6,0% (15 przypadków), a RSI2 rynku 11 sugeruje odbicie."
+  ],
+  "niedzwiedz": [
+   "Asymetria jest niekorzystna: cel +2% (9,02 zł), a stop 7,75 zł to ok. −12% od 8,84 zł, przy zmienności dziennej 7,8% i co dziesiątej transakcji tracącej >10%.",
+   "Dzienny Stoch RSI 94 to strefa realizacji zysku, kurs urósł o ok. 330% od początku roku i stoi tuż pod kwietniowym szczytem 9,4 zł, a 17.11 już −3,4%.",
+   "Tło nie sprzyja: okres 15.11–15.12 dawał średnio −1,2% (na plus 4 z 12 lat), WIG dziś −1,5%, a spółki z największym skokiem przegrywają z rynkiem o 0,6–0,9 pkt."
+  ],
+  "ryzyko": "Największe ryzyko to odwrót po rajdzie (+330% od początku roku, Stoch RSI 94, opór 9,4 zł) w słabym sezonie. Sygnał słabnie poniżej ok. 8,10 zł (poziom sprzed wystrzału 16.11), unieważnia go stop 7,75 zł. Ograniczenie: pół pozycji, stop 7,75 zł, wyjście najpóźniej po 10 sesjach (ok. 01.12).",
+  "zrodla": [
+   {
+    "t": "Parkiet – Imponująca poprawa w Wasko, kurs rośnie",
+    "u": "https://www.parkiet.com/wyniki-spolek/art45493511-imponujaca-poprawa-w-wasko-kurs-rosnie"
+   },
+   {
+    "t": "ITReseller – WASKO zwiększyło przychody o 83% i ponad trzykrotnie zysk netto",
+    "u": "https://itreseller.pl/wasko-zwiekszylo-przychody-o-83-i-ponad-trzykrotnie-zysk-netto/"
+   },
+   {
+    "t": "BiznesRadar – WASKO 35/2026 Zmiany w składzie Rady Nadzorczej",
+    "u": "https://www.biznesradar.pl/a/165828,wasko-sa-35-2026-zmiany-w-skladzie-rady-nadzorczej-wasko-s-a"
+   },
+   {
+    "t": "BiznesRadar – wskaźniki wartości rynkowej WASKO",
+    "u": "https://www.biznesradar.pl/wskazniki-wartosci-rynkowej/WASKO"
+   }
+  ]
+ },
+ "KTY": {
+  "data": "2026-11-17",
+  "regula": "chop",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Raport za III kw. wyszedł 26.10: przychody 1 635 mln zł (+13% r/r), zysk netto 208 mln (+18,2%), nieco powyżej konsensusu; prognoza 2026 podtrzymana (EBITDA 1,11 mld zł). Przyczyny wybicia z 13.11 nie znaleziono, w listopadzie brak nowych ESPI i rekomendacji; II transza dywidendy wypłacona 04.11, do 01.12 brak zaplanowanych zdarzeń. C/Z ok. 18–20, akcjonariat zdominowany przez OFE. Ryzyka: przejęcie METRA (EV 645 mln EUR, dług netto/EBITDA do ok. 2,5–2,7x), słabszy sezonowo IV kw., ceny aluminium i mocny złoty.",
+  "byk": [
+   "Warunek reguły spełniony: CHOP spadł z 74 do 49 przy RSI2 rynku 11 (<30), a historycznie dawało to ~73% zyskownych, choć średnio tylko +0,5–1%.",
+   "KTY jest w trendzie (nad SMA200, −2,9% od rocznego szczytu) z RSI2 16, a cel +3% przy zmienności dziennej 2,2% to niespełna półtorej typowej sesji.",
+   "Fundamenty wspierają: III kw. nieco powyżej konsensusu (zysk netto +18,2% r/r), prognoza 2026 podtrzymana, dywidenda wypłacona i brak zaplanowanych zdarzeń do 01.12."
+  ],
+  "niedzwiedz": [
+   "Przewaga reguły jest znikoma: ~73% zyskownych wobec ~70% przy losowym wejściu z TP 2–3%, a sygnały na KTY dały średnio tylko +0,1% z 15.",
+   "Rynek jest o krok od paniki (RSI2 11, próg <10; WIG −1,5%), sezon 15.11–15.12 średnio −1,2% (plus 4/12 lat), a plan nie ma stopu.",
+   "Wybicie z 13.11 już zawiodło (−1,84%, przyczyny nie znaleziono), do 01.12 brak katalizatorów, a C/Z ok. 20 i dług po METRA do 2,7x EBITDA."
+  ],
+  "ryzyko": "Największe ryzyko to rynek o krok od paniki (RSI2 11) przy pozycji bez stopu i nieudanym wybiciu z 13.11. Sygnał unieważnia otwarcie 18.11 powyżej 1 310,98 zł lub nieoczekiwany komunikat (np. w sprawie METRA) przed 01.12. Ograniczenie: mała pozycja, bez dokładania, wyjście najpóźniej na zamknięciu 01.12.",
+  "zrodla": [
+   {
+    "t": "BiznesRadar – Grupa Kęty zwiększa zysk netto w III kw. 2026 o 18%",
+    "u": "https://www.biznesradar.pl/a/164089,grupa-kety-zwieksza-zysk-netto-w-iii-kw-2026-r-o-18-i-podtrzymuje-caloroczna-prognoze-my-spogladamy-dalej-br-premium"
+   },
+   {
+    "t": "BiznesRadar – wiadomości KETY",
+    "u": "https://www.biznesradar.pl/wiadomosci/KETY"
+   },
+   {
+    "t": "Strefa Inwestorów – akcjonariat KTY",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLKETY000011/akcjonariat"
+   },
+   {
+    "t": "Grupa Kęty – kalendarz zdarzeń korporacyjnych 2026",
+    "u": "https://grupakety.com/en/raporty_biezace/update-of-the-calendar-of-corporate-events-for-the-year-2026/"
+   }
+  ]
  }
 }
