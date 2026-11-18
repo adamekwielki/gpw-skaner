@@ -149,5 +149,106 @@
     "u": "https://grupakety.com/en/raporty_biezace/update-of-the-calendar-of-corporate-events-for-the-year-2026/"
    }
   ]
+ },
+ "KGH": {
+  "data": "2026-11-18",
+  "regula": "🔥 Panika",
+  "werdykt": "bez zastrzeżeń",
+  "analityk": "Szósta spadkowa sesja z rzędu (18.11: −6,1% do 248,20 zł, najniższe zamknięcie 2026) – media łączą ją z miedzią na LME najniżej od 5 miesięcy (−10% w miesiąc). Wyniki za III kw. wyszły 18.11 po sesji: skoryg. EBITDA 3,996 mld zł (ok. 12% nad konsensusem), zysk netto 1,937 mld zł (rok temu 433 mln), przychody 12,04 mld zł (konsensus 12,37 mld). Dług netto/EBITDA 0,3, C/Z ok. 6; dywidenda wypłacona w lipcu, NWZ było 3.11 – w oknie do 02.12 nie znaleziono raportu ani WZA. Ryzyka: miedź i srebro, energia, podatek od kopalin, capex Sierra Gorda.",
+  "byk": [
+   "Wyniki III kw. wyszły po sesji 18.11, więc kurs ich nie uwzględnia: skoryg. EBITDA 3,996 mld zł (ok. 12% nad konsensusem), zysk 1,937 mld zł.",
+   "Warunki reguły Panika spełnione (RSI2 rynku 9, −13,8% w 5 sesji), a 15 wcześniejszych sygnałów na KGH dało średnio +3,6%.",
+   "W oknie do 02.12 nie ma raportu, WZA ani dywidendy; bilans mocny (dług netto/EBITDA 0,3, C/Z ok. 6)."
+  ],
+  "niedzwiedz": [
+   "Spadek ma przyczynę fundamentalną – miedź najniżej od 5 miesięcy – a kurs jest pod SMA200 po sześciu sesjach spadków z rzędu.",
+   "Wyniki zmienią otwarcie: luka powyżej 253,16 zł oznacza brak wejścia, a przychody poniżej konsensusu (12,04 vs 12,37 mld zł) mogą dać lukę w dół.",
+   "Kurs jest tylko ok. 4% nad minimum 2026 (ok. 238 zł), a sezon 15.11–15.12 historycznie średnio −1,2%."
+  ],
+  "ryzyko": "Największe ryzyko to dalszy spadek miedzi na LME i luka na otwarciu 19.11 po wynikach. Sygnał unieważnia otwarcie powyżej 253,16 zł (brak wejścia) albo zejście poniżej ok. 238 zł (nowy dołek roczny). W ramach reguły: pół pozycji i wejście tylko przy otwarciu w przedziale ok. 238–253 zł.",
+  "zrodla": [
+   {
+    "t": "Parkiet: kontynuacja wyprzedaży akcji KGHM",
+    "u": "https://www.parkiet.com/gielda/art45509191-podaz-nie-odpuszcza-krajowym-indeksom-fatalna-passa-akcji-kghm"
+   },
+   {
+    "t": "WNP: Giełdowe kłopoty KGHM-u",
+    "u": "https://www.wnp.pl/rynki/gieldowe-klopoty-kghm-u-kurs-giganta-zbliza-sie-do-tegorocznych-minimow,1120993.html"
+   },
+   {
+    "t": "StrefaInwestorów: EBITDA KGHM w III kw. vs konsensus",
+    "u": "https://strefainwestorow.pl/wiadomosci/20261118/skorygowana-ebitda-grupy-kghm-wyniosla-w-iii-kw-3996-mld-zl-wobec-3564-mld-zl"
+   },
+   {
+    "t": "Stockwatch: KGHM dywidendy",
+    "u": "https://www.stockwatch.pl/gpw/kghm,notowania,dywidendy.aspx"
+   }
+  ]
+ },
+ "BMC": {
+  "data": "2026-11-18",
+  "regula": "🔥 Panika",
+  "werdykt": "poważne zastrzeżenia",
+  "analityk": "Nie znaleziono jednego wyraźnego powodu spadku o 21% w 5 sesji. 17.11 spółka opublikowała trzy ESPI: zmianę rozliczenia sprzedaży udziałów Bumech Defense (do BDP za 12,56 mln zł), PRZESUNIĘCIE terminu raportu za III kw. (nowej daty nie ustalono; termin ustawowy ok. 29.11 – w oknie) i transakcję na akcjach spółki (kierunek nieznany). Przychody spadają (410 → 329 → 182 mln zł), zysk netto 12 mies. +364 mln zł jest jednorazowy przy stracie na sprzedaży −170 mln; zobowiązania 220 mln zł przewyższają aktywa 174 mln (kapitał ok. −45 mln). Toczy się sprawa układu PG Silesia; rekomendacji brak.",
+  "byk": [
+   "Reguła w panice dawała ~95% zyskownych transakcji (śr. +2,5% w ~3 dni), a 14 sygnałów na BMC średnio +1,5%.",
+   "Spadek o 21,1% w 5 sesji bez jednego wyraźnego negatywnego powodu wygląda na wyprzedanie, a do TP 8,78 zł trzeba tylko +3%.",
+   "Ryzyko ogranicza pół pozycji (zmienność 8,1%), a sprzedaż Bumech Defense za 12,56 mln zł (ok. 10% kapitalizacji) może dać impuls."
+  ],
+  "niedzwiedz": [
+   "Aktywne ostrzeżenie skanera o nowym dołku 52 tyg. – w testach takie spółki przegrywały z rynkiem o ok. 1,5 pkt w 10 sesji.",
+   "Raport za III kw. przesunięto bez znanej daty; termin ustawowy ok. 29.11 wypada w oknie, wbrew zasadzie 3 sesji przed raportem.",
+   "Kapitał własny ok. −45 mln zł, przychody spadają 410→329→182 mln zł, a trzy ESPI z 17.11 pozostają niewyjaśnione."
+  ],
+  "ryzyko": "Aktywne ostrzeżenie o dołku 52 tyg., ujemny kapitał i trzy niewyjaśnione ESPI z 17.11. Raport za III kw. przesunięto bez daty – termin ok. 29.11 wypada w oknie, co łamie zasadę 3 sesji przed raportem. W ramach reguły: rezygnacja z wejścia; najwyżej symboliczna pozycja, gdy nowa data raportu okaże się po 02.12.",
+  "zrodla": [
+   {
+    "t": "Biznesradar: wiadomości Bumech",
+    "u": "https://www.biznesradar.pl/wiadomosci/BUMECH"
+   },
+   {
+    "t": "Zbycie udziałów Bumech Defense (26.10.2026)",
+    "u": "https://www.money.pl/gielda/komunikaty/7344210930692673.html"
+   },
+   {
+    "t": "ESPI 68/2026 – zmiana terminu raportu",
+    "u": "https://www.money.pl/gielda/komunikaty/7352026072650305.html"
+   },
+   {
+    "t": "StrefaInwestorów: Bumech wyniki finansowe",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLBMECH00012/wyniki-finansowe"
+   }
+  ]
+ },
+ "CRQ": {
+  "data": "2026-11-18",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Creotech Quantum (spin-off kwantowy Creotech Instruments, na GPW od 17.04.2026) spadł z 196,90 zł (13.11) do 169,45 zł, blisko minimum 52 tyg. 166,25 zł. Jedyny ESPI z 3 tygodni (16.11) jest pozytywny – projekt UE QIA-Phase2 (ok. 240 tys. EUR); negatywnych komunikatów nie znaleziono, spadek wygląda na sentyment rynku. Raport za III kw. jeszcze nie wyszedł – termin ustawowy ok. 29.11, czyli prawdopodobnie w oknie. Brak przychodów ze sprzedaży (wynik z grantów), kapitalizacja ok. 543 mln zł, C/Z ok. 130; majowa emisja po 232 zł.",
+  "byk": [
+   "Jedyny ESPI z ostatnich 3 tygodni był pozytywny (projekt UE QIA-Phase2), negatywnych komunikatów brak – spadek wygląda na sentyment rynku.",
+   "Cztery spadkowe sesje z rzędu w czasie paniki (RSI2 rynku 9) to układ, w którym reguła dawała ~95% zyskownych transakcji.",
+   "Kurs jest ok. 27% pod ceną emisji serii D (232 zł) i wciąż nad minimum 52 tyg., a TP wymaga tylko +3%."
+  ],
+  "niedzwiedz": [
+   "Raport za III kw. jeszcze nie wyszedł i prawdopodobnie wypadnie w oknie (termin ok. 29.11), co koliduje z zasadą 3 sesji przed raportem.",
+   "Kurs jest niecałe 2% nad minimum 52 tyg. (166,25 zł), a spółka nie ma żadnej historii sygnałów w skanerze.",
+   "Zmienność 7% to profil „loterii”; brak przychodów, C/Z ok. 130, w czerwcu −40% i możliwe kolejne emisje."
+  ],
+  "ryzyko": "Raport za III kw. bez znanej daty – termin ok. 29.11 najpewniej w oknie, co grozi luką na spółce bez przychodów. Sygnał unieważnia zamknięcie poniżej 166,25 zł (nowy dołek 52 tyg.) albo raport ogłoszony na mniej niż 3 sesje od wejścia. W ramach reguły: pół pozycji, a bez TP wyjście na sesji przed raportem.",
+  "zrodla": [
+   {
+    "t": "Parkiet: Creotech Quantum",
+    "u": "https://www.parkiet.com/firmy/445361-creotech-quantum"
+   },
+   {
+    "t": "Bankier: Creotech Quantum wiadomości",
+    "u": "https://www.bankier.pl/gielda/notowania/akcje/CRQUANTUM/wiadomosci"
+   },
+   {
+    "t": "StrefaInwestorów: Creotech Quantum wyniki",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLCTHQM00018/wyniki-finansowe"
+   }
+  ]
  }
 }

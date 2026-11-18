@@ -98,6 +98,7 @@ Skrypt: `badania/skrypty/2026-11-15_usa_panika.py`. Panika = RSI2 indeksu równo
 10. 🔥 Panika na 14 latach wypada dużo słabiej niż w pierwotnym teście 2-letnim (84–85% zyskownych, śr. +0,3% / +0,9%, 36/55 kwartałów na plus vs „~95%, +2,5%”) – sprawdzić na danych godzinowych i szukać filtra (głębsze RSI2 rynku < 5, spółka −15%, RSI2 spółki, odległość od szczytu 52 tyg.), zanim uznamy ją za najsilniejszą regułę.
 
 ## Dziennik prac (najnowsze na górze)
+- 2026-11-18: debata agentów – BMC (🔥 panika, TOP 2): **poważne zastrzeżenia** – aktywne ostrzeżenie „nowy dołek 52 tyg.”, ujemny kapitał, raport III kw. przesunięty bez daty (termin ok. 29.11 w oknie), 3 niewyjaśnione ESPI z 17.11. KGH bez zastrzeżeń, CRQ z zastrzeżeniami (raport w oknie).
 - 2026-11-18: po sesji – cron 17:40 i ręczny skan 18:15 OK; 2 zamknięte (🌀 CHOP MDV, ALE: +2,6% w 1 dzień); 8 otwartych wybić (śr. −0,7%), 5 otwartych CHOP (śr. −1,2%); **RSI2 rynku 9 → pierwsze sygnały 🔥 paniki** (CRI, KGH, BMC, CRQ); WIG −0,5%; TOP 5: KGH, BMC, CRQ, TOA, EUR.
 - 2026-11-17: po sesji – cron 17:59 i ręczny skan 18:16 OK; 0 zamkniętych, 8 otwartych wybić (śr. −0,4%), 7 nowych 🌀 CHOP; RSI2 rynku 11 (tuż nad progiem paniki), WIG −1,5%; TOP 5: WAS, TOA, EUR, ACT, KTY. Dziennik nie śledzi nowego wystrzału WAS z 16.11 (stary wpis z limitem 6,51).
 - 2026-11-16: po sesji – ręczny skan 18:15 OK; 0 zamkniętych, 8 otwartych wybić (śr. −0,1%), 4 limity 🚀 czekają; RSI2 rynku 48 (z 88); TOP 5 tylko 3 pozycje (EUR, TOA, DAT); WAS nowy wystrzał +14,8%.
