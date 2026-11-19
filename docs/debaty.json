@@ -250,5 +250,75 @@
     "u": "https://strefainwestorow.pl/notowania/spolki/PLCTHQM00018/wyniki-finansowe"
    }
   ]
+ },
+ "S2B": {
+  "data": "2026-11-19",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Syn2bio to biotech wydzielony z Synektika (GPW od 04.2026, kap. ok. 484 mln zł); konkretnego powodu spadku z 64,00 zł (13.11) nie znaleziono, a 05.11 osoba powiązana kupiła akcje. Raport roczny 2025/26 (rok obrotowy X–IX) wypada 03.12 – w dniu wyjścia czasowego; w IV kw. spółka zapowiada wyniki interim III fazy SYN2 w Europie, bez daty. Brak przychodów, R&D ok. 11 mln zł/kw., gotówka ok. 19 mln zł (30.06) na 10–11 miesięcy – prawdopodobna emisja; czeka na IND z FDA. Akcjonariatu nie ustalono, zakres 52 tyg. 26,20–96,60 zł.",
+  "byk": [
+   "Warunki reguły 🔥 Panika są spełnione z naddatkiem: RSI2 rynku 6 (<10), spółka −11,6% w 5 sesji, a rynek pozostaje nad SMA200.",
+   "Badanie 14-letnie daje 84–85% zyskownych transakcji i 36/55 kwartałów na plus; w tym epizodzie KGH, BMC i ASB już zamknięto z zyskiem +2,6%.",
+   "Zmienność dzienna 6,6% sprawia, że cel +3% to mniej niż jedna typowa sesja, a kupno insidera z 05.11 i brak katalizatora sugerują wyprzedaż techniczną."
+  ],
+  "niedzwiedz": [
+   "Bez stopu w spółce biotech czekającej na zdarzenia binarne: wyniki interim III fazy SYN2 mogą wypaść w oknie, a raport roczny przypada na dzień wyjścia 03.12.",
+   "Gotówka ok. 19 mln zł przy R&D ok. 11 mln zł/kwartał wskazuje na prawdopodobną emisję, więc spadek może wyceniać rozwodnienie, a nie samą panikę.",
+   "Badanie 14-letnie daje średnio tylko +0,29%/+0,86%, a 7% transakcji traci >10%; S2B ma zmienność 6,6% dziennie, brak historii, a sezon był na plus w 4/12 lat."
+  ],
+  "ryzyko": "Największe ryzyko to luka cenowa w biotechu bez stopu: interim III fazy SYN2 albo emisja przy gotówce na 10–11 mies. Sygnał unieważnia ogłoszenie emisji lub interimu przed wyjściem albo zamknięcie poniżej 50 zł. Raport roczny jest 03.12, więc wyjście czasowe warto przenieść na zamknięcie 02.12, a pozycję trzymać ≤½.",
+  "zrodla": [
+   {
+    "t": "Syn2bio – wiadomości i ESPI (BiznesRadar)",
+    "u": "https://www.biznesradar.pl/wiadomosci/S2B"
+   },
+   {
+    "t": "Prace nad SYN2 pochłonęły 11 mln zł, spółka czeka na ruch FDA",
+    "u": "https://www.biznesradar.pl/a/150030,prace-nad-syn2-pochlonely-11-mln-zl-spolka-czeka-na-ruch-fda"
+   },
+   {
+    "t": "Kalendarium publikacji raportów okresowych (StrefaInwestorów)",
+    "u": "https://strefainwestorow.pl/dane/raporty/lista-publikacji-raportow-okresowych/all"
+   },
+   {
+    "t": "Syn2bio – Parkiet",
+    "u": "https://www.parkiet.com/spolka/PLSNBIO00013"
+   }
+  ]
+ },
+ "VOT": {
+  "data": "2026-11-19",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Żaden ESPI nie tłumaczy spadku z 39,30 zł (12.11); część zniżki od 19.10 to odcięcie 2,50 zł zaliczki, a DM BOŚ 12.10 obniżył zalecenie do „trzymaj” (48,8 zł) z powodu wyczerpywania się spraw frankowych. 19.11 kurs spadł o 5,95% (min. 33,30 zł) przy dwóch ESPI: rezygnacji członka RN (bez powodu) i zapowiedzi drugiej zaliczki za 2026 (kwota nieznana, wymaga zgody RN). Raport za III kw. 24.11 – w oknie trzymania; prognoza zysku III kw. 28,0 mln zł (−5% r/r), za I–III kw. −22% r/r. C/Z ok. 3,6–3,8, C/WK 1,16, ujemny dług netto, Dadełło (DSA) 57,08%, niska płynność.",
+  "byk": [
+   "Warunki reguły są spełnione (RSI2 rynku 6, VOT −11,5% w 5 sesji), rynek jest nad SMA200, a przez 14 lat 84–85% transakcji było zyskownych.",
+   "Żaden ESPI nie tłumaczy spadku, a ESPI 42/2026 zapowiada drugą zaliczkę; przy C/Z 3,6–3,8, C/WK 1,16 i ujemnym długu netto to wygląda na panikę, nie fundamenty.",
+   "Cel +3% (35,84 zł) jest poniżej dzisiejszego otwarcia 36,90 zł i mniejszy niż dzienna zmienność 3,8%, a w tym epizodzie KGH, BMC i ASB zamknęły się po +2,6%."
+  ],
+  "niedzwiedz": [
+   "Na samym VOT sygnały dały średnio −0,1% z 14 prób, 14-letnie badanie tylko +0,29–0,86%, a 7% transakcji traci >10% – tu bez stopu i pełną pozycją.",
+   "Raport III kw. wypada 24.11 w oknie trzymania przy spadających zyskach (I–III kw. −22% r/r, TTM 117,6 vs 140,2 mln zł), a spadek bez ESPI może być fundamentalny.",
+   "Niska płynność (58 tys. akcji w dniu spadku) i niewyjaśniona rezygnacja członka RN 19.11, a sezon 15.11–15.12 był na plus tylko w 4 z 12 lat."
+  ],
+  "ryzyko": "Największe ryzyko to raport III kw. 24.11 w oknie trzymania przy zyskach I–III kw. −22% r/r i niewyjaśnionej rezygnacji członka RN, przy braku stopu, pełnej pozycji i niskiej płynności. Sygnał unieważnia zamknięcie poniżej 33,30 zł albo słaby raport 24.11. W ramach reguły: wejście tylko przy otwarciu ≤35,50 zł, cel +3% od faktycznej ceny zakupu.",
+  "zrodla": [
+   {
+    "t": "Votum – notowania i wskaźniki (Stockwatch)",
+    "u": "https://www.stockwatch.pl/gpw/votum,notowania,wskazniki.aspx"
+   },
+   {
+    "t": "Notowania VOTUM (BiznesRadar)",
+    "u": "https://www.biznesradar.pl/notowania/VOTUM"
+   },
+   {
+    "t": "DM BOŚ obniżył cenę docelową akcji Votum do 48,8 zł",
+    "u": "https://strefainwestorow.pl/wiadomosci/20261013/dm-bos-obnizyl-cene-docelowa-akcji-votum-do-488-zl"
+   },
+   {
+    "t": "9 spółek, które jeszcze wypłacą wysokie dywidendy i zaliczki w 2026",
+    "u": "https://strefainwestorow.pl/dywidendy/wysokie-dywidendy-jesien-zaliczki-2026"
+   }
+  ]
  }
 }
