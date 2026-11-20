@@ -320,5 +320,98 @@
     "u": "https://strefainwestorow.pl/dywidendy/wysokie-dywidendy-jesien-zaliczki-2026"
    }
   ]
+ },
+ "ICE": {
+  "data": "2026-11-20",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "ICE to Medinice S.A. (medtech, nie IT – skaner ma błędny sektor). Brak ESPI tłumaczącego spadek z 50,5 do 44,5 zł; ostatnie komunikaty to patenty CoolCryo w Chinach (23.10) i Izraelu (03.11), raport za III kw. wyszedł 06.11 – w oknie do 04.12 nie znaleziono raportu, WZA, dywidendy ani emisji. Przychody 0 od 5 kwartałów, strata III kw. −3,64 mln zł (najwyższa w serii), gotówka 55,6 mln zł bez kredytów, kapitalizacja ok. 465 mln zł. Kurs jest pod ceną emisji serii O (50 zł, lipiec, 1 inwestor, w obrocie od 13.08); otwarte bez daty: negocjacje z podmiotem DACH i komercjalizacja CoolCryo.",
+  "byk": [
+   "Brak ESPI tłumaczącego spadek −10,6%, a ostatnie komunikaty są pozytywne (patenty 23.10 i 03.11) – wygląda to na panikę rynkową, nie fundamenty.",
+   "Spółka ma 55,6 mln zł gotówki i brak kredytów, a w oknie 23.11–04.12 nie ma raportu, WZA ani emisji – ryzyko zdarzeniowe niskie.",
+   "Reguła wygrywała w 84–85% przypadków na 14 latach (10/14 lat na plus), a 20 sygnałów na tej spółce dało średnio +4,8%."
+  ],
+  "niedzwiedz": [
+   "Zero przychodów od 5 kwartałów i rekordowa strata −3,64 mln zł, a spadek nie ma znanej przyczyny.",
+   "Kurs 44,50 zł jest pod ceną emisji serii O (50 zł) objętej przez jednego inwestora – możliwa podaż z tego pakietu.",
+   "Na 14 latach reguła daje średnio tylko +0,29%/+0,86%, 7% transakcji traci >10%, bez stopu; sezon 15.11–15.12 zwykle słaby."
+  ],
+  "ryzyko": "Największe ryzyko to spadek bez wyjaśnienia przy zerowych przychodach i kursie pod ceną emisji 50 zł (możliwa podaż inwestora serii O). Sygnał unieważnia negatywny ESPI albo luka na otwarciu 23.11 poniżej ok. 42 zł – wtedy bez wejścia. Ograniczenie: ½ pozycji jako maksimum, bez dokupowania, limit wejścia nie wyżej niż 45,39 zł.",
+  "zrodla": [
+   {
+    "t": "Wiadomości ICE – Biznesradar",
+    "u": "https://www.biznesradar.pl/wiadomosci/ICE"
+   },
+   {
+    "t": "Medinice – rachunek zysków i strat (kwartalnie)",
+    "u": "https://www.biznesradar.pl/raporty-finansowe-rachunek-zyskow-i-strat/ICE,Q"
+   },
+   {
+    "t": "Medinice – podsumowanie subskrypcji akcji serii O",
+    "u": "https://www.parkiet.com/komunikaty-espi/art44908411-medinice-spolka-akcyjna-podsumowanie-subskrypcji-akcji-serii-o"
+   }
+  ]
+ },
+ "OML": {
+  "data": "2026-11-20",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Kurs spada od premiery Valor Mortis na Steam (14.10) mimo dobrych recenzji; 20.10 ESPI o zwrocie kosztów współwydawcy dało +10%, 26.10 zapowiedź DLC, od tego czasu brak ESPI, a 20.11 kurs 1,25 zł (−7%) – najniżej od roku. Raport za III kw. zaplanowany na 30.11 – w oknie trzymania, pokaże pierwszą sprzedaż gry. 2025: przychody 1,46 mln zł, strata 3,69 mln; I pół. 2026: przychody 0,81 mln, strata 2,06 mln; zobowiązania 31,7 mln zł przy kapitale 12,7 mln, kapitalizacja ok. 83 mln zł. 21.09 ABS Investment ASI sprzedał pakiet; płynność znikoma (transakcje rzędu setek zł).",
+  "byk": [
+   "Reguła wygrywała w 84–85% przypadków na 14 latach (10/14 lat na plus), a 12 sygnałów na OML dało średnio +4,4%.",
+   "Spadek −10,4% do najniższego kursu od roku nastąpił bez nowych ESPI od 26.10 – wygląda na paniczną podaż, nie nowe złe wieści.",
+   "Cel to tylko +3% (1,29 zł) przy ½ pozycji, a raport 30.11 pokaże pierwszą sprzedaż Valor Mortis, która może być katalizatorem."
+  ],
+  "niedzwiedz": [
+   "Fundamenty słabe: strata 3,69 mln zł przy 1,46 mln przychodów w 2025 i zobowiązania 31,7 mln zł przy kapitale 12,7 mln.",
+   "Raport za III kw. 30.11 wypada w oknie trzymania, a bez stopu słaba sprzedaż gry może dać stratę ponad 10%.",
+   "Płynność znikoma (transakcje rzędu setek zł), sezon 15.11–15.12 zwykle słaby, a średni wynik reguły na 14 latach to tylko +0,29%/+0,86%."
+  ],
+  "ryzyko": "Raport za III kw. 30.11 w oknie trzymania przy zadłużeniu i znikomej płynności – słaba sprzedaż gry bez stopu może dać stratę >10%. Sygnał unieważnia słaby raport 30.11 albo ESPI o emisji/zadłużeniu. Ograniczenie: pozycja mniejsza niż ½, dopasowana do płynności, wejście nie wyżej niż 1,27 zł; rozważyć zamknięcie przed raportem (najpóźniej 27.11).",
+  "zrodla": [
+   {
+    "t": "Wiadomości OML – Biznesradar",
+    "u": "https://www.biznesradar.pl/wiadomosci/OML"
+   },
+   {
+    "t": "One More Level – raport półroczny",
+    "u": "https://www.biznesradar.pl/a/158185,one-more-level-sa-raport-okresowy-polroczny-za-p"
+   },
+   {
+    "t": "Kalendarium raportów okresowych – Strefa Inwestorów",
+    "u": "https://strefainwestorow.pl/dane/raporty/lista-publikacji-raportow-okresowych/all"
+   }
+  ]
+ },
+ "SEV": {
+  "data": "2026-11-20",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Od 13.11 brak negatywnych ESPI/EBI – spadek z 13,90 do 12,45 zł nastąpił po dobrym raporcie z 12.11 (Q1 2026/27: przychody 45,5 mln zł, +39% r/r, zysk netto 4,31 mln wobec −0,53 mln). Za 4 kwartały przychody 218,7 mln zł i zysk 16,9 mln, C/Z ok. 7,4; w oknie do 04.12 brak raportu okresowego. ZWZ 07.12, proponowana dywidenda 1,05 zł (ok. 8,4%), dzień dywidendy 10.12 – po planowanym wyjściu. Free float ok. 21% (NewConnect), transakcje osoby zarządzającej 18.08 o nieznanym kierunku, przegląd opcji strategicznych od 28.04.",
+  "byk": [
+   "Reguła wygrywała w 84–85% przypadków na 14 latach, a 14 sygnałów na samym SEV dało średnio +6,5%.",
+   "Spadek −10,4% to przecena rynku, nie złe wieści: od 13.11 brak negatywnych ESPI, a raport z 12.11 pokazał przychody +39% i zysk 4,31 mln zł.",
+   "Wycena niska (C/Z ok. 7,4), w oknie nie ma raportu okresowego, a dywidenda 1,05 zł (ok. 8,4%) przed ZWZ 07.12 może wspierać kurs."
+  ],
+  "niedzwiedz": [
+   "Na 14 latach reguła daje średnio tylko +0,29%/+0,86%, a 7% transakcji traci ponad 10% – bez stopu to realne ryzyko.",
+   "Free float ok. 21% na NewConnect i zmienność 7,3% utrudniają wejście i wyjście po planowanych cenach; transakcje zarządu z 18.08 nieznane.",
+   "Sezon 15.11–15.12 średnio −1,2% (plus w 4 z 12 lat), a wyniki SEV mocno się wahają (Q4 2025/26 EBIT −0,13 mln zł)."
+  ],
+  "ryzyko": "Największe ryzyko to brak stopu na mało płynnej spółce (free float 21%, zmienność 7,3%) – przecena małych spółek może trwać. Sygnał unieważnia negatywny ESPI przed 04.12 (np. zmiana propozycji dywidendy) lub zamknięcie poniżej ok. 11,50 zł. Ograniczenie: ½ pozycji lub mniej i limit wejścia ściśle do 12,70 zł.",
+  "zrodla": [
+   {
+    "t": "Sevenet – rachunek zysków i strat (kwartalnie)",
+    "u": "https://www.biznesradar.pl/raporty-finansowe-rachunek-zyskow-i-strat/SEVENET,Q"
+   },
+   {
+    "t": "Sevenet – dywidenda",
+    "u": "https://www.biznesradar.pl/dywidenda/SEVENET"
+   },
+   {
+    "t": "Sevenet – komunikaty ESPI",
+    "u": "https://www.money.pl/gielda/komunikaty/?isin=plsvnet00019"
+   }
+  ]
  }
 }
