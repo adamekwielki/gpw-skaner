@@ -324,7 +324,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
     # 🔥 PANIKA
     if panika_rynku and ret5 <= -10:
         mod.append(dict(typ="panika", tytul="🔥 PANIKA NA RYNKU – odbicie",
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.02)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.02)})",
             sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy zakupie po {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
             stop="bez stopu (w testach stopy szkodziły) – trzymaj małą pozycję",
             opis=f"Indeks małych spółek mocno wyprzedany, spółka {pct(ret5)} w 5 sesji."))
@@ -376,14 +376,14 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
     spadki = int((c.diff().tail(5) < 0).sum())
     if spadki == 5 and np.isfinite(sma100) and close > sma100:
         mod.append(dict(typ="5spadkow", tytul="📉 5 SPADKÓW Z RZĘDU w trendzie",
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.01)})",
             sprzedaj=f"gdy RSI2 &gt; 70 – dziś to zamknięcie ≥ {zl(cel_rsi2)}; najpóźniej {data_za(D, 7)}",
             stop=f"awaryjny {zl(stop_awaryjny)}", opis=f"Kurs {pct((close / sma100 - 1) * 100)} nad SMA100."))
 
     # 📉 MOCNE COFNIĘCIE w trendzie (spółka −8% w 5 sesji, nad SMA200, RSI2 < 10)
     if r2 < 10 and nad200 and ret5 <= -8 and not any(m["typ"] == "panika" for m in mod):
         mod.append(dict(typ="cofniecie", tytul="📉 MOCNE COFNIĘCIE w trendzie",
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.01)})",
             sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
             stop="bez stopu (w testach stopy szkodziły) – mała pozycja",
             opis=f"Spółka {pct(ret5)} w 5 sesji, RSI2 = {r2:.0f}, kurs nadal nad SMA200."))
@@ -392,7 +392,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
     if r2 < 5 and trend_ok and not any(m["typ"] in ("5spadkow", "panika", "cofniecie") for m in mod):
         blisko = bool(np.isfinite(od52) and od52 > -10)
         mod.append(dict(typ="rsi2", tytul="📉 RSI2 &lt; 5 w trendzie" + (" (blisko szczytu – słabsze)" if blisko else ""),
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.01)})",
             sprzedaj=f"gdy RSI2 &gt; 70 – dziś to zamknięcie ≥ {zl(cel_rsi2)}; najpóźniej {data_za(D, 7)}",
             stop=f"awaryjny {zl(stop_awaryjny)}", slabe=blisko,
             opis=f"RSI2 = {r2:.1f}, kurs nad SMA200" + (f", {pct(od52)} od rocznego szczytu." if np.isfinite(od52) else ".")))
@@ -403,7 +403,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
         roczny = szczyt52 or not np.isfinite(h52)
         mod.append(dict(typ="wybicie", tytul=("📈 WYBICIE na roczny szczyt (52 tyg.)" if roczny
                                               else "📈 Wybicie na szczyt 120 sesji (nie roczny – słabsze)"),
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.02)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.02)})",
             sprzedaj=f"po 10 sesjach ({data_za(D, 10)}), a gdy idzie dobrze – nawet do 20 sesji; albo stop kroczący: najwyższe zamknięcie − 2×ATR",
             stop=f"stop kroczący, dziś {zl(close - 2 * atr)}", slabe=not roczny,
             opis=(f"Poprzedni szczyt {zl(hh)}, wolumen {v.iloc[-1] / vmed.iloc[-1]:.1f}× mediany."
@@ -420,7 +420,7 @@ def analiza(t, D, H, panika_rynku, r2_rynku=50.0, wymus=False):
     rozl = ch.tail(10).max() > 60 and ch1 < 50
     if rozl and trend_ok and r2_rynku < 30 and not any(m["typ"] == "panika" for m in mod):
         mod.append(dict(typ="chop", tytul="🌀 CHOP rozładowanie + rynek wyprzedany",
-            kup=f"jutro na otwarciu (do ok. {zl(close * 1.01)})",
+            kup=f"{SESJA['kup']} (do ok. {zl(close * 1.01)})",
             sprzedaj=f"od razu zlecenie z limitem <b>+3% od ceny zakupu</b> (przy {zl(close)} → {zl(close * 1.03)}); jeśli nie wejdzie – na zamknięciu {data_za(D, 10)}",
             stop="bez stopu (w testach stopy szkodziły) – mała pozycja",
             opis=f"CHOP spadł z {ch.tail(10).max():.0f} do {ch1:.0f}, RSI2 rynku {r2_rynku:.0f} (&lt; 30), kurs w trendzie."))
@@ -538,6 +538,58 @@ NAZWA = {"panika": "Odbicie po panice na rynku", "wystrzal": "Wejście na korekc
 INSIDERZY = {}
 BRAK_POZ = []
 DEBATY = {}
+SESJA = {"kup": "jutro na otwarciu"}  # ustawiane w main() wg daty danych
+
+# dni bez sesji na GPW (poza weekendami)
+SWIETA_GPW = {"2026-12-24", "2026-12-25", "2026-12-31", "2027-01-01", "2027-01-06", "2027-03-26", "2027-03-29",
+              "2027-05-03", "2027-05-27", "2027-11-01", "2027-11-11", "2027-12-24"}
+
+
+def czy_sesja(d):
+    return d.weekday() < 5 and d.isoformat() not in SWIETA_GPW
+
+
+def nastepna_sesja(d):
+    d = d + dt.timedelta(days=1)
+    while not czy_sesja(d):
+        d += dt.timedelta(days=1)
+    return d
+
+
+def oczekiwana_sesja(teraz):
+    """ostatnia sesja, która powinna już być w danych (dzisiejsza od 10:00, inaczej poprzednia)"""
+    d = teraz.date()
+    if czy_sesja(d) and teraz.hour >= 10:
+        return d
+    d -= dt.timedelta(days=1)
+    while not czy_sesja(d):
+        d -= dt.timedelta(days=1)
+    return d
+
+
+def uzupelnij_luki(D, H, dni=15):
+    """Yahoo czasem gubi świecę dzienną (np. 19.11.2026) – odtwarzamy ją z danych godzinowych."""
+    luki = {}
+    for s, df in D.items():
+        h = H.get(s)
+        if h is None or not len(h) or not len(df):
+            continue
+        h = h.copy()
+        if h.index.tz is None:
+            h.index = h.index.tz_localize("UTC")
+        h.index = h.index.tz_convert("Europe/Warsaw")
+        dz = h.groupby(h.index.date).agg({"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": "sum"})
+        dz.index = pd.to_datetime(dz.index)
+        if df.index.tz is not None:
+            dz.index = dz.index.tz_localize(df.index.tz)
+        start = df.index[-1] - pd.Timedelta(days=dni)
+        brak = [d for d in dz.index if d > start and d not in df.index]
+        if brak:
+            D[s] = pd.concat([df, dz.loc[brak]]).sort_index()
+            for d in brak:
+                luki.setdefault(d.date(), 0)
+                luki[d.date()] += 1
+    return luki
 DEBATA_DNI = 6   # jak długo debata jest „świeża” i pokazywana na karcie
 
 
@@ -751,17 +803,42 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html="", pozycje=()):
         poz_html += f'<div class="box">Nie mam notowań dla pozycji: {html.escape(", ".join(BRAK_POZ))} – sprawdź skrót w pliku pozycji.</div>'
     chipy = "".join(f'<span class="chip{" top3" if i < 3 else ""}">{i + 1}. {html.escape(s)} <b>{m:+.1f}%</b></span>'
                     for i, (s, m) in enumerate(sektory))
+    DNI = ["pon.", "wt.", "śr.", "czw.", "pt.", "sob.", "niedz."]
+    d_dane = SESJA.get("dane")
+    if d_dane is None:
+        dane_html = ""
+        top_h2 = '<h2>🏆 TOP 5 na dziś <small>najmocniejsze sygnały kupna wg testów</small></h2>'
+    elif SESJA.get("stale"):
+        ocz = SESJA["oczekiwana"]
+        dane_html = (f'<div class="box badb">⚠️ <b>DANE NIEAKTUALNE</b> – ostatnia sesja w danych to {DNI[d_dane.weekday()]} '
+                     f'{d_dane:%d.%m}, brakuje sesji {ocz:%d.%m}. Sygnały i ceny poniżej są stare – nie graj według nich, '
+                     f'poczekaj na kolejny skan.</div>')
+        top_h2 = f'<h2>🏆 TOP 5 – ⚠️ nieaktualne <small>dane z {d_dane:%d.%m}</small></h2>'
+    else:
+        nast = nastepna_sesja(d_dane)
+        luki = SESJA.get("luki") or []
+        dop = (f' · sesję {", ".join(f"{d:%d.%m}" for d in luki)} odtworzono z danych godzinowych (Yahoo jej nie podał)'
+               if luki else "")
+        if SESJA.get("trwa"):
+            dane_html = (f'<div class="box warnb">⏳ <b>Sesja {d_dane:%d.%m} jeszcze trwa</b> – sygnały są wstępne (z niepełnej świecy), '
+                         f'ostateczne po skanie ok. 17:20. Kupno najwcześniej na otwarciu {DNI[nast.weekday()]} {nast:%d.%m}{dop}.</div>')
+        else:
+            dane_html = (f'<div class="box ok">📅 <b>Dane z sesji {DNI[d_dane.weekday()]} {d_dane:%d.%m}</b> → '
+                         f'kupno na otwarciu {DNI[nast.weekday()]} {nast:%d.%m}{dop}</div>')
+        top_h2 = (f'<h2>🏆 TOP 5 na {DNI[nast.weekday()]} {nast:%d.%m} '
+                  f'<small>sygnały z sesji {d_dane:%d.%m}, najmocniejsze wg testów</small></h2>')
     strona = f"""<!doctype html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Skaner GPW</title><style>{CSS}</style></head>
 <body><div class="wrap"><h1>Skaner GPW</h1>
 <div class="sub">Stan na {teraz} · {len(wyniki)} spółek · kliknij nazwę spółki, żeby otworzyć wykres</div>
+{dane_html}
 <div class="box {rk}">{rynek[1]}</div>{pan}{sezon}
 {poz_html}
 <h2>🔎 Moje spółki <small>wpisz skróty lub nazwy – zapamiętam je na tym urządzeniu</small></h2>
 <div class="szuk"><input id="q" type="text" inputmode="text" placeholder="np. PKN, CDR, Allegro" autocomplete="off" autocapitalize="characters"><button id="qx" title="Wyczyść">✕</button></div>
 <div id="wyn"></div>
 <div id="all" hidden>{wszystkie_html}</div>
-<h2>🏆 TOP 5 na dziś <small>najmocniejsze sygnały kupna wg testów</small></h2>
+{top_h2}
 {top_html}
 {reszta_html}
 {inne_html}
@@ -773,7 +850,7 @@ def raport(wyniki, plik, rynek, sektory, panika, wyniki_html="", pozycje=()):
 <b>Moje spółki</b>: wpisz skróty (np. PKN, CDR) albo nazwy – zobaczysz, czy spółka jest w strefie realizacji zysku (🔔), przy rocznym szczycie (📈) albo czy jest ostrzeżenie. Skaner zna ok. 140 najpłynniejszych spółek.<br>
 <b>Kolejność TOP 5</b> = siła reguły w testach (🔥 panika &gt; 🚀 wystrzał &gt; 📉 mocne cofnięcie &gt; 📉 5 spadków &gt; 📈 wybicie &gt; 📉 RSI2 &gt; 🌀 CHOP),
 plus dodatkowe punkty za 👔 zakup zarządu, ⭐ i dobrą historię sygnałów na tej spółce. ★★★ = mocny, ★☆☆ = słaby.<br>
-<b>Kup jutro na otwarciu</b> = zlecenie na otwarcie następnej sesji, najwyżej do podanej ceny.
+<b>Kup na otwarciu dd.mm</b> = zlecenie na otwarcie następnej sesji (data podana przy sygnale), najwyżej do podanej ceny.
 <b>Zlecenie z limitem</b> = kupno tylko, jeśli kurs spadnie do tej ceny (w XTB: zlecenie z limitem).<br>
 <b>Stop</b>: w testach stopy −5%/−8% pogarszały wynik, dlatego przy 🔥/🚀/🌀 go nie ma – zamiast tego trzymaj małe pozycje (maks. 3–4 naraz). Limit +2/3% ustaw zaraz po zakupie.
 <b>½ pozycji</b> = spółka rusza się średnio ponad 5% dziennie – w testach co 10. transakcja traciła tam ponad 10%, więc wchodź mniejszą kwotą. 🌀 CHOP i 📉 RSI2 na takich spółkach nie trafiają do TOP 5.
@@ -994,6 +1071,9 @@ def alerty(wyniki, panika, plik_stanu="docs/alerty.json", pozycje=()):
     """Wysyła powiadomienie o sygnałach ★★★ (bez powtórek tej samej spółki i reguły przez 5 dni)."""
     import json, re
     topic = os.environ.get("NTFY_TOPIC", "").strip()
+    if SESJA.get("stale"):
+        print("alerty: dane nieaktualne – nie wysyłam sygnałów")
+        return
     if not topic:
         print("alerty: brak NTFY_TOPIC – pomijam")
         return
@@ -1058,6 +1138,11 @@ def main():
     print(f"insiderzy: {len(INSIDERZY)} spółek z zakupami zarządu w ostatnich {INSIDER_DNI} dniach")
     D = pobierz(symbole, "1d", "2y")
     H = pobierz(symbole, "1h", "1y")
+    luki = uzupelnij_luki(D, H)
+    # luka „rynkowa” = brakowało świecy dziennej w co najmniej 20% spółek
+    SESJA["luki"] = sorted(d for d, n in luki.items() if n >= 0.2 * len(D))
+    if luki:
+        print("uzupełniono z danych godzinowych:", {str(d): n for d, n in sorted(luki.items())})
 
     # rynek: indeks równowagowy płynnych spółek (zastępuje sWIG80)
     rets = []
@@ -1090,6 +1175,13 @@ def main():
     msc = {k: i + 1 for i, (k, _) in enumerate(sektory)}
 
     ostatnia = max(df.index[-1] for df in D.values())
+    from zoneinfo import ZoneInfo
+    dane = pd.Timestamp(ostatnia).date()
+    _t = dt.datetime.now(ZoneInfo("Europe/Warsaw"))
+    ocz = oczekiwana_sesja(_t)
+    SESJA.update(dane=dane, oczekiwana=ocz, stale=dane < ocz, trwa=dane == _t.date() and _t.hour < 17,
+                 kup=f"na otwarciu {nastepna_sesja(dane):%d.%m}")
+    print(f"dane z sesji {dane}, oczekiwana {ocz}{' – NIEAKTUALNE' if dane < ocz else ''}")
     wyniki = []
     for s in symbole:
         t = s[:-3]
@@ -1137,7 +1229,10 @@ def main():
             print(f"  pozycja {t}: brak danych")
     raport(wyniki, args.out, rynek, sektory, panika, sekcja_wynikow(J), pozycje)
     try:
-        zapisz_sygnaly(wyniki, plik_dz)
+        if SESJA.get("stale"):
+            print("dziennik: dane nieaktualne – nie zapisuję nowych sygnałów")
+        else:
+            zapisz_sygnaly(wyniki, plik_dz)
     except Exception as e:
         print("dziennik: błąd zapisu", e)
     alerty(wyniki, panika, str(Path(args.out).parent / "alerty.json"), pozycje)
