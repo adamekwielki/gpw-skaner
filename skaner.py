@@ -1085,7 +1085,11 @@ def alerty(wyniki, panika, plik_stanu="docs/alerty.json", pozycje=()):
     stan = {k: v for k, v in stan.items() if (dzis - dt.date.fromisoformat(v)).days < 5}
     czysc = lambda x: re.sub(r"<[^>]+>", "", x).replace("&gt;", ">").replace("&lt;", "<")
     nowe = []
-    for r in sorted([r for r in wyniki if r.get("_p") is not None and r["_p"] >= 80], key=lambda r: -r["_p"]):
+    # w trakcie sesji świeca jest niepełna – sygnałów kupna nie wysyłamy (tylko alerty o posiadanych pozycjach)
+    kandydaci = [] if SESJA.get("trwa") else [r for r in wyniki if r.get("_p") is not None and r["_p"] >= 80]
+    if SESJA.get("trwa"):
+        print("alerty: sesja trwa – sygnały kupna wyślę po zamknięciu")
+    for r in sorted(kandydaci, key=lambda r: -r["_p"]):
         m = r["_m"]
         klucz = f'{r["spolka"]}:{m["typ"]}'
         if klucz in stan:
