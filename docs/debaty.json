@@ -27,56 +27,72 @@
   ]
  },
  "TOA": {
-  "data": "2026-11-15",
+  "data": "2026-11-23",
   "regula": "wystrzal",
   "werdykt": "z zastrzeżeniami",
-  "analityk": "Wystrzał 06.11 (+10,4%) po raporcie za III kw.: przychody 274 mln zł (+22% r/r), zysk netto 28,4 mln zł (+52% r/r, 20% nad konsensusem). Noble podniósł cenę docelową do 17 zł (19.10). Kolejnego raportu w 2026 r. nie będzie. C/Z ok. 9,9. Po wystrzale kurs rósł dalej, do 14,22 zł (12.11).",
+  "analityk": "Wystrzał 06.11 po raporcie za III kw.: przychody 274 mln zł (+22% r/r), zysk netto 28,4 mln zł (+52%); C/Z ok. 9,5, cel Noble 17 zł (16.10). Spadku ze szczytu 14,22 zł (12.11) do ok. 12 zł ani odbicia 23.11 (+2,5%) nic nie wyjaśnia – od 05.11 brak ESPI/EBI, transakcji insiderów i nowych rekomendacji. Do 8.12 brak raportów, dywidendy i WZA. Ryzyka: przepływy operacyjne H1 26 mln zł wobec 67 mln r/r, wyższe zobowiązania po zakupie magazynu (41,6 mln EUR), free float ok. 27%.",
   "byk": [
-   "Reguła przez 14 lat dawała 85–87% zyskownych transakcji i średnio +1,0–1,4% po kosztach, choć 4–5% transakcji traciło ponad 10%.",
-   "Wystrzał ma twarde podstawy: EBIT III kwartału +54% r/r i 23% nad konsensusem, C/Z ok. 9,9, cena docelowa Noble 17 zł, choć wyniki kwartał do kwartału płaskie.",
-   "Limity 12,03 i 11,75 zł leżą w zakresie sesji wystrzału, a przy kursie 10% wyżej brak wypełnienia nic nie kosztuje."
+   "Płytszy limit 12,03 zł wypełnił się 20.11, a kurs 12,92 zł jest już ponad celem 12,27 zł – pierwsza transza na zysku lub zamknięta.",
+   "Rynek nad SMA200, RSI2 rynku 39 bez wykupienia, a reguła daje ok. 90% zyskownych transakcji, średnio +1,5%.",
+   "Wystrzał miał podstawy w wynikach: zysk +52% r/r, przychody +22%, C/Z ok. 9,5, cel Noble 17 zł ok. 32% nad kursem."
   ],
   "niedzwiedz": [
-   "Kurs 13,24 zł jest ok. 10% nad pierwszym limitem, a wypełnienie wymaga zamknięcia luki z 06.11 – rynek musiałby zanegować reakcję na świetny raport.",
-   "Asymetria jest niekorzystna: zysk ograniczony do +2% (średnio +1,0–1,4% po kosztach), a ok. 4–5% transakcji traci ponad 10%.",
-   "Otoczenie sprzyja głębszej korekcie zamiast odbicia: rynek wykupiony (RSI2 89), sezonowo słaby okres 15.11–15.12, brak kolejnego raportu jako katalizatora."
+   "Asymetria: cel +2% wobec stopu 10,96 zł (−8,9% od 12,03) – jedna strata kasuje ok. 4 wygrane, a reguła miewa straty do −30%.",
+   "Na Toi reguła dała średnio tylko +0,4% z 12 sygnałów, a okno trzymania trafia w słaby sezon (śr. −1,2%, plus w 4 z 12 lat).",
+   "Spadek z 14,22 do ok. 12 zł (−15%) bez znanej przyczyny, słabsze przepływy i mała płynność – realne ryzyko luki pod stop."
   ],
-  "ryzyko": "Limity 12,03 i 11,75 zł wypełnią się dopiero przy zamknięciu luki po świetnym raporcie, przy wykupionym rynku i słabym sezonie, a zysk ograniczono do +2%. Sygnał unieważnia zejście poniżej 11,54 zł (dołek sesji 06.11) lub wygaśnięcie zlecenia po 15 sesjach od 06.11. Ograniczenie: mniejsza pozycja, nie gonić kursu.",
+  "ryzyko": "Niewyjaśniona korekta z 14,22 do ok. 12 zł przy free floacie ok. 27% – kurs może otworzyć się luką pod stopem 10,96 zł. Sygnał unieważnia zamknięcie poniżej 11,54 zł (dołek z 06.11) lub negatywny ESPI. Zostać przy ½ pozycji i nie przedłużać limitu 11,75 zł po 30.11.",
   "zrodla": [
    {
-    "t": "Wyniki Toya w III kw. 2026 vs konsensus",
-    "u": "https://strefainwestorow.pl/wiadomosci/20261105/wyniki-toya-w-iii-kw-2026-r-vs-konsensus-pap-biznes-tabela"
+    "t": "Noble Securities podniósł cenę docelową akcji Toya do 17 zł",
+    "u": "https://strefainwestorow.pl/wiadomosci/20261019/noble-securities-podniosl-cene-docelowa-akcji-toya-do-17-zl"
    },
    {
-    "t": "Terminy raportów Toya 2026",
-    "u": "https://toya.pl/en/deadlines-for-publication-of-toya-s-a-interim-reports-in-the-financial-year-2026"
+    "t": "Toya – komunikaty (money.pl)",
+    "u": "https://www.money.pl/gielda/spolki-gpw/pltoya000011,emitent,1.html"
+   },
+   {
+    "t": "Akcjonariat Toya SA",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLTOYA000011/akcjonariat"
+   },
+   {
+    "t": "Toya – wyniki finansowe",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLTOYA000011/wyniki-finansowe"
    }
   ]
  },
  "EUR": {
-  "data": "2026-11-15",
+  "data": "2026-11-23",
   "regula": "wystrzal",
   "werdykt": "poważne zastrzeżenia",
-  "analityk": "Wystrzał 03.11 (ok. +11%) po wstępnych szacunkach III kw.: EBITDA 216 mln zł wobec konsensusu 148 mln, zysk netto 16 mln zł zamiast oczekiwanej straty; przychody −8% r/r. Pełny raport 19.11. 29.10 kurs spadł o 13% do 4,36 zł, najniżej od 20 lat, z niejasnej przyczyny. 12.11 zwołano NWZ (porządek obrad nieustalony).",
+  "analityk": "Raport za III kw. (19.11) potwierdził szacunki: przychody 7,28 mld zł (−8,3% r/r), EBITDA 216 mln zł wobec konsensusu 148 mln, zysk akcjonariuszy 16 mln zł zamiast oczekiwanej straty 41 mln; po 9 mies. wciąż strata 69 mln. Koszty −14,5% r/r, 279 z 400 mln zł oszczędności zabezpieczone; 20.11 ogłoszono przygotowania do IPO Frisco (≥2027) i restrukturyzację Dużego Bena (−60 mln zł EBIT 2026). Przyczyna spadku 29.10 o 13% do 4,36 zł (najniżej od 20 lat) nadal nieznana. NWZ 11.12 (siedziba, uprawnienia RN) – tuż po oknie; raportów do 8.12 brak.",
   "byk": [
-   "Reguła ma 14-letnią statystykę na GPW: ok. 85–87% transakcji zyskownych, średnio +1,0–1,4% po kosztach, choć zdarzają się rzadkie duże straty.",
-   "Wystrzał ma twarde podstawy: EBITDA III kw. 216 mln zł wobec konsensusu 148 mln i zysk netto 16 mln zamiast oczekiwanej straty 41 mln, mimo przychodów −8% r/r.",
-   "Plan nie goni kursu: limity 4,58 i 4,46 zł leżą ok. 7–10% poniżej 4,93 zł, cel to tylko +2%, a Noble wycenia akcje na 5,70 zł."
+   "Reguła wygrywała w ok. 90% przypadków (śr. +1,5%), a 03.11 dała czysty sygnał: +12% przy 4× wolumenie.",
+   "Wyniki III kw. pobiły konsensus: 16 mln zł zysku zamiast 41 mln straty, EBITDA 216 mln zamiast 148 mln, koszty −14,5% r/r.",
+   "Limity 4,58/4,46 zł są 3,6–6% pod kursem, cel to tylko +2%, a do 8.12 nie ma raportów ani NWZ."
   ],
   "niedzwiedz": [
-   "Pełny raport za III kw. wypada 19.11, w oknie zlecenia, a reguła skanera zakazuje wejścia na 3 sesje przed raportem – limit może się wypełnić tuż przed nim.",
-   "29.10 kurs spadł o 13% do 4,36 zł, najniżej od 20 lat, z niejasnej przyczyny, a spółki po nowym rocznym dołku przegrywały z rynkiem o 1–2,7 pkt.",
-   "Oczekiwany zysk to tylko ok. +1,0–1,4% przy rzadkich dużych stratach, a niewiadome są spore: NWZ bez porządku obrad, nieustalony dług netto, słaby sezon."
+   "Cel +2% wobec stopu 4,17 zł, czyli ok. −9% od 4,58 i −6,5% od 4,46; rzadkie straty reguły sięgały −30%.",
+   "Skaner ostrzega przed nowym dołkiem 52 tyg. (29.10, 4,36 zł) – takie spółki przegrywały z rynkiem o 1–2,7 pkt w 2–4 tygodnie.",
+   "Słaby sezon (śr. −1,2%, plus w 4 z 12 lat) i brak katalizatora: raport 19.11 tylko potwierdził szacunki z 2.11."
   ],
-  "ryzyko": "Skaner ostrzega przed rocznym dołkiem, a spadek 29.10 o 13% i NWZ bez porządku obrad są niewyjaśnione. Wypełnienie limitów 4,58/4,46 zł w sesjach 16–18.11 złamałoby zakaz wejścia na 3 sesje przed raportem 19.11. Sygnał unieważnia raport gorszy od szacunków lub zejście poniżej 4,36 zł. Ograniczenie: pominąć albo wystawić zlecenia dopiero po 19.11, mniejszą pozycją.",
+  "ryzyko": "Aktywne ostrzeżenie o nowym dołku 52 tyg., a przyczyna spadku 29.10 (−13%, do 4,36 zł) wciąż nieznana. Sygnał unieważnia zamknięcie poniżej 4,36 zł lub nowy negatywny komunikat. Nie przedłużać limitów po 25.11 i bezwzględnie trzymać stop 4,17 zł.",
   "zrodla": [
    {
-    "t": "Eurocash – szacunki za III kw.",
-    "u": "https://xyz.pl/?p=271278"
+    "t": "Eurocash tnie koszty o 14,5% r/r i porządkuje sieć Duży Ben",
+    "u": "https://www.biznesradar.pl/a/171360,eurocash-tnie-koszty-o-14-5-r-r-i-porzadkuje-siec-duzy-ben-spolka-zrealizowala-juz-ponad-90-celu-oszczednosciowego"
    },
    {
-    "t": "Terminy raportów Eurocash 2026",
-    "u": "https://www.parkiet.com/komunikaty-espi/art43730511-eurocash-sa-terminy-publikacji-raportow-okresowych-w-2026-r"
+    "t": "EUROCASH: wstępne szacunkowe wyniki 3 kw. 2026",
+    "u": "https://www.money.pl/gielda/komunikaty/7346791465542209.html"
+   },
+   {
+    "t": "Eurocash chce rozwijać Dużego Bena we franczyzie",
+    "u": "https://strefainwestorow.pl/wiadomosci/20261120/eurocash-chce-rozwijac-duzego-bena-we-franczyzie-zamknie-nieperspektywiczne"
+   },
+   {
+    "t": "Eurocash przenosi siedzibę spółki (porządek NWZ)",
+    "u": "https://www.wiadomoscihandlowe.pl/handel-i-dystrybucja/handel-detaliczny/eurocash-przenosi-siedzibe-spolki-przyjmuje-tez-polityke-rownowagi-plci-2539367"
    }
   ]
  },
@@ -411,6 +427,37 @@
    {
     "t": "Sevenet – komunikaty ESPI",
     "u": "https://www.money.pl/gielda/komunikaty/?isin=plsvnet00019"
+   }
+  ]
+ },
+ "GPP": {
+  "data": "2026-11-23",
+  "regula": "rsi2",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Raport za III kw. (17.11): przychody 222,6 mln zł (+9% r/r, przyspieszenie z +2% i +6%), skorygowana EBITDA 106,5 mln zł (+9%, konsensus 100,8 mln), zysk netto 69,1 mln zł (+5%); podtrzymany cel >400 mln zł EBITDA w 2027, ale zarząd zapowiada niższą marżę w IV kw. i rozmawia o przejęciach. Przyczyny spadku po wynikach nie znaleziono. 20.11 wieczorem RB 16/2026 o transakcji osoby zarządzającej – kierunku i wielkości nie ustalono. C/Z ok. 14 (TTM); do 8.12 brak raportów, dywidendy i WZA.",
+  "byk": [
+   "Kurs 13,2% pod rocznym szczytem – w 14 latach taki układ dawał średnio +0,9–1,5% przy ok. 65% zyskownych sygnałów.",
+   "RSI2 = 2,1 przy kursie i rynku nad SMA200 to skrajne wyprzedanie w trendzie; na tej spółce 12 sygnałów dało średnio +0,9%.",
+   "Spadek przyszedł po wynikach lepszych od konsensusu (EBITDA 106,5 vs 100,8 mln, przychody +9%) bez negatywnych newsów, przy C/Z forward ok. 12."
+  ],
+  "niedzwiedz": [
+   "Przewaga to średnio ok. +0,9%, a stop 46,90 zł leży 8,2% pod kursem przy zmienności 4,1% dziennie – pełna pozycja ryzykuje wielokrotność zysku.",
+   "Okno trzymania wypada w historycznie słabym sezonie: średnio −1,2%, wzrosty tylko w 4 z 12 lat.",
+   "Spadek po dobrych wynikach jest niewyjaśniony, a kierunek transakcji menedżera z RB 16/2026 nieznany – może to być sprzedaż."
+  ],
+  "ryzyko": "Największe ryzyko: niewyjaśniony spadek po wynikach i nieznany kierunek transakcji insidera z RB 16/2026 (20.11). Duża sprzedaż przez insidera albo zamknięcie poniżej 46,90 zł przed 02.12 unieważnia sygnał. Przed otwarciem 24.11 sprawdzić RB 16/2026, przy sprzedaży pominąć wejście; stop od razu, bez dokładania.",
+  "zrodla": [
+   {
+    "t": "Wiadomości GPP – BiznesRadar",
+    "u": "https://www.biznesradar.pl/wiadomosci/GPP"
+   },
+   {
+    "t": "Grupa Pracuj – notowania i wiadomości",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLGRPRC00015"
+   },
+   {
+    "t": "Grupa Pracuj rozgląda się za okazjami zakupowymi",
+    "u": "https://xyz.pl/?p=276933"
    }
   ]
  }
