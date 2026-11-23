@@ -1,11 +1,4 @@
 {
-"WAS:wystrzal": "2026-11-17",
-"TOA:wystrzal": "2026-11-17",
-"CRI:panika": "2026-11-18",
-"KGH:panika": "2026-11-18",
-"BMC:panika": "2026-11-18",
-"CRQ:panika": "2026-11-18",
-"EUR:wystrzal": "2026-11-18",
 "S2B:panika": "2026-11-19",
 "VOT:panika": "2026-11-19",
 "SLV:panika": "2026-11-19",
@@ -25,5 +18,6 @@
 "GRX:panika": "2026-11-20",
 "ABE:panika": "2026-11-20",
 "LBW:panika": "2026-11-20",
-"MDG:panika": "2026-11-20"
+"MDG:panika": "2026-11-20",
+"KGH:panika": "2026-11-23"
 }
