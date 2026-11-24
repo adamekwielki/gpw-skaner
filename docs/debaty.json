@@ -1,28 +1,36 @@
 {
  "ACT": {
-  "data": "2026-11-15",
-  "regula": "wybicie",
+  "data": "2026-11-24",
+  "regula": "📈 Wybicie",
   "werdykt": "z zastrzeżeniami",
-  "analityk": "Wybicia nie tłumaczy żaden komunikat z 9–13.11. W tle: szacunek przychodów za III kw. ok. 922 mln zł (+23,8% r/r), cena docelowa DM BOŚ 63,3 zł (22.10) i trwający skup akcji. Raport za III kw. wypada 27.11, w oknie trzymania; zysk netto jeszcze nieznany. C/Z 13,5 – powyżej mediany sektora.",
+  "analityk": "Wybicia 24.11 nie tłumaczy żaden komunikat; katalizatorem są wstępne wyniki III kw. z 17.11: przychody 926,1 mln zł (+24% r/r), marża brutto 11,52% (z 8,41%), zysk netto 35,8 mln zł (z 9,0 mln), a zysk 9M (65 mln) przekracza cały 2025. Pełny raport za III kw. 27.11 – w oknie trzymania; szacunek obrotów listopada zwykle na początku grudnia (niepotwierdzone). C/Z ok. 9,4 (wyliczenie), skup akcji z limitem 50 zł nie wspiera kursu, DM BOŚ (sierpień) cel 46,6 zł, a wzrost marży wynika z drożejących komponentów i może się odwrócić.",
   "byk": [
-   "Reguła ma dodatnią wartość oczekiwaną z 14 lat GPW: średnio +2,3% w 20 sesji po kosztach, mimo tylko ~52% zyskownych i 12% strat ponad 10%.",
-   "Wybicie ma paliwo fundamentalne: przychody III kw. ok. 922 mln zł (+23,8% r/r), cena docelowa DM BOŚ 63,3 zł wobec kursu 55,40 oraz trwający skup akcji.",
-   "Nowy roczny szczyt powyżej 54,00 zł potwierdza wolumen 1,8× mediany, a stop kroczący ok. 50,29 zł ogranicza stratę, choć komunikatu tłumaczącego ruch brak."
+   "Wybicie o 4,1% ponad roczny szczyt 58,20 zł przy wolumenie 2,5× mediany, w dniu spadku rynku o ok. 2%, świadczy o silnym popycie niezależnym od rynku.",
+   "Świeży katalizator: wstępny zysk netto za III kw. 35,8 mln zł wobec 9,0 mln (ok. 4×), przychody +24% r/r, C/Z ok. 9,4 według wyliczenia analityka.",
+   "Reguła ma przewagę +1,9 pkt w 14/14 lat i daje śr. +2,3% w 20 sesji (zyskownych ok. 52%), a na ACT dała śr. +1,4% z 22 sygnałów."
   ],
   "niedzwiedz": [
-   "Raport za III kwartał wypada 27.11, w oknie trzymania, a zysk netto jest nieznany – przy C/Z 13,5 i C/WK 1,88 powyżej mediany sektora rozczarowanie może zaboleć.",
-   "Wybicia nie tłumaczy żaden komunikat z 9–13.11, kurs jest tylko 2,6% nad poprzednim szczytem, a 13.10 nieustalony akcjonariusz zmniejszył udział w głosach.",
-   "Rynek jest wykupiony (RSI2 89) i wchodzi w okres 15.11–15.12 ze średnią −1,2%, a reguła daje tylko ~52% trafności i 12% strat ponad 10%."
+   "Rynek jest pod SMA200 i SMA50 i spada, skaner sam zaleca połowę stawki, a sezon listopad–grudzień dawał śr. −1,2% (plus w 4 z 12 lat).",
+   "Pełny raport 27.11 wypada w oknie trzymania i może zweryfikować wstępne dane, a skok marży do 11,52% wg BOŚ wynika z drożejących komponentów.",
+   "Średni zysk to +1,6% w 10 sesji przy zmienności 4,5% i stopie ok. −9%; ~48% transakcji nie zarabia, 12% traci ponad 10%, a skup (limit 50 zł) nie wspiera."
   ],
-  "ryzyko": "Największe ryzyko to raport za III kw. 27.11 w oknie trzymania – zysk netto nieznany przy wycenie powyżej mediany sektora, a wybicia nie tłumaczy żaden komunikat. Sygnał unieważnia powrót poniżej 54,00 zł lub zejście do stopu ok. 50,29 zł. Ograniczenie: mniejsza pozycja i wyjście przed 27.11 albo pominięcie.",
+  "ryzyko": "Największe ryzyko to pełny raport za III kw. 27.11, trzecia sesja po wejściu – rozczarowanie marżą może dać lukę poniżej stopu (ok. −9%). Sygnał unieważnia zamknięcie poniżej 58,20 zł (powrót pod szczyt) albo stop 55,16 zł. Wejść połową stawki, nie dokładać przed 27.11, stopu nie luzować.",
   "zrodla": [
    {
-    "t": "BiznesRadar – wiadomości ACTION",
-    "u": "https://www.biznesradar.pl/wiadomosci/ACT"
+    "t": "ACTION SA (58/2026) Korekta raportu bieżącego – wstępne wyniki III kw. 2026",
+    "u": "https://www.biznesradar.pl/a/170049,action-sa-58-2026-korekta-raporty-biezacego-58-2026"
    },
    {
-    "t": "Strefa Inwestorów – wyniki Action",
-    "u": "https://strefainwestorow.pl/notowania/spolki/PLACTIN00018/wyniki-finansowe"
+    "t": "Zarząd Action upoważniony do nabycia do 1,3 mln akcji własnych",
+    "u": "https://strefainwestorow.pl/wiadomosci/20260618/zarzad-action-zostal-upowazniony-do-nabycia-do-13-mln-akcji-wlasnych"
+   },
+   {
+    "t": "ACTION – Shareholders",
+    "u": "https://www.action.pl/en/investor-relations/company/shareholders"
+   },
+   {
+    "t": "DM BOŚ – Action, raport 10.08.2026",
+    "u": "https://www.gpw.pl/pub/pwpa/20260810_dom_maklerski_banku_ochrony_środowiska_act_pl_pw.pdf"
    }
   ]
  },
@@ -458,6 +466,76 @@
    {
     "t": "Grupa Pracuj rozgląda się za okazjami zakupowymi",
     "u": "https://xyz.pl/?p=276933"
+   }
+  ]
+ },
+ "ASE": {
+  "data": "2026-11-24",
+  "regula": "📉 Mocne cofnięcie",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Spadek z 75,00 zł (19.11) do 68,00 zł (24.11, −5,2% na ostatniej sesji) bez żadnego ESPI/EBI, rekomendacji ani newsa, przy niskiej płynności (23.11 tylko 4,7 tys. akcji). III kw. powyżej konsensusu: przychody 475,8 mln zł (+8,8% r/r), EBIT 82,4 mln (+78%), zysk netto 62,0 mln (+12%) – częściowo dzięki niskiej bazie po odpisach w 2025; C/Z ok. 17. 10.11 akcje kupiła fundacja powiązana z członkiem zarządu. W oknie do 08.12 brak raportów i WZA, dywidenda już wypłacona; ryzyka: segment płatności −5% w I pół., niższe pozyskane zamówienia w III kw., DM BOŚ „trzymaj”.",
+  "byk": [
+   "Przez 14 lat reguła dała 85%/82% zyskownych transakcji i zysk w 13 z 14 lat, wyraźnie więcej niż losowe wejście z tym samym wyjściem (64%, −0,4%).",
+   "Kurs spadł z 75,00 do 68,00 zł (RSI2=6) bez katalizatora, choć III kw. był powyżej konsensusu, a 10.11 akcje kupiła fundacja powiązana z członkiem zarządu.",
+   "Cel +3% jest mniejszy niż typowy dzienny ruch spółki (4,3%), kurs jest nad SMA200, a 8 wcześniejszych sygnałów na ASE dało średnio +2,0%."
+  ],
+  "niedzwiedz": [
+   "Rynek jest pod SMA200 i SMA50 i spada (24.11 średnia −2,0%), a sezon połowa listopada–połowa grudnia dawał śr. −1,2%, z plusem tylko w 4 z 12 lat.",
+   "Bez stopu przy zmienności 4,3% i obrocie zaledwie 4,7 tys. akcji (23.11) ryzyko poślizgu i ogona jest realne – 5% transakcji reguły traci ponad 10%.",
+   "Przewaga jest cienka: w teście śr. +0,5%, a losowe wejście z tym wyjściem daje 64% zyskownych, więc wysoki odsetek trafień to w dużej mierze mechanika limitu +3%."
+  ],
+  "ryzyko": "Spadek o 11% bez katalizatora przy małym obrocie może wyprzedzać złą informację (np. sprzedaż pakietu przez Asseco, słabsze zamówienia), a słaby rynek tego nie złagodzi. Sygnał unieważnia ESPI wyjaśniające spadek przed otwarciem 25.11 albo luka poniżej ok. 65,00 zł. Mała pozycja, kupno tylko z limitem 68,68 zł, wyjście najpóźniej 08.12.",
+  "zrodla": [
+   {
+    "t": "ISBnews: Asseco SEE miało 61,95 mln zł zysku netto w III kw. 2026",
+    "u": "https://pl.investing.com/news/stock-market-news/asseco-see-mialo-6195-mln-zl-zysku-netto-11002-mln-zl-zysku-ebitda-w-iii-kw-2026-r-1618049"
+   },
+   {
+    "t": "Wiadomości ASE – BiznesRadar",
+    "u": "https://www.biznesradar.pl/wiadomosci/ASSECO-SOUTH-EASTERN-EUROPE"
+   },
+   {
+    "t": "Akcjonariat i wycena – stockwatch.pl",
+    "u": "https://www.stockwatch.pl/gpw/assecosee,akcjonariat,wycena.aspx"
+   },
+   {
+    "t": "Komunikat ASE, art. 19 MAR (10.11.2026)",
+    "u": "https://www.money.pl/gielda/komunikaty/7349504531079745.html"
+   }
+  ]
+ },
+ "AGO": {
+  "data": "2026-11-24",
+  "regula": "📉 Mocne cofnięcie",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Brak ESPI/EBI, rekomendacji czy zmian w akcjonariacie tłumaczących spadek −10,8% w 5 sesji; kurs zjeżdża od wyników z 19.11 (ok. 12,70 zł). III kw.: przychody 392 mln zł (+6,4%), EBITDA 82,3 mln (+41%, powyżej konsensusu), wynik netto −0,4 mln zł (rok wcześniej −6 mln; Trigon oczekiwał +3,3 mln); Helios i outdoor mocne, radio słabe, internet −15,1%. C/Z 12,2, C/WK 0,75. W oknie do 08.12 brak raportów i NWZ, dywidenda 0,50 zł wypłacona; insiderzy kupowali w czerwcu, w listopadzie brak transakcji.",
+  "byk": [
+   "Reguła dała 85%/82% zyskownych transakcji i 13/14 lat na plus, lepiej niż losowe wejście (64%, −0,4%), a pierwsze 4 cofnięcia na żywo zamknięto z zyskiem ok. +2,6%.",
+   "Spółka jest skrajnie wyprzedana (RSI2=0, −10,8% w 5 sesji), ale nad SMA200, z dodatkowym sygnałem CHOP (~73% zyskownych), a cel +3% to mniej niż dzienny ruch (3,9%).",
+   "Fundamenty nie tłumaczą przeceny: EBITDA III kw. +41% powyżej konsensusu, strata netto zmniejszona do 0,4 mln zł, C/WK 0,75, a w oknie nie ma raportów."
+  ],
+  "niedzwiedz": [
+   "Rynek jest pod SMA200 i SMA50 i spada, a od połowy listopada do połowy grudnia dawał średnio −1,2%, z plusem tylko w 4 z 12 lat.",
+   "Plan nie ma stopu, zmienność to 3,9% dziennie, a 5% transakcji traci ponad 10% przy średnim zysku w teście tylko +0,5%; jedna wpadka kasuje kilka trafień.",
+   "Kurs spada mimo EBITDA powyżej konsensusu, bo rynek wycenia słabe radio, internet −15,1% i stratę −0,4 mln wobec +3,3 mln u Trigonu; w oknie brak katalizatora."
+  ],
+  "ryzyko": "Największe ryzyko to dalszy odpływ kapitału po rozczarowującym wyniku netto z 19.11 przy słabym rynku i sezonie. Sygnał słabnie przy zamknięciu poniżej 11,00 zł albo przy nowych informacjach o Heliosie (opcje menedżerskie) lub restrukturyzacji. Kupno tylko z limitem 11,67 zł, połowa zwykłej pozycji, wyjście najpóźniej 08.12.",
+  "zrodla": [
+   {
+    "t": "Agora z lepszym kwartałem. Magia kin i więcej reklam w prasie",
+    "u": "https://www.parkiet.com/firmy/art45512121-lepszy-kwartal-agory-magia-kin-i-wiecej-reklam-w-prasie"
+   },
+   {
+    "t": "Wiadomości AGORA – BiznesRadar",
+    "u": "https://www.biznesradar.pl/wiadomosci/AGORA"
+   },
+   {
+    "t": "Akcjonariat Agora SA – StrefaInwestorów",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLAGORA00067/akcjonariat"
+   },
+   {
+    "t": "AGORA: Terminy publikacji raportów okresowych w 2026 r.",
+    "u": "https://www.bankier.pl/wiadomosc/AGORA-Terminy-publikacji-raportow-okresowych-w-2026-r-9073406.html"
    }
   ]
  }
