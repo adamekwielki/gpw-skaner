@@ -538,5 +538,110 @@
     "u": "https://www.bankier.pl/wiadomosc/AGORA-Terminy-publikacji-raportow-okresowych-w-2026-r-9073406.html"
    }
   ]
+ },
+ "ASB": {
+  "data": "2026-11-25",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Brak negatywnego komunikatu spółki – spadki zbiegły się z przeceną spółek AI (20.11 −11,1%, 25.11 −9,5%). III kw. (05.11): przychody 2,19 mld USD (+135% r/r), zysk netto 51,6 mln USD, ale marża brutto spadła do 6,16% z 7,03%, przepływy operacyjne −46,4 mln USD, a portfel zamówień na serwery skurczył się do ok. 530 mln USD (latem 860 mln). Szacunek październikowy 948 mln USD (+187% r/r), poniżej września. W oknie brak raportu okresowego; zaliczka dywidendy 0,35 USD wypłacana 26.11 – prawo już ustalone, nowy kupujący jej nie dostanie.",
+  "byk": [
+   "Historia sygnałów ASBIS jest dobra: średnio +4,8% na 20 sygnałów, wyraźnie powyżej celu +3% i średniej reguły (+0,29%/+0,86% na 14 latach).",
+   "Reguła dawała 84–85% zyskownych transakcji na 14 latach, a w listopadzie 2026 wszystkie 14 zamkniętych paniki zakończyły się zyskiem.",
+   "Spadek −13,9% w 5 sesji to efekt przeceny spółek AI bez złego komunikatu, a III kwartał był mocny: przychody +135% r/r, zysk netto 51,6 mln USD."
+  ],
+  "niedzwiedz": [
+   "Na 14 latach reguła daje śr. tylko +0,29%/+0,86%, a 7% transakcji traci >10% bez stopu; otwarte paniki listopada są średnio na −8,7% (CRQ −21,2%).",
+   "Rynek pod SMA200 i SMA50 nadal spada (drugi epizod paniki, trzecia sesja przeceny), a okres poł. listopada–poł. grudnia był na plus tylko w 4 z 12 lat.",
+   "Spadek napędza sektorowa przecena AI, a fundamenty słabną: portfel zamówień 530 vs 860 mln USD, marża 6,16% z 7,03%, przepływy operacyjne −46,4 mln USD."
+  ],
+  "ryzyko": "Największe ryzyko to dalsza przecena spółek AI przy rynku pod SMA200, bez stopu; otwarte paniki tracą już śr. −8,7%. Sygnał słabnie przy zamknięciu poniżej ok. 122 zł (−10% od wejścia) lub przy słabych danych za listopad przed 09.12. Ograniczenie: ½ pozycji, kupno najwyżej po 138,31 zł, bez uśredniania, wyjście najpóźniej 09.12.",
+  "zrodla": [
+   {
+    "t": "Asbis po III kwartale 2026 (StockWatch)",
+    "u": "https://www.stockwatch.pl/wiadomosci/asbis-wyniki-iii-kwartal-2026-serwery-ai-dywidenda-tziamalis,akcje,384907"
+   },
+   {
+    "t": "ASBIS bije rekord! Przychody wystrzeliły o 187% (Investing.com)",
+    "u": "https://pl.investing.com/news/stock-market-news/asbis-bije-rekord-przychody-wystrzelily-o-187-co-dalej-z-akcjami-1663589"
+   },
+   {
+    "t": "ASBIS – dywidendy (Strefa Inwestorów)",
+    "u": "https://strefainwestorow.pl/notowania/spolki/CY1000031710/dywidendy"
+   },
+   {
+    "t": "ASBIS – akcjonariat (Bankier)",
+    "u": "https://www.bankier.pl/gielda/notowania/akcje/ASBIS/akcjonariat"
+   }
+  ]
+ },
+ "BDF": {
+  "data": "2026-11-25",
+  "regula": "🔥 Panika",
+  "werdykt": "z zastrzeżeniami",
+  "analityk": "Bumech Defense Partners (dawniej Capital Partners) – spółka zbrojeniowa zależna od Bumech S.A., bez istotnych przychodów (strata 0,67 mln zł w 2025, 3 pracowników, kapitalizacja ok. 63 mln zł); po spekulacyjnym rajdzie do ~13 zł we wrześniu kurs spada. Trwa oferta do 18 mln akcji serii E z prawem poboru po 1,50 zł – prawa notowane 20.11–3.12, zapisy do 8.12, przydział 22.12. 16.11 (ESPI 27/2026) zajęto 9 mln akcji BDF należących do Bumech S.A. i jego wierzytelność 12,56 mln zł, przez co Bumech nie może objąć zadeklarowanych 9 mln akcji serii E. Raportu okresowego w oknie nie znaleziono.",
+  "byk": [
+   "Sygnały na BDF dawały średnio +21,4% w 19 przypadkach, a przy dziennej zmienności 14,5% cel +3% (3,60 zł) to ułamek typowego ruchu jednej sesji.",
+   "Na 14 latach reguła miała 84–85% zyskownych transakcji, a w listopadzie 2026 wszystkie 14 zamkniętych paniki skończyło się zyskiem, choć średni zysk to tylko +0,29%/+0,86%.",
+   "BDF spadł o 24,9% w 5 sesji do 3,50 zł, RSI2 rynku wynosi 9 przy trzeciej sesji przeceny, a karta spółki nie ma ostrzeżeń skanera."
+  ],
+  "niedzwiedz": [
+   "Prawo poboru serii E po 1,50 zł (poniżej połowy kursu) jest notowane 20.11–3.12, a zapisy kończą się 8.12, więc przez całe okno ciąży arbitraż i podaż.",
+   "16.11 zajęto 9 mln akcji BDF należących do Bumechu (ok. 50%) i Bumech nie obejmie serii E, więc spadek o 24,9% ma konkretny powód, a nie jest ślepą paniką.",
+   "Bez stopu, przy zmienności dziennej 14,5%, rynku pod SMA200 i słabym sezonie (plus w 4 z 12 lat), a otwarte paniki tracą dziś średnio 8,7% (CRQ −21,2%)."
+  ],
+  "ryzyko": "Spadek ma konkretną przyczynę, więc to nie ślepa panika: zajęcie 9 mln akcji Bumechu (16.11) i prawa poboru po 1,50 zł notowane do 3.12, zapisy do 8.12. Sygnał unieważnia kolejny ESPI o zmianie harmonogramu oferty lub o zabezpieczeniu. Tylko ½ pozycji, kupno najwyżej po 3,57 zł, nie gonić luki, wyjście najpóźniej 09.12.",
+  "zrodla": [
+   {
+    "t": "Zajęcie akcji i wierzytelności uniemożliwia rozliczenie transakcji za 12,56 mln zł (Investing.com)",
+    "u": "https://pl.investing.com/news/global-filings/pilne-bumech-defense-partners-sa-zajecie-akcji-i-wierzytelnosci-uniemozliwia-rozliczenie-transakcji-za-1256-mln-zl-93CH-1654921"
+   },
+   {
+    "t": "Przesunięcie harmonogramu oferty akcji serii E – zapisy od 17 listopada (Investing.com)",
+    "u": "https://pl.investing.com/news/global-filings/bumech-defense-partners-sa-przesuniecie-harmonogramu-oferty-akcji-serii-e--zapisy-od-17-listopada-93CH-1645876"
+   },
+   {
+    "t": "Nowa umowa, a akcje w dół. Bumech Defense Partners przerywa serię wzrostów (Parkiet)",
+    "u": "https://www.parkiet.com/firmy/art45107311-nowa-umowa-a-akcje-w-dol-bumech-defense-partners-przerywa-serie-wzrostow"
+   },
+   {
+    "t": "Bumech Defense Partners SA – notowania (Strefa Inwestorów)",
+    "u": "https://strefainwestorow.pl/notowania/spolki/PLCPTLP00015"
+   }
+  ]
+ },
+ "CRI": {
+  "data": "2026-11-25",
+  "regula": "🔥 Panika",
+  "werdykt": "poważne zastrzeżenia",
+  "analityk": "Spadku 24–25.11 (638 → 608 zł) nie tłumaczy żaden komunikat; ostatnie ESPI są pozytywne – 23.11 Agencja Uzbrojenia zatwierdziła dokumentację D3 Mikroglobu (41,37 mln zł netto, koniec fazy D). Raport za III kw. wychodzi 26.11 – w dniu wejścia; NWZ 1.12 (wydzielenie części biznesu do spółki zależnej, zmiany w RN na żądanie akcjonariusza z 6,04%). H1 2026: przychody 89,6 mln zł (+34% z działalności kontynuowanej), wynik operacyjny −0,9 mln zł, przepływy operacyjne −78 mln zł; raportowany zysk 685 mln zł to jednorazowy efekt wydzielenia Creotech Quantum. Lipcowa emisja M po 740 zł, ostatnia rekomendacja Noble (maj) „trzymaj”, 667 zł.",
+  "byk": [
+   "Na 14 latach reguła dała 84–85% zyskownych transakcji, a w listopadzie 2026 wszystkie 14 zamkniętych paniki zakończyło się zyskiem; cel to tylko +3%.",
+   "Sygnały CRI dawały historycznie średnio +3,9% z 18 przypadków, a przy zmienności dziennej 6,8% limit 626,24 zł można osiągnąć nawet w jednej sesji.",
+   "Spadek o 11,4% nastąpił bez złego komunikatu, 23.11 zatwierdzono D3 (41,37 mln zł), a kurs 608 zł jest poniżej celu Noble (667 zł) i ceny emisji M (740 zł)."
+  ],
+  "niedzwiedz": [
+   "Raport za III kw. wychodzi 26.11, w dniu wejścia (godzina nieznana), a w H1 zysk netto z działalności kontynuowanej spadł do 0,3 mln zł przy przepływach −78 mln zł.",
+   "To drugi epizod paniki: CRI miał sygnał już 18.11 i dalej spada (−11,4% w 5 sesji); otwarte paniki tracą średnio −8,7% (CRQ −21,2%).",
+   "Bez stopu, przy zmienności dziennej 6,8% i 7% transakcji tracących >10%, w słabym sezonie (plus w 4 z 12 lat) i przy rynku pod SMA200."
+  ],
+  "ryzyko": "Raport za III kw. 26.11 wypada w dniu wejścia (godzina nieznana), a 11,4% spadku nie tłumaczy żaden komunikat. Sygnał unieważnia słaby raport (strata operacyjna, ujemne przepływy) albo otwarcie wyraźnie poniżej 608 zł. Ograniczenie: kupować dopiero po publikacji raportu, tylko z limitem 620,16 zł i za ½ pozycji; uwaga na NWZ 1.12.",
+  "zrodla": [
+   {
+    "t": "ESPI 63/2026 – zatwierdzenie dokumentacji D3 Mikroglob (BiznesRadar)",
+    "u": "https://www.biznesradar.pl/a/171765,creotech-instruments-sa-63-2026-informacja-o-zatwierdzeniu-przez-skarb-panstwa-agencje-uzbrojenia-dokumentacji-wynikowej-d3-oraz-zakonczeniu-fazy-d-w-projekcie-mikroglob"
+   },
+   {
+    "t": "ESPI 59/2026 – żądanie akcjonariusza (NWZ) (BiznesRadar)",
+    "u": "https://www.biznesradar.pl/a/168093,creotech-instruments-sa-59-2026-zadanie-akcjonariusza-umieszczenia-okreslonej-sprawy-w-porzadku-obrad-nadzwyczajnego-walnego-zgromadzenia-wraz-z-projektami-uchwal"
+   },
+   {
+    "t": "Kalendarium publikacji raportów okresowych (Strefa Inwestorów)",
+    "u": "https://strefainwestorow.pl/dane/raporty/lista-publikacji-raportow-okresowych/all"
+   },
+   {
+    "t": "Creotech nie rozczarował, akcje drożeją (Parkiet)",
+    "u": "https://www.parkiet.com/technologie/art45201711-creotech-nie-rozczarowal-akcje-drozeja"
+   }
+  ]
  }
 }
