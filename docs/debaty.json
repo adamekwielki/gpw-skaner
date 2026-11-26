@@ -643,5 +643,44 @@
     "u": "https://www.parkiet.com/technologie/art45201711-creotech-nie-rozczarowal-akcje-drozeja"
    }
   ]
+ },
+ "DAT": {
+  "data": "2026-11-26",
+  "regula": "wystrzał",
+  "werdykt": "poważne zastrzeżenia",
+  "analityk": "Wystrzał 06.11 (+12%) zbiegł się tylko z RB o patencie w USA – nic nie wiąże go wprost z ruchem; dołek 52 tyg. to spadek o ok. 15% 04.11 po szacunkach za 9M 2026, a 20.11 przyszła umowa licencyjna z ubezpieczycielem z USA (bez wartości). III kw.: przychody ok. 3,5 mln zł (−52% r/r, czwarty spadek z rzędu), strata netto ok. 24 mln zł; 9M: przychody 14,56 mln zł (−53%), skor. EBITDA −39,6 mln zł; C/Z ujemne, DM BOŚ „trzymaj”, cel 114 zł. Do ok. 14.12 brak raportu okresowego, WZA i dywidendy; zarząd zapowiada duże umowy na listopad–grudzień, ale jedna może przejść na 2027. Ryzyka: brak nowych klientów w 2026, koszty +40% r/r, niezweryfikowany stan gotówki na 30.09, niska płynność.",
+  "byk": [
+   "Przez 14 lat testów reguła dawała ok. 90% zyskownych zagrań przy średnim wyniku +1,5%.",
+   "Wystrzał z 06.11 o +12,0% przy wolumenie 4,1× wyraźnie spełnia warunki reguły, a jej historia na DataWalk to średnio +1,4% z 10 sygnałów.",
+   "Limity 80,56 i 78,44 zł, realizujące się w 74% i 59% przypadków, dawały 84–87% zyskownych zagrań, a 20.11 spółka ogłosiła znaczącą umowę licencyjną w USA."
+  ],
+  "niedzwiedz": [
+   "Fundamenty się sypią: przychody za 9M 2026 spadły o 53% r/r (czwarty z rzędu spadek), a skorygowana EBITDA pogłębiła się z −7,94 do −39,57 mln zł.",
+   "Skaner sam ostrzega, że spółki z nowym dołkiem 52 tyg. w ciągu 20 sesji dalej przegrywały z rynkiem o 1–2,7 pkt w 2–4 tygodnie.",
+   "Rynek jest pod SMA200 i SMA50, a od połowy listopada do połowy grudnia średnio tracił 1,2% (na plus w 4 z 12 lat), przy dziennej zmienności DAT 9,3%."
+  ],
+  "ryzyko": "Największe ryzyko to dalsze spadki po słabych wynikach – oba limity leżą pod zamknięciem z 04.11 (ok. 83,9 zł), więc wypełnią się dopiero na nowych dołkach. Sygnał unieważnia zamknięcie poniżej 71,01 zł albo komunikat o przesunięciu dużych umów na 2027. Pół stawki, sztywny stop 71,01 zł, zlecenia anulować 30.11.",
+  "zrodla": [
+   {
+    "t": "Wiadomości DATAWALK (DAT) – BiznesRadar",
+    "u": "https://www.biznesradar.pl/wiadomosci/DAT"
+   },
+   {
+    "t": "Akcje DataWalk tanieją. W III kwartale 2026 r. przychody spadły o 52 proc. – Parkiet",
+    "u": "https://www.parkiet.com/technologie/art45443311-datawalk-akcje-przychody-iii-kwartal-2026"
+   },
+   {
+    "t": "DataWalk z wyższą stratą w trzech kwartałach 2026 r. – StockWatch",
+    "u": "https://www.stockwatch.pl/wiadomosci/datawalk-wyniki-trzy-kwartaly-2026-strata-ebitda-przychody,akcje,384515"
+   },
+   {
+    "t": "DataWalk: kilka dużych umów jeszcze w 2026 r. – StockWatch",
+    "u": "https://www.stockwatch.pl/wiadomosci/datawalk-duze-umowy-koniec-2026-dynamika-arr,akcje,385041"
+   },
+   {
+    "t": "Zawarcie znaczącej umowy licencyjnej z operatorem sektora ubezpieczeniowego w USA – DataWalk",
+    "u": "https://datawalk.com/pl/investors/report/zawarcie-znaczacej-umowy-licencyjnej-z-wiodacym-operatorem-sektora-ubezpieczeniowego-w-usa/"
+   }
+  ]
  }
 }
